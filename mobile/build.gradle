@@ -20,13 +20,22 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            versionNameSuffix = '-nightly'
+            versionNameSuffix '-nightly'
             signingConfig signingConfigs.debug
             proguardFiles 'r8-rules.pro'
+            kotlinOptions {
+                jvmTarget = javaVersion
+                freeCompilerArgs = [
+                        '-Xno-param-assertions',
+                        '-Xno-call-assertions',
+                        '-Xno-receiver-assertions',
+                        '-Xmultifile-parts-inherit',
+                ]
+            }
         }
         debug {
-            applicationIdSuffix = '.debug'
-            versionNameSuffix = '-debug'
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
             resValue 'string', 'applicationId', defaultConfig.applicationId + applicationIdSuffix
         }
     }
@@ -35,20 +44,15 @@ android {
         sourceCompatibility javaVersion
         targetCompatibility javaVersion
     }
-    kotlinOptions.jvmTarget = javaVersion
     packagingOptions {
         exclude '/META-INF/*.version'
         exclude '**/*.kotlin_*'
     }
-    aaptOptions {
-        additionalParameters "--preferred-density", "xxxhdpi"
-    }
+    aaptOptions.additionalParameters "--preferred-density", "xxxhdpi"
     lintOptions.checkReleaseBuilds false
 }
 
-androidExtensions {
-    experimental = true
-}
+androidExtensions.experimental true
 
 dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugarLibsVersion"
