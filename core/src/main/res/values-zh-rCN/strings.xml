@@ -172,15 +172,5 @@
 
     <!-- ssrsub -->
     <string name="ssrsub_manage">管理 SSR 订阅</string>
-    <plurals name="ssrsub_manage_summary">
-        <item quantity="other">添加了 %d 个订阅</item>
-    </plurals>
-    <string name="ssrsub_autoupdate">自动更新 SSR 订阅</string>
-    <string name="ssrsub_autoupdate_summary">每天检查订阅</string>
-    <string name="ssrsub_add">添加订阅地址</string>
-    <string name="ssrsub_list">订阅列表</string>
-    <string name="ssrsub_remove_tip_title">删除</string>
-    <string name="ssrsub_remove_tip">同时删除此订阅的节点？</string>
-    <string name="ssrsub_remove_tip_direct">仅删除订阅</string>
     <string name="ssrsub_remove_tip_delete">与节点一起删除</string>
 </resources>

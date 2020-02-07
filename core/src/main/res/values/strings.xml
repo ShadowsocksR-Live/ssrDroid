@@ -171,18 +171,9 @@
   <string name="plugin_unknown">Unknown plugin %s</string>
   <string name="plugin_untrusted">Warning: This plugin does not seem to come from a known trusted source.</string>
   <string name="profile_plugin">Plugin: %s</string>
+  <string name="plugin_auto_connect_unlock_only">This plugin might not work with Auto Connect</string>
 
   <!-- ssrsub -->
   <string name="ssrsub_manage">管理 SSR 订阅</string>
-  <plurals name="ssrsub_manage_summary">
-    <item quantity="other">添加了 %d 个订阅</item>
-  </plurals>
-  <string name="ssrsub_autoupdate">自动更新 SSR 订阅</string>
-  <string name="ssrsub_autoupdate_summary">每天检查订阅</string>
-  <string name="ssrsub_add">Add URL</string>
-  <string name="ssrsub_list">Item List</string>
-  <string name="ssrsub_remove_tip_title">Subscription removal</string>
-  <string name="ssrsub_remove_tip">Delete this subscription without removing its nodes (nodes that bear its group name)?</string>
-  <string name="ssrsub_remove_tip_direct">Delete the URL only</string>
   <string name="ssrsub_remove_tip_delete">Delete the nodes too</string>
 </resources>
