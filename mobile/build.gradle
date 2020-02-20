@@ -24,7 +24,6 @@ android {
             signingConfig signingConfigs.debug
             proguardFiles 'r8-rules.pro'
             kotlinOptions {
-                jvmTarget = javaVersion
                 freeCompilerArgs = [
                         '-Xno-param-assertions',
                         '-Xno-call-assertions',
@@ -49,6 +48,7 @@ android {
         exclude '**/*.kotlin_*'
     }
     aaptOptions.additionalParameters "--preferred-density", "xxxhdpi"
+    kotlinOptions.jvmTarget = javaVersion
     lintOptions.checkReleaseBuilds false
 }
 
