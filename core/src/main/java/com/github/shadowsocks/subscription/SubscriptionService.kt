@@ -24,8 +24,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
@@ -41,15 +39,15 @@ import com.github.shadowsocks.database.ProfileManager
 import com.github.shadowsocks.database.SSRSub
 import com.github.shadowsocks.database.SSRSubManager
 import com.github.shadowsocks.utils.Action
+import com.github.shadowsocks.utils.broadcastReceiver
 import com.github.shadowsocks.utils.printLog
 import com.github.shadowsocks.utils.readableMessage
 import kotlinx.coroutines.*
 
-class SubscriptionService : Service() {
+class SubscriptionService : Service(), CoroutineScope {
     companion object {
         private const val NOTIFICATION_CHANNEL = "service-subscription"
         private const val NOTIFICATION_ID = 2
-        private var worker: Job? = null
 
         val idle = MutableLiveData<Boolean>(true)
 
@@ -57,12 +55,9 @@ class SubscriptionService : Service() {
                 app.getText(R.string.service_subscription), NotificationManager.IMPORTANCE_LOW)
     }
 
-    private object CancelReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            worker?.cancel()
-        }
-    }
-
+    override val coroutineContext = SupervisorJob() + CoroutineExceptionHandler { _, t -> printLog(t) }
+    private var worker: Job? = null
+    private val cancelReceiver = broadcastReceiver { _, _ -> worker?.cancel() }
     private var counter = 0
     private var receiverRegistered = false
 
@@ -72,11 +67,10 @@ class SubscriptionService : Service() {
         if (worker == null) {
             idle.value = false
             if (!receiverRegistered) {
-                registerReceiver(CancelReceiver, IntentFilter(Action.ABORT),
-                        "$packageName.SERVICE", null)
+                registerReceiver(cancelReceiver, IntentFilter(Action.ABORT), "$packageName.SERVICE", null)
                 receiverRegistered = true
             }
-            worker = GlobalScope.launch {
+            worker = launch {
                 val ssrsubs = SSRSubManager.getAllSSRSub()
                 val notification = NotificationCompat.Builder(this@SubscriptionService, NOTIFICATION_CHANNEL).apply {
                     color = ContextCompat.getColor(this@SubscriptionService, R.color.material_primary_500)
@@ -101,7 +95,7 @@ class SubscriptionService : Service() {
                     async(Dispatchers.IO) { fetchJson(it, ssrsubs.size, notification) }
                 }
                 try {
-                    val localJsons = workers.awaitAll()
+                    workers.awaitAll()
                     withContext(Dispatchers.Main) {
                         Core.notification.notify(NOTIFICATION_ID, notification.apply {
                             setContentTitle(getText(R.string.service_subscription_finishing))
@@ -133,8 +127,10 @@ class SubscriptionService : Service() {
             ssrSub.status = SSRSub.NETWORK_ERROR
             SSRSubManager.updateSSRSub(ssrSub)
             printLog(e)
-            GlobalScope.launch(Dispatchers.Main) {
-                Toast.makeText(this@SubscriptionService, e.readableMessage, Toast.LENGTH_LONG).show()
+            coroutineScope {
+                launch(Dispatchers.Main) {
+                    Toast.makeText(this@SubscriptionService, e.readableMessage, Toast.LENGTH_LONG).show()
+                }
             }
         } finally {
             withContext(Dispatchers.Main) {
@@ -148,8 +144,8 @@ class SubscriptionService : Service() {
     }
 
     override fun onDestroy() {
-        worker?.cancel()
-        if (receiverRegistered) unregisterReceiver(CancelReceiver)
+        cancel()
+        if (receiverRegistered) unregisterReceiver(cancelReceiver)
         super.onDestroy()
     }
 }
