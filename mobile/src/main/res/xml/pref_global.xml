@@ -34,6 +34,10 @@
         app:key="serviceMode"
         app:title="@string/service_mode"
         app:useSimpleSummaryProvider="true" />
+    <SwitchPreference
+        app:icon="@drawable/ic_baseline_settings_remote_24"
+        app:key="shareOverLan"
+        app:title="@string/share_over_lan"/>
     <EditTextPreference
         app:icon="@drawable/ic_maps_directions_boat"
         app:key="portProxy"

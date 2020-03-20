@@ -82,6 +82,7 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
         hosts.setOnBindEditTextListener(EditTextPreferenceModifiers.Monospace)
         hosts.summaryProvider = HostsSummaryProvider
         val serviceMode = findPreference<Preference>(Key.serviceMode)!!
+        val shareOverLan = findPreference<SwitchPreference>(Key.shareOverLan)!!
         val portProxy = findPreference<EditTextPreference>(Key.portProxy)!!
         portProxy.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
         val portLocalDns = findPreference<EditTextPreference>(Key.portLocalDns)!!
@@ -104,6 +105,7 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
             val stopped = it == BaseService.State.Stopped
             tfo.isEnabled = stopped
             serviceMode.isEnabled = stopped
+            shareOverLan.isEnabled = stopped
             portProxy.isEnabled = stopped
             if (stopped) onServiceModeChange.onPreferenceChange(null, DataStore.serviceMode) else {
                 hosts.isEnabled = false
