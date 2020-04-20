@@ -10,8 +10,8 @@ buildscript {
         compileSdkVersion = 29
         buildToolsVersion = '29.0.3'
         desugarLibsVersion = '1.0.5'
-        versionCode = 406
-        versionName = '5.0.5R.1'
+        versionCode = 407
+        versionName = '5.0.6R'
         resConfigs = ['zh-rCN']
     }
 
