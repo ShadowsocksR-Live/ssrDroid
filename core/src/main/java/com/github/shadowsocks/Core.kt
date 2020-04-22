@@ -22,6 +22,8 @@ package com.github.shadowsocks
 
 import android.app.*
 import android.app.admin.DevicePolicyManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -30,6 +32,7 @@ import android.os.Build
 import android.os.Build.VERSION_CODES.O
 import android.os.Build.VERSION_CODES.Q
 import android.os.UserManager
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
@@ -60,6 +63,7 @@ object Core {
         @VisibleForTesting set
     lateinit var configureIntent: (Context) -> PendingIntent
     val activity by lazy { app.getSystemService<ActivityManager>()!! }
+    val clipboard by lazy { app.getSystemService<ClipboardManager>()!! }
     val connectivity by lazy { app.getSystemService<ConnectivityManager>()!! }
     val notification by lazy { app.getSystemService<NotificationManager>()!! }
     val packageInfo: PackageInfo by lazy { getPackageInfo(app.packageName) }
@@ -145,6 +149,14 @@ object Core {
     }
 
     fun getPackageInfo(packageName: String) = app.packageManager.getPackageInfo(packageName, 0)!!
+
+    fun trySetPrimaryClip(clip: String) = try {
+        clipboard.setPrimaryClip(ClipData.newPlainText(null, clip))
+        true
+    } catch (e: RuntimeException) {
+        Log.d(TAG, e.readableMessage, e)
+        false
+    }
 
     fun startService() = ContextCompat.startForegroundService(app, Intent(app, ShadowsocksConnection.serviceClass))
     fun reloadService() = app.sendBroadcast(Intent(Action.RELOAD).setPackage(app.packageName))
