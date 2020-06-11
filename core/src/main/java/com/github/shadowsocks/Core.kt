@@ -39,6 +39,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.aidl.ShadowsocksConnection
 import com.github.shadowsocks.core.R
 import com.github.shadowsocks.database.Profile
@@ -56,9 +57,8 @@ import java.io.File
 import java.io.IOException
 import kotlin.reflect.KClass
 
-object Core {
+object Core : Configuration.Provider {
     const val TAG = "Core"
-
     lateinit var app: Application
         @VisibleForTesting set
     lateinit var configureIntent: (Context) -> PendingIntent
@@ -66,6 +66,7 @@ object Core {
     val clipboard by lazy { app.getSystemService<ClipboardManager>()!! }
     val connectivity by lazy { app.getSystemService<ConnectivityManager>()!! }
     val notification by lazy { app.getSystemService<NotificationManager>()!! }
+    val user by lazy { app.getSystemService<UserManager>()!! }
     val packageInfo: PackageInfo by lazy { getPackageInfo(app.packageName) }
     val deviceStorage by lazy { if (Build.VERSION.SDK_INT < 24) app else DeviceStorageApp(app) }
     val directBootSupported by lazy {
@@ -100,15 +101,13 @@ object Core {
 
         // overhead of debug mode is minimal: https://github.com/Kotlin/kotlinx.coroutines/blob/f528898/docs/debugging.md#debug-mode
         System.setProperty(DEBUG_PROPERTY_NAME, DEBUG_PROPERTY_VALUE_ON)
-        WorkManager.initialize(deviceStorage, Configuration.Builder().apply {
-            setExecutor { GlobalScope.launch { it.run() } }
-            setTaskExecutor { GlobalScope.launch { it.run() } }
-        }.build())
+
         UpdateCheck.enqueue()
 
         // handle data restored/crash
-        if (Build.VERSION.SDK_INT >= 24 && DataStore.directBootAware &&
-                app.getSystemService<UserManager>()?.isUserUnlocked == true) DirectBoot.flushTrafficStats()
+        if (Build.VERSION.SDK_INT >= 24 && DataStore.directBootAware && user.isUserUnlocked) {
+            DirectBoot.flushTrafficStats()
+        }
         if (DataStore.tcpFastOpen && !TcpFastOpen.sendEnabled) TcpFastOpen.enableTimeout()
         if (DataStore.publicStore.getLong(Key.assetUpdateTime, -1) != packageInfo.lastUpdateTime) {
             val assetManager = app.assets
@@ -123,6 +122,12 @@ object Core {
         }
         updateNotificationChannels()
     }
+
+    override fun getWorkManagerConfiguration() = Configuration.Builder().apply {
+        setMinimumLoggingLevel(if (BuildConfig.DEBUG) Log.VERBOSE else Log.INFO)
+        setExecutor { GlobalScope.launch { it.run() } }
+        setTaskExecutor { GlobalScope.launch { it.run() } }
+    }.build()
 
     fun updateNotificationChannels() {
         if (Build.VERSION.SDK_INT >= O) @RequiresApi(O) {

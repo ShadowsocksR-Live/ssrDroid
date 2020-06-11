@@ -24,9 +24,11 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.*
+import android.os.Build
+import android.os.IBinder
+import android.os.RemoteCallbackList
+import android.os.RemoteException
 import android.util.Log
-import androidx.core.content.getSystemService
 import com.crashlytics.android.Crashlytics
 import com.github.shadowsocks.BootReceiver
 import com.github.shadowsocks.Core
@@ -44,7 +46,6 @@ import java.io.File
 import java.io.IOException
 import java.net.URL
 import java.net.UnknownHostException
-import java.util.*
 
 /**
  * This object uses WeakMap to simulate the effects of multi-inheritance.
@@ -233,8 +234,8 @@ object BaseService {
         fun buildAdditionalArguments(cmd: ArrayList<String>): ArrayList<String> = cmd
 
         suspend fun startProcesses(hosts: HostsFile) {
-            val configRoot = (if (Build.VERSION.SDK_INT < 24 || app.getSystemService<UserManager>()
-                            ?.isUserUnlocked != false) app else Core.deviceStorage).noBackupFilesDir
+            val context = if (Build.VERSION.SDK_INT < 24 || Core.user.isUserUnlocked) app else Core.deviceStorage
+            val configRoot = context.noBackupFilesDir
             val udpFallback = data.udpFallback
             data.proxy!!.start(this,
                     File(Core.deviceStorage.noBackupFilesDir, "stat_main"),
