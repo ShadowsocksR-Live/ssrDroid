@@ -390,7 +390,7 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
                 try {
                     val profiles = Profile.findAllUrls(
                             Core.clipboard.primaryClip!!.getItemAt(0).text,
-                            Core.currentProfile?.first
+                            Core.currentProfile?.main
                     ).toList()
                     if (profiles.isNotEmpty()) {
                         profiles.forEach { ProfileManager.createProfile(it) }
@@ -421,7 +421,7 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
             }
             R.id.action_manual_settings -> {
                 startConfig(ProfileManager.createProfile(
-                        Profile().also { Core.currentProfile?.first?.copyFeatureSettingsTo(it, true) }))
+                        Profile().also { Core.currentProfile?.main?.copyFeatureSettingsTo(it, true) }))
                 true
             }
             R.id.action_export_clipboard -> {
