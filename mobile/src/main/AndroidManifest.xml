@@ -2,6 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.github.shadowsocks">
 
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
     <application android:name=".App">
 
         <activity
@@ -68,6 +72,9 @@
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
         </service>
 
         <receiver

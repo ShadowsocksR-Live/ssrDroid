@@ -26,10 +26,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ShortcutManager
 import android.net.VpnService
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.RemoteException
+import android.os.*
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -156,7 +153,7 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPref
         }
     }
 
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     private val connection = ShadowsocksConnection(handler, true)
     override fun onServiceConnected(service: IShadowsocksService) = changeState(try {
         BaseService.State.values()[service.state]
