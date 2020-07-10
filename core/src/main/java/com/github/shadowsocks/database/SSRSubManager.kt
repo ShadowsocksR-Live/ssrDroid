@@ -49,6 +49,8 @@ object SSRSubManager {
 
     private suspend fun getResponse(url: String): String {
         val connection = URL(url).openConnection() as HttpURLConnection
+        connection.addRequestProperty("User-Agent","ShadowsocksRb (https://github.com/ShadowsocksRb)")
+        connection.addRequestProperty("X-Forwarded-For","127.0.0.1")
         val body = connection.useCancellable { inputStream.bufferedReader().use { it.readText() } }
         return String(Base64.decode(body, Base64.URL_SAFE))
     }
