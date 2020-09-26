@@ -35,7 +35,6 @@ import com.github.shadowsocks.database.Profile
 import com.github.shadowsocks.database.ProfileManager
 import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.DirectBoot
-import com.github.shadowsocks.utils.SingleInstanceActivity
 import com.github.shadowsocks.utils.resolveResourceId
 import com.github.shadowsocks.widget.ListHolderListener
 import com.github.shadowsocks.widget.ListListener
@@ -95,7 +94,6 @@ class UdpFallbackProfileActivity : AppCompatActivity() {
             finish()
             return
         }
-        SingleInstanceActivity.register(this) ?: return
         setContentView(R.layout.layout_udp_fallback)
         ListHolderListener.setup(this)
 

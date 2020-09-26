@@ -32,7 +32,6 @@ import com.github.shadowsocks.plugin.AlertDialogFragment
 import com.github.shadowsocks.plugin.Empty
 import com.github.shadowsocks.plugin.PluginContract
 import com.github.shadowsocks.preference.DataStore
-import com.github.shadowsocks.utils.SingleInstanceActivity
 import com.github.shadowsocks.widget.ListHolderListener
 
 class ProfileConfigActivity : AppCompatActivity() {
@@ -53,7 +52,6 @@ class ProfileConfigActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SingleInstanceActivity.register(this) ?: return
         setContentView(R.layout.layout_profile_config)
         ListHolderListener.setup(this)
         setSupportActionBar(findViewById(R.id.toolbar))
