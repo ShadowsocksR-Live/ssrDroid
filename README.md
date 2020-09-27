@@ -9,9 +9,9 @@
 * [Git](https://git-scm.com/downloads)
 * [OpenJDK 8+](https://jdk.java.net/)
 * [Android SDK](https://developer.android.com/studio#command-tools)
-  - Android SDK Build-Tools 29.0.3
-  - Android SDK Platform 29
-  - NDK (Side by side) 21.1.6273396
+  - Android SDK Build-Tools 30.0.2
+  - Android SDK Platform 30
+  - NDK (Side by side) 21.3.6528147
   - Android SDK Tools
 
 ```shell script
