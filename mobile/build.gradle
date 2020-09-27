@@ -65,11 +65,11 @@ androidExtensions.experimental true
 dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugarLibsVersion"
     implementation project(':core')
-    implementation 'androidx.browser:browser:1.3.0-alpha04'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta7'
+    implementation 'androidx.browser:browser:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
     implementation 'com.google.zxing:core:3.4.0'
     implementation 'com.takisoft.preferencex:preferencex-simplemenu:1.1.0'
     implementation 'com.twofortyfouram:android-plugin-api-for-locale:1.0.4'
-    implementation 'me.zhanghai.android.fastscroll:library:1.1.3'
+    implementation 'me.zhanghai.android.fastscroll:library:1.1.4'
 }

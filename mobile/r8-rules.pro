@@ -1,4 +1,4 @@
--keepattributes InnerClasses
+-keepnames class kotlin.Pair
 -allowaccessmodification
 -repackageclasses
 -keepclassmembers class * implements android.os.Parcelable {
