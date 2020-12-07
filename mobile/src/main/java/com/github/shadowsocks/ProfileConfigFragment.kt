@@ -28,6 +28,9 @@ import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
 import androidx.preference.*
 import com.github.shadowsocks.database.Profile
 import com.github.shadowsocks.database.ProfileManager
@@ -113,7 +116,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listView.setOnApplyWindowInsetsListener(ListListener)
+        ViewCompat.setOnApplyWindowInsetsListener(listView, ListListener)
     }
 
     private fun saveAndExit() {

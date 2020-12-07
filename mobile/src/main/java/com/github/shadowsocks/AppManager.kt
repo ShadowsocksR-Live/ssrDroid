@@ -40,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.util.set
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -250,7 +251,7 @@ class AppManager : AppCompatActivity() {
 
         initProxiedUids()
         list = findViewById(R.id.list)
-        list.setOnApplyWindowInsetsListener(ListListener)
+        ViewCompat.setOnApplyWindowInsetsListener(list, ListListener)
         list.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         list.itemAnimator = DefaultItemAnimator()
         list.adapter = appsAdapter

@@ -28,6 +28,7 @@ import android.view.ViewGroup
 import android.widget.CheckedTextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -119,7 +120,7 @@ class UdpFallbackProfileActivity : AppCompatActivity() {
         }
 
         findViewById<RecyclerView>(R.id.list).apply {
-            setOnApplyWindowInsetsListener(ListListener)
+            ViewCompat.setOnApplyWindowInsetsListener(this, ListListener)
             itemAnimator = DefaultItemAnimator()
             adapter = profilesAdapter
             layoutManager = LinearLayoutManager(this@UdpFallbackProfileActivity, RecyclerView.VERTICAL, false).apply {
