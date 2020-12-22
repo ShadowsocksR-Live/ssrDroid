@@ -4,7 +4,7 @@ find_library( log-lib log )
 
 add_subdirectory(libancillary)
 
-#add_subdirectory(pdnsd)
+add_subdirectory(pdnsd)
 
 #add_subdirectory(proxychains4)
 
