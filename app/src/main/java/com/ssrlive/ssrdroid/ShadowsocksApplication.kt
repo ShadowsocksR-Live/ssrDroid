@@ -25,7 +25,7 @@ class ShadowsocksApplication : Application()
 	{
 		const val SIG_FUNC = "getSignature"
 		private const val TAG = "ShadowsocksApplication"
-		private val EXECUTABLES = arrayOf(Constants.Executable.PDNSD, Constants.Executable.PROXYCHAINS4, Constants.Executable.SS_LOCAL, Constants.Executable.TUN2SOCKS)
+		private val EXECUTABLES = arrayOf(Constants.Executable.PDNSD, Constants.Executable.PROXYCHAINS4, Constants.Executable.SSR_CLIENT, Constants.Executable.TUN2SOCKS)
 
 		private val SIMPLIFIED_CHINESE: Locale
 		private val TRADITIONAL_CHINESE: Locale

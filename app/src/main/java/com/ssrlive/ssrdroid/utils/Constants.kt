@@ -8,13 +8,13 @@ object Constants
 	{
 		const val PDNSD = "libpdnsd.so"
 		const val PROXYCHAINS4 = "libproxychains4.so"
-		const val SS_LOCAL = "libssr-local.so"
+		const val SSR_CLIENT = "libssr-local.so" // "libssr-client.so" //
 		const val TUN2SOCKS = "libtun2socks.so"
 	}
 
 	object ConfigUtils
 	{
-		const val SHADOWSOCKS = "{\"server\": \"%s\", \"server_port\": %d, \"local_port\": %d, \"password\": \"%s\", \"method\":\"%s\", \"timeout\": %d, \"protocol\": \"%s\", \"obfs\": \"%s\", \"obfs_param\": \"%s\", \"protocol_param\": \"%s\"}"
+		const val SSR_CONFIG = "{\"server\": \"%s\", \"server_port\": %d, \"local_port\": %d, \"password\": \"%s\", \"method\":\"%s\", \"timeout\": %d, \"protocol\": \"%s\", \"obfs\": \"%s\", \"obfs_param\": \"%s\", \"protocol_param\": \"%s\"}"
 		const val PROXYCHAINS = "strict_chain\n" + "localnet 127.0.0.0/255.0.0.0\n" + "[ProxyList]\n" + "%s %s %s %s %s"
 		const val PDNSD_LOCAL = "global {" + "perm_cache = 2048;" + "%s" + "cache_dir = \"%s\";" + "server_ip = %s;" + "server_port = %d;" + "query_method = tcp_only;" + "min_ttl = 15m;" + "max_ttl = 1w;" + "timeout = 10;" + "daemon = off;" + "}" + "" + "server {" + "label = \"local\";" + "ip = 127.0.0.1;" + "port = %d;" + "reject = %s;" + "reject_policy = negate;" + "reject_recursively = on;" + "}" + "" + "rr {" + "name=localhost;" + "reverse=on;" + "a=127.0.0.1;" + "owner=localhost;" + "soa=localhost,root.localhost,42,86400,900,86400,86400;" + "}"
 		const val PDNSD_DIRECT = "global {" + "perm_cache = 2048;" + "%s" + "cache_dir = \"%s\";" + "server_ip = %s;" + "server_port = %d;" + "query_method = udp_only;" + "min_ttl = 15m;" + "max_ttl = 1w;" + "timeout = 10;" + "daemon = off;" + "par_queries = 4;" + "}" + "" + "%s" + "" + "server {" + "label = \"local-server\";" + "ip = 127.0.0.1;" + "query_method = tcp_only;" + "port = %d;" + "reject = %s;" + "reject_policy = negate;" + "reject_recursively = on;" + "}" + "" + "rr {" + "name=localhost;" + "reverse=on;" + "a=127.0.0.1;" + "owner=localhost;" + "soa=localhost,root.localhost,42,86400,900,86400,86400;" + "}"

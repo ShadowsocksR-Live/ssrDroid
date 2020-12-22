@@ -163,7 +163,7 @@ private constructor()
 			}
 		}
 
-		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, host, profile.remotePort, profile.localPort + 2, Constants.ConfigUtils.escapedJson(profile.password), profile.method, 600, profile.protocol, profile.obfs, Constants.ConfigUtils.escapedJson(profile.obfs_param), Constants.ConfigUtils.escapedJson(profile.protocol_param))
+		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SSR_CONFIG, host, profile.remotePort, profile.localPort + 2, Constants.ConfigUtils.escapedJson(profile.password), profile.method, 600, profile.protocol, profile.obfs, Constants.ConfigUtils.escapedJson(profile.obfs_param), Constants.ConfigUtils.escapedJson(profile.protocol_param))
 
 		Utils.printToFile(File(applicationInfo!!.dataDir + "/libssr-local.so-test.conf"), conf, true)
 

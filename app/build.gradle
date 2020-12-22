@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
+    publishNonDefault true
     defaultConfig {
         applicationId "com.ssrlive.ssrdroid"
         minSdkVersion rootProject.minSdkVersion
@@ -41,6 +42,11 @@ android {
     kotlinOptions.jvmTarget = javaVersion
 
     packagingOptions.exclude '**/*.kotlin_*'
+    externalNativeBuild {
+        cmake {
+            path file('jni/CMakeLists.txt')
+        }
+    }
 }
 
 dependencies {

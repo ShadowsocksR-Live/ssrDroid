@@ -231,10 +231,10 @@ class ShadowsocksVpnService : BaseVpnService()
 
 	private fun startShadowsocksUDPDaemon()
 	{
-		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, profile!!.host, profile!!.remotePort, profile!!.localPort, Constants.ConfigUtils.escapedJson(profile!!.password), profile!!.method, 600, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.escapedJson(profile!!.obfs_param), Constants.ConfigUtils.escapedJson(profile!!.protocol_param))
+		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SSR_CONFIG, profile!!.host, profile!!.remotePort, profile!!.localPort, Constants.ConfigUtils.escapedJson(profile!!.password), profile!!.method, 600, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.escapedJson(profile!!.obfs_param), Constants.ConfigUtils.escapedJson(profile!!.protocol_param))
 		Utils.printToFile(File(applicationInfo.dataDir + "/libssr-local.so-udp-vpn.conf"), conf)
 
-		val cmd = arrayOf("${applicationInfo.nativeLibraryDir}/${Constants.Executable.SS_LOCAL}", "-V", "-U", "-b", "127.0.0.1", "--host", hostArg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-udp-vpn.conf")
+		val cmd = arrayOf("${applicationInfo.nativeLibraryDir}/${Constants.Executable.SSR_CLIENT}", "-V", "-U", "-b", "127.0.0.1", "--host", hostArg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-udp-vpn.conf")
 		val cmds = LinkedList(cmd.toList())
 		if (proxychainsEnable)
 		{
@@ -260,11 +260,11 @@ class ShadowsocksVpnService : BaseVpnService()
 	private fun startShadowsocksDaemon()
 	{
 
-		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, profile!!.host, profile!!.remotePort, profile!!.localPort, Constants.ConfigUtils.escapedJson(profile!!.password), profile!!.method, 600, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.escapedJson(profile!!.obfs_param), Constants.ConfigUtils.escapedJson(profile!!.protocol_param))
+		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SSR_CONFIG, profile!!.host, profile!!.remotePort, profile!!.localPort, Constants.ConfigUtils.escapedJson(profile!!.password), profile!!.method, 600, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.escapedJson(profile!!.obfs_param), Constants.ConfigUtils.escapedJson(profile!!.protocol_param))
 
 		Utils.printToFile(File(applicationInfo.dataDir + "/libssr-local.so-vpn.conf"), conf)
 
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.SS_LOCAL}", "-V", "-x", "-b", "127.0.0.1", "--host", hostArg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-vpn.conf")
+		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.SSR_CLIENT}", "-V", "-x", "-b", "127.0.0.1", "--host", hostArg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-vpn.conf")
 
 		val cmds = LinkedList(cmd.toList())
 
@@ -302,10 +302,10 @@ class ShadowsocksVpnService : BaseVpnService()
 
 	private fun startDnsTunnel()
 	{
-		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, profile!!.host, profile!!.remotePort, profile!!.localPort + 63, Constants.ConfigUtils.escapedJson(profile!!.password), profile!!.method, 60, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.escapedJson(profile!!.obfs_param), Constants.ConfigUtils.escapedJson(profile!!.protocol_param))
+		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SSR_CONFIG, profile!!.host, profile!!.remotePort, profile!!.localPort + 63, Constants.ConfigUtils.escapedJson(profile!!.password), profile!!.method, 60, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.escapedJson(profile!!.obfs_param), Constants.ConfigUtils.escapedJson(profile!!.protocol_param))
 		Utils.printToFile(File(applicationInfo.dataDir + "/ss-tunnel-vpn.conf"), conf)
 
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.SS_LOCAL}", "-V", "-u", "--host", hostArg, "-b", "127.0.0.1", "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/ss-tunnel-vpn.conf")
+		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.SSR_CLIENT}", "--host", hostArg, "-b", "127.0.0.1", "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/ss-tunnel-vpn.conf")
 
 		val cmds = LinkedList(cmd.toList())
 		cmds.add("-L")
@@ -495,8 +495,6 @@ class ShadowsocksVpnService : BaseVpnService()
 
 		val conn = builder.establish() ?: throw NullConnectionException()
 		this.conn = conn
-
-		val fd = conn.fd
 
 		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.TUN2SOCKS}", "--netif-ipaddr", String.format(Locale.ENGLISH, PRIVATE_VLAN, "2"), "--netif-netmask", "255.255.255.0", "--socks-server-addr", "127.0.0.1:" + profile!!.localPort, "--tunmtu", VPN_MTU.toString(), "--sock-path", applicationInfo.dataDir + "/sock_path", "--loglevel", "3")
 
