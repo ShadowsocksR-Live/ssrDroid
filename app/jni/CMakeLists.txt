@@ -8,7 +8,7 @@ add_subdirectory(pdnsd)
 
 add_subdirectory(proxychains4)
 
-add_subdirectory(badvpn)
+#add_subdirectory(badvpn)
 
 add_subdirectory(ssrNative)
 
