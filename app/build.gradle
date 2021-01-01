@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    publishNonDefault true
     defaultConfig {
         applicationId "com.ssrlive.ssrdroid"
         minSdkVersion rootProject.minSdkVersion
@@ -22,6 +21,17 @@ android {
         multiDexEnabled true
         proguardFiles
         vectorDrawables.useSupportLibrary = true
+
+        externalNativeBuild {
+            cmake {
+                // cFlags '-Wall -Wextra -std=gnu99'
+                arguments '-DBADVPN_THREADWORK_USE_PTHREAD',
+                        '-DBADVPN_LINUX', '-DBADVPN_BREACTOR_BADVPN',
+                        '-D_GNU_SOURCE', '-DANDROID', '-D__ANDROID__',
+                        '-DBADVPN_USE_SELFPIPE', '-DBADVPN_USE_EPOLL',
+                        '-DBADVPN_LITTLE_ENDIAN', '-DBADVPN_THREAD_SAFE'
+            }
+        }
     }
     buildTypes {
         debug {
