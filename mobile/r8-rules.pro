@@ -10,3 +10,7 @@
 -assumenosideeffects class android.util.Log {
     public static int d(...);
 }
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+	public static void check*(...);
+	public static void throw*(...);
+}

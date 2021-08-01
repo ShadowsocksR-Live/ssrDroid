@@ -54,8 +54,8 @@ android {
         targetCompatibility javaVersion
     }
     packagingOptions {
-        exclude '/META-INF/*.version'
-        exclude '**/*.kotlin_*'
+        exclude '/META-INF/**'
+        exclude '/kotlin/**'
         exclude '/*.bin'
     }
     aaptOptions.additionalParameters "--preferred-density", "xxxhdpi"

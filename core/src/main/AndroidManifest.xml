@@ -92,68 +92,8 @@
             </intent-filter>
         </receiver>
 
-        <!-- https://android.googlesource.com/platform/frameworks/support/+/androidx-master-dev/work/workmanager/src/main/AndroidManifest.xml -->
-        <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            tools:node="remove" />
-
         <service
             android:name="androidx.room.MultiInstanceInvalidationService"
-            android:directBootAware="true"
             android:process=":bg" />
-        <service
-            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:ignore="Instantiatable"
-            tools:replace="android:directBootAware" />
-        <service
-            android:name="androidx.work.impl.background.systemjob.SystemJobService"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:replace="android:directBootAware" />
-        <service
-            android:name="androidx.work.impl.foreground.SystemForegroundService"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:ignore="Instantiatable"
-            tools:replace="android:directBootAware" />
-
-        <receiver
-            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:replace="android:directBootAware" />
-        <receiver
-            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:replace="android:directBootAware" />
-        <receiver
-            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:replace="android:directBootAware" />
-        <receiver
-            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:replace="android:directBootAware" />
-        <receiver
-            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:replace="android:directBootAware" />
-        <receiver
-            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:replace="android:directBootAware" />
-        <receiver
-            android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver"
-            android:directBootAware="true"
-            android:process=":bg"
-            tools:replace="android:directBootAware" />
     </application>
 </manifest>

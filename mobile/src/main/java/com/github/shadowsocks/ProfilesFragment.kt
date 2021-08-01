@@ -20,13 +20,12 @@
 
 package com.github.shadowsocks
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.text.format.Formatter
 import android.util.LongSparseArray
@@ -88,7 +87,6 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener, Sea
     private fun isProfileEditable(id: Long) =
             (activity as MainActivity).state == BaseService.State.Stopped || id !in Core.activeProfileIds
 
-    @SuppressLint("ValidFragment")
     class QRCodeDialog() : DialogFragment() {
         constructor(url: String) : this() {
             arguments = bundleOf(Pair(KEY_URL, url))
@@ -244,10 +242,9 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener, Sea
         fun filter(name: String) {
             val active = ProfileManager.getActiveProfiles()?.toMutableList() ?: mutableListOf()
             profiles.clear()
-            val locale = resources.configuration.locale
-            val lower = name.lowercase(locale)
+            val lower = name.lowercase()
             profiles.addAll(active.filter {
-                it.name?.lowercase(locale)?.contains(lower) == true || it.host.lowercase(locale).contains(lower)
+                it.name.lowercase().contains(lower) || it.host.lowercase().contains(lower)
             })
             notifyDataSetChanged()
         }
@@ -380,14 +377,14 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener, Sea
                     if (isEnabled) super.getDragDirs(recyclerView, viewHolder) else 0
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val index = viewHolder.adapterPosition
+                val index = viewHolder.bindingAdapterPosition
                 profilesAdapter.remove(index)
                 undoManager.remove(Pair(index, (viewHolder as ProfileViewHolder).item))
             }
 
             override fun onMove(recyclerView: RecyclerView,
                                 viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                profilesAdapter.move(viewHolder.adapterPosition, target.adapterPosition)
+                profilesAdapter.move(viewHolder.bindingAdapterPosition, target.bindingAdapterPosition)
                 return true
             }
 

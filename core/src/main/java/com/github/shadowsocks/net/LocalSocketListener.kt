@@ -29,7 +29,8 @@ import android.system.OsConstants
 import com.github.shadowsocks.utils.printLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.onFailure
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
@@ -60,7 +61,7 @@ abstract class LocalSocketListener(name: String, socketFile: File) : Thread(name
                 }
             }
         }
-        closeChannel.sendBlocking(Unit)
+        closeChannel.trySendBlocking(Unit).onFailure { throw it!! }
     }
 
     open fun shutdown(scope: CoroutineScope) {

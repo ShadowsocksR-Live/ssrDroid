@@ -61,8 +61,8 @@ object SSRSubManager {
     }
 
     suspend fun update(ssrSub: SSRSub, b: String = "") {
-        val response = if (b.isEmpty()) getResponse(ssrSub.url) else b
-        var profiles = Profile.findAllSSRUrls(response, Core.currentProfile?.first).toList()
+        val response = b.ifEmpty { getResponse(ssrSub.url) }
+        var profiles = Profile.findAllSSRUrls(response, Core.currentProfile?.main).toList()
         when {
             profiles.isEmpty() -> {
                 deletProfiles(ssrSub)
@@ -96,7 +96,7 @@ object SSRSubManager {
 
     suspend fun create(url: String): SSRSub {
         val response = getResponse(url)
-        val profiles = Profile.findAllSSRUrls(response, Core.currentProfile?.first).toList()
+        val profiles = Profile.findAllSSRUrls(response, Core.currentProfile?.main).toList()
         if (profiles.isNullOrEmpty() || profiles[0].url_group.isEmpty()) throw IOException("Invalid Link")
         var new = SSRSub(url = url, url_group = profiles[0].url_group)
         getAllSSRSub().forEach { if (it.url_group == new.url_group) throw IOException("Group already exists") }

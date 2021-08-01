@@ -103,7 +103,7 @@ data class Profile(
         private const val TAG = "ShadowParser"
         private const val serialVersionUID = 1L
         private val pattern =
-                """(?i)ss://[-a-zA-Z0-9+&@#/%?=.~*'()|!:,;\[\]]*[-a-zA-Z0-9+&@#/%=.~*'()|\[\]]""".toRegex()
+                """(?i)ss://[-a-zA-Z0-9+&@#/%?=.~*'()|!:,;_\[\]]*[-a-zA-Z0-9+&@#/%=.~*'()|\[\]]""".toRegex()
         private val userInfoPattern = "^(.+?):(.*)$".toRegex()
         private val legacyPattern = "^(.+?):(.*)@(.+?):(\\d+?)$".toRegex()
 
@@ -124,11 +124,11 @@ data class Profile(
                 if (match != null) {
                     val profile = Profile()
                     feature?.copyFeatureSettingsTo(profile)
-                    profile.host = match.groupValues[2].toLowerCase(Locale.ENGLISH)
+                    profile.host = match.groupValues[2].lowercase(Locale.ENGLISH)
                     profile.remotePort = match.groupValues[3].toInt()
-                    profile.protocol = match.groupValues[4].toLowerCase(Locale.ENGLISH)
-                    profile.method = match.groupValues[5].toLowerCase(Locale.ENGLISH)
-                    profile.obfs = match.groupValues[6].toLowerCase(Locale.ENGLISH)
+                    profile.protocol = match.groupValues[4].lowercase(Locale.ENGLISH)
+                    profile.method = match.groupValues[5].lowercase(Locale.ENGLISH)
+                    profile.obfs = match.groupValues[6].lowercase(Locale.ENGLISH)
                     profile.password = base64Decode(match.groupValues[7])
 
                     val match1 = decodedPattern_ssr_obfsparam.matchEntire(match.groupValues[8])
@@ -162,7 +162,7 @@ data class Profile(
                     if (match != null) {
                         val profile = Profile()
                         feature?.copyFeatureSettingsTo(profile)
-                        profile.method = match.groupValues[1].toLowerCase(Locale.ENGLISH)
+                        profile.method = match.groupValues[1].lowercase(Locale.ENGLISH)
                         profile.password = match.groupValues[2]
                         profile.host = match.groupValues[3]
                         profile.remotePort = match.groupValues[4].toInt()
@@ -344,7 +344,7 @@ data class Profile(
     }
 
     val formattedAddress get() = (if (host.contains(":")) "[%s]:%d" else "%s:%d").format(host, remotePort)
-    val formattedName get() = if (name.isEmpty()) formattedAddress else name
+    val formattedName get() = name.ifEmpty { formattedAddress }
 
     fun copyFeatureSettingsTo(profile: Profile, withMore: Boolean = false) {
         profile.route = route

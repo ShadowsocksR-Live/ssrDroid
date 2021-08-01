@@ -65,7 +65,7 @@ class VpnService : BaseVpnService(), LocalDnsService.Interface {
     private inner class ProtectWorker : ConcurrentLocalSocketListener("ShadowsocksVpnThread",
             File(Core.deviceStorage.noBackupFilesDir, "protect_path")) {
         override fun acceptInternal(socket: LocalSocket) {
-            socket.inputStream.read()
+            if (socket.inputStream.read() == -1) return
             val fd = socket.ancillaryFileDescriptors!!.single()!!
             try {
                 socket.outputStream.write(if (underlyingNetwork.let { network ->
@@ -74,8 +74,7 @@ class VpnService : BaseVpnService(), LocalDnsService.Interface {
                                 return@let true
                             } catch (e: IOException) {
                                 when ((e.cause as? ErrnoException)?.errno) {
-                                    // also suppress ENONET (Machine is not on the network)
-                                    OsConstants.EPERM, 64 -> e.printStackTrace()
+                                    OsConstants.EPERM, OsConstants.EACCES, OsConstants.ENONET -> e.printStackTrace()
                                     else -> printLog(e)
                                 }
                                 return@let false

@@ -41,6 +41,7 @@ import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.aidl.ShadowsocksConnection
+import com.github.shadowsocks.core.BuildConfig
 import com.github.shadowsocks.core.R
 import com.github.shadowsocks.database.Profile
 import com.github.shadowsocks.database.ProfileManager
@@ -96,7 +97,7 @@ object Core : Configuration.Provider {
         this.app = app
         this.configureIntent = {
             PendingIntent.getActivity(it, 0, Intent(it, configureClass.java)
-                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT), 0)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT), PendingIntent.FLAG_IMMUTABLE)
         }
 
         if (Build.VERSION.SDK_INT >= 24) {  // migrate old files
@@ -128,6 +129,7 @@ object Core : Configuration.Provider {
     }
 
     override fun getWorkManagerConfiguration() = Configuration.Builder().apply {
+        setDefaultProcessName(app.packageName + ":bg")
         setMinimumLoggingLevel(if (BuildConfig.DEBUG) Log.VERBOSE else Log.INFO)
         setExecutor { GlobalScope.launch { it.run() } }
         setTaskExecutor { GlobalScope.launch { it.run() } }

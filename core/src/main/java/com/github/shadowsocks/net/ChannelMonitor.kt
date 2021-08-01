@@ -24,7 +24,8 @@ import android.os.Build
 import com.github.shadowsocks.utils.printLog
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.onFailure
+import kotlinx.coroutines.channels.trySendBlocking
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.channels.*
@@ -52,7 +53,7 @@ class ChannelMonitor : Thread("ChannelMonitor") {
             registerInternal(this, SelectionKey.OP_READ) {
                 val junk = ByteBuffer.allocateDirect(1)
                 while (read(junk) > 0) {
-                    pendingRegistrations.poll()!!.apply {
+                    pendingRegistrations.tryReceive().getOrNull()?.apply {
                         try {
                             result.complete(registerInternal(channel, ops, listener))
                         } catch (e: Exception) {
@@ -112,7 +113,7 @@ class ChannelMonitor : Thread("ChannelMonitor") {
                 (key.attachment() as (SelectionKey) -> Unit)(key)
             }
         }
-        closeChannel.sendBlocking(Unit)
+        closeChannel.trySendBlocking(Unit).onFailure { throw it!! }
     }
 
     fun close(scope: CoroutineScope) {
