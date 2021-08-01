@@ -306,7 +306,6 @@ object BaseService {
         suspend fun preInit() { }
         suspend fun getActiveNetwork() = if (Build.VERSION.SDK_INT >= 23) Core.connectivity.activeNetwork else null
         suspend fun resolver(host: String) = DnsResolverCompat.resolveOnActiveNetwork(host)
-        suspend fun openConnection(url: URL) = url.openConnection()
 
         fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
             val data = data
@@ -347,7 +346,7 @@ object BaseService {
                     data.udpFallback?.init(this@Interface, hosts)
                     if (profile.route == Acl.CUSTOM_RULES) try {
                         withContext(Dispatchers.IO) {
-                            Acl.createCustom(this@Interface::openConnection)
+                            Acl.createCustom(this@Interface.getActiveNetwork())
                         }
                     } catch (e: IOException) {
                         throw ExpectedExceptionWrapper(e)

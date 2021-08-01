@@ -10,6 +10,7 @@ import androidx.preference.EditTextPreferenceDialogFragmentCompat
 import com.github.shadowsocks.R
 import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.utils.printLog
+import com.github.shadowsocks.utils.setUA
 import com.github.shadowsocks.utils.useCancellable
 import kotlinx.coroutines.*
 import java.net.HttpURLConnection
@@ -41,10 +42,10 @@ class ActionEditTextPreferenceDialogFragment : EditTextPreferenceDialogFragmentC
                     try {
                         withTimeout(10000L) {
                             val connection = URL(mEditText.text.toString()).openConnection() as HttpURLConnection
-                            connection.addRequestProperty("User-Agent","ShadowsocksRb (https://github.com/ShadowsocksRb)")
-                            connection.addRequestProperty("X-Forwarded-For","127.0.0.1")
-                            connection.useCancellable {
-                                inputStream.copyTo(Acl.getFile(Acl.CUSTOM_RULES).outputStream())
+                            connection.setUA().useCancellable {
+                                Acl.getFile(Acl.CUSTOM_RULES).outputStream().use { out ->
+                                    inputStream.use { it.copyTo(out) }
+                                }
                             }
                         }
                     } catch (e: Exception) {

@@ -117,6 +117,11 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
         listener((activity as MainActivity).state)
         MainActivity.stateListener = listener
         serviceMode.onPreferenceChangeListener = onServiceModeChange
+
+        findPreference<EditTextPreference>(Key.socksPort)!!
+                .setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
+        findPreference<EditTextPreference>(Key.socksPswd)!!
+                .summaryProvider = ProfileConfigFragment
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

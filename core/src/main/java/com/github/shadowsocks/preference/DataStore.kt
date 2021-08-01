@@ -78,6 +78,11 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     var portTransproxy: Int
         get() = getLocalPort(Key.portTransproxy, 8200)
         set(value) = publicStore.putString(Key.portTransproxy, value.toString())
+    val socksAddress: InetSocketAddress
+        get() = InetSocketAddress(publicStore.getString(Key.socksHost) ?: "",
+                parsePort(publicStore.getString(Key.socksPort), 1080))
+    val socksUser: String get() = publicStore.getString(Key.socksUser) ?: ""
+    val socksPswd: String get() = publicStore.getString(Key.socksPswd) ?: ""
 
     /**
      * Initialize settings that have complicated default values.

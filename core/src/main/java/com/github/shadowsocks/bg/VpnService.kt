@@ -143,11 +143,6 @@ class VpnService : BaseVpnService(), LocalDnsService.Interface {
     override suspend fun preInit() = DefaultNetworkListener.start(this) { underlyingNetwork = it }
     override suspend fun getActiveNetwork() = DefaultNetworkListener.get()
     override suspend fun resolver(host: String) = DnsResolverCompat.resolve(DefaultNetworkListener.get(), host)
-    override suspend fun openConnection(url: URL) = DefaultNetworkListener.get().openConnection(url)
-            .apply {
-                addRequestProperty("User-Agent", "ShadowsocksRb (https://github.com/ShadowsocksRb)")
-                addRequestProperty("X-Forwarded-For", "127.0.0.1")
-            }
 
     override suspend fun startProcesses(hosts: HostsFile) {
         worker = ProtectWorker().apply { start() }

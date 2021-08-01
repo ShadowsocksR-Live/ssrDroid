@@ -176,4 +176,12 @@
   <!-- ssrsub -->
   <string name="ssrsub_manage">管理 SSR 订阅</string>
   <string name="ssrsub_remove_tip_delete">Delete the nodes too</string>
+
+  <!-- socks5 -->
+  <string name="socks_title">设置订阅代理</string>
+  <string name="socks_summary">当未启动服务时，通过代理更新订阅</string>
+  <string name="socks_host">Socks5 服务器</string>
+  <string name="socks_port">Socks5 端口</string>
+  <string name="socks_user">Socks5 用户名</string>
+  <string name="socks_pswd">Socks5 密码</string>
 </resources>

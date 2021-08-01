@@ -37,7 +37,7 @@
     <SwitchPreference
         app:icon="@drawable/ic_baseline_settings_remote_24"
         app:key="shareOverLan"
-        app:title="@string/share_over_lan"/>
+        app:title="@string/share_over_lan" />
     <EditTextPreference
         app:icon="@drawable/ic_maps_directions_boat"
         app:key="portProxy"
@@ -52,4 +52,27 @@
         app:key="portTransproxy"
         app:title="@string/port_transproxy"
         app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory
+        app:key="socks"
+        app:summary="@string/socks_summary"
+        app:title="@string/socks_title">
+
+        <EditTextPreference
+            app:key="socksHost"
+            app:title="@string/socks_host"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="socksPort"
+            app:title="@string/socks_port"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="socksUser"
+            app:title="@string/socks_user"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:dialogLayout="@layout/preference_dialog_password"
+            app:key="socksPswd"
+            app:title="@string/socks_pswd" />
+    </PreferenceCategory>
 </PreferenceScreen>

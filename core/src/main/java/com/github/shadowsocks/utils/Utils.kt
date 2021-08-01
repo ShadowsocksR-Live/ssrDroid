@@ -76,7 +76,7 @@ fun FileDescriptor.closeQuietly() = try {
     Os.close(this)
 } catch (_: ErrnoException) { }
 
-private val parseNumericAddress by lazy @SuppressLint("DiscouragedPrivateApi") {
+private val parseNumericAddress by lazy @SuppressLint("SoonBlockedPrivateApi") {
     InetAddress::class.java.getDeclaredMethod("parseNumericAddress", String::class.java).apply {
         isAccessible = true
     }
@@ -166,4 +166,10 @@ fun Context.getBitmap(id: Int): Bitmap {
     drawable.setBounds(0, 0, canvas.width, canvas.height)
     drawable.draw(canvas)
     return bitmap
+}
+
+fun HttpURLConnection.setUA(): HttpURLConnection {
+    setRequestProperty("User-Agent", "ShadowsocksRb (https://github.com/ShadowsocksRb)")
+    setRequestProperty("X-Forwarded-For", "127.0.0.1")
+    return this
 }

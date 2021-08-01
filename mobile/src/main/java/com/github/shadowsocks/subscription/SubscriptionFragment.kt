@@ -41,6 +41,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.shadowsocks.MainActivity
 import com.github.shadowsocks.R
 import com.github.shadowsocks.ToolbarFragment
+import com.github.shadowsocks.bg.BaseService
 import com.github.shadowsocks.database.SSRSub
 import com.github.shadowsocks.database.SSRSubManager
 import com.github.shadowsocks.plugin.AlertDialogFragment
@@ -49,8 +50,8 @@ import com.github.shadowsocks.utils.readableMessage
 import com.github.shadowsocks.widget.ListHolderListener
 import com.github.shadowsocks.widget.MainListListener
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.*
+import kotlinx.parcelize.Parcelize
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.net.MalformedURLException
 import java.net.URL
@@ -75,6 +76,7 @@ class SubscriptionFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener 
 
         override fun AlertDialog.Builder.prepare(listener: DialogInterface.OnClickListener) {
             val activity = requireActivity()
+
             @SuppressLint("InflateParams")
             val view = activity.layoutInflater.inflate(R.layout.dialog_subscription, null)
             editText = view.findViewById(R.id.content)
@@ -151,7 +153,7 @@ class SubscriptionFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener 
 
         override fun onClick(v: View?) {
             if (item.id == 0L) return
-            SubDialogFragment().withArg(SubItem(adapterPosition, item.url, item.url_group))
+            SubDialogFragment().withArg(SubItem(bindingAdapterPosition, item.url, item.url_group))
                     .show(this@SubscriptionFragment, REQUEST_CODE_EDIT)
         }
     }
@@ -219,7 +221,7 @@ class SubscriptionFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener 
         FastScrollerBuilder(list).useMd2Style().build()
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val index = viewHolder.adapterPosition
+                val index = viewHolder.bindingAdapterPosition
                 if ((viewHolder as SubViewHolder).item.id == 0L) adapter.notifyItemChanged(index)
                 else adapter.del(index)
             }
@@ -244,7 +246,10 @@ class SubscriptionFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener 
         }
         R.id.action_update_subscription -> {
             val context = requireContext()
-            context.startService(Intent(context, SubscriptionService::class.java))
+            val intent = Intent(context, SubscriptionService::class.java)
+            val useProxy = (activity as MainActivity).state != BaseService.State.Connected
+            intent.putExtra("useProxy", useProxy)
+            context.startService(intent)
             true
         }
         else -> false
@@ -260,10 +265,11 @@ class SubscriptionFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener 
                 GlobalScope.launch(Dispatchers.IO) {
                     var new: SSRSub? = null
                     try {
-                        new = withTimeout(10000L) { return@withTimeout SSRSubManager.create(ret.url) }
+                        val useProxy = (activity as MainActivity).state != BaseService.State.Connected
+                        new = withTimeout(10000L) { return@withTimeout SSRSubManager.create(ret.url, useProxy) }
                     } catch (e: Exception) {
                         printLog(e)
-                        GlobalScope.launch(Dispatchers.Main) {
+                        withContext(Dispatchers.Main) {
                             (activity as MainActivity).snackbar().setText(e.readableMessage).show()
                         }
                     } finally {

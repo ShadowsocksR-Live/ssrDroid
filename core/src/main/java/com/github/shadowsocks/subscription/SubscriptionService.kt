@@ -91,8 +91,9 @@ class SubscriptionService : Service(), CoroutineScope {
                 }
                 Core.notification.notify(NOTIFICATION_ID, notification.build())
                 counter = 0
+                val useProxy = intent?.getBooleanExtra("useProxy", false) ?: false
                 val workers = ssrsubs.map {
-                    async(Dispatchers.IO) { fetchJson(it, ssrsubs.size, notification) }
+                    async(Dispatchers.IO) { fetchJson(it, useProxy, ssrsubs.size, notification) }
                 }
                 try {
                     workers.awaitAll()
@@ -120,9 +121,9 @@ class SubscriptionService : Service(), CoroutineScope {
         return START_NOT_STICKY
     }
 
-    private suspend fun fetchJson(ssrSub: SSRSub, max: Int, notification: NotificationCompat.Builder) {
+    private suspend fun fetchJson(ssrSub: SSRSub, useProxy: Boolean, max: Int, notification: NotificationCompat.Builder) {
         try {
-            SSRSubManager.update(ssrSub)
+            SSRSubManager.update(ssrSub, useProxy = useProxy)
         } catch (e: Exception) {
             ssrSub.status = SSRSub.NETWORK_ERROR
             SSRSubManager.updateSSRSub(ssrSub)

@@ -21,15 +21,17 @@
 package com.github.shadowsocks.acl
 
 import android.content.Context
+import android.net.Network
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.net.Subnet
 import com.github.shadowsocks.preference.DataStore
+import com.github.shadowsocks.utils.setUA
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import java.io.File
 import java.io.Reader
+import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLConnection
 import kotlin.coroutines.coroutineContext
 
 class Acl {
@@ -81,10 +83,14 @@ class Acl {
             return bypass to if (bypass) proxySubnets else bypassSubnets
         }
 
-        suspend fun createCustom(connect: suspend (URL) -> URLConnection) {
+        fun createCustom(network: Network?) {
+            network ?: return
             val file = getFile(CUSTOM_RULES)
             if (file.exists()) return
-            connect(URL(DataStore.aclUrl)).getInputStream().copyTo(file.outputStream())
+            val connection = network.openConnection(URL(DataStore.aclUrl)) as HttpURLConnection
+            file.outputStream().use { out ->
+                connection.setUA().inputStream.use { it.copyTo(out) }
+            }
         }
     }
 }
