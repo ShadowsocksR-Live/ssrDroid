@@ -3,13 +3,13 @@
 buildscript {
     ext {
         javaVersion = JavaVersion.VERSION_1_8
-        kotlinVersion = '1.4.10'
-        ndkVersion = '21.3.6528147'
+        kotlinVersion = '1.5.21'
+        ndkVersion = '21.4.7075529'
         minSdkVersion = 21
-        sdkVersion = 30
-        compileSdkVersion = 30
-        buildToolsVersion = '30.0.2'
-        desugarLibsVersion = '1.0.10'
+        sdkVersion = 31
+        compileSdkVersion = 31
+        buildToolsVersion = '31.0.0'
+        desugarLibsVersion = '1.1.5'
         versionCode = 408
         versionName = '5.0.6R.1'
         resConfigs = ['zh-rCN']
@@ -17,11 +17,11 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0-alpha12'
+        classpath 'com.android.tools.build:gradle:7.1.0-alpha05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
@@ -29,6 +29,7 @@ buildscript {
 allprojects {
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
 }

@@ -1,5 +1,4 @@
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.github.shadowsocks.core"
     android:installLocation="internalOnly">
@@ -62,6 +61,7 @@
         <activity
             android:name="com.github.shadowsocks.UrlImportActivity"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -83,6 +83,7 @@
             android:name="com.github.shadowsocks.BootReceiver"
             android:directBootAware="true"
             android:enabled="false"
+            android:exported="true"
             android:process=":bg">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

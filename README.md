@@ -7,11 +7,11 @@
 ### 编译
 
 * [Git](https://git-scm.com/downloads)
-* [OpenJDK 8+](https://jdk.java.net/)
+* [OpenJDK 11+](https://jdk.java.net/)
 * [Android SDK](https://developer.android.com/studio#command-tools)
-  - Android SDK Build-Tools 30.0.2
-  - Android SDK Platform 30
-  - NDK (Side by side) 21.3.6528147
+  - Android SDK Build-Tools 31.0.0
+  - Android SDK Platform 31
+  - NDK (Side by side) 21.4.7075529
   - Android SDK Tools
 
 ```shell script

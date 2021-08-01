@@ -33,7 +33,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,7 +48,7 @@ import com.github.shadowsocks.utils.readableMessage
 import com.github.shadowsocks.widget.ListHolderListener
 import com.github.shadowsocks.widget.MainListListener
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.*
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.net.MalformedURLException
@@ -206,7 +205,7 @@ class SubscriptionFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener 
         toolbar.setTitle(R.string.subscriptions)
         toolbar.inflateMenu(R.menu.subscription_menu)
         toolbar.setOnMenuItemClickListener(this)
-        SubscriptionService.idle.observe(this) {
+        SubscriptionService.idle.observe(viewLifecycleOwner) {
             toolbar.menu.findItem(R.id.action_update_subscription).isEnabled = it
             if (it == true) adapter.updateAll()
         }

@@ -36,11 +36,11 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.SparseBooleanArray
 import android.view.*
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.SearchView
+import android.widget.*
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.getSystemService
 import androidx.core.util.set
 import androidx.lifecycle.lifecycleScope
@@ -56,8 +56,6 @@ import com.github.shadowsocks.utils.listenForPackageChanges
 import com.github.shadowsocks.widget.ListHolderListener
 import com.github.shadowsocks.widget.ListListener
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.layout_apps.*
-import kotlinx.android.synthetic.main.layout_apps_item.view.*
 import kotlinx.coroutines.*
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import me.zhanghai.android.fastscroll.PopupTextProvider
@@ -111,15 +109,15 @@ class AppManager : AppCompatActivity() {
 
         fun bind(app: ProxiedApp) {
             item = app
-            itemView.itemicon.setImageDrawable(app.icon)
-            itemView.title.text = app.name
+            itemView.findViewById<ImageView>(R.id.itemicon).setImageDrawable(app.icon)
+            itemView.findViewById<TextView>(R.id.title).text = app.name
             @SuppressLint("SetTextI18n")
-            itemView.desc.text = "${app.packageName} (${app.uid})"
-            itemView.itemcheck.isChecked = isProxiedApp(app)
+            itemView.findViewById<TextView>(R.id.desc).text = "${app.packageName} (${app.uid})"
+            itemView.findViewById<Switch>(R.id.itemcheck).isChecked = isProxiedApp(app)
         }
 
         fun handlePayload(payloads: List<String>) {
-            if (payloads.contains(SWITCH)) itemView.itemcheck.isChecked = isProxiedApp(item)
+            if (payloads.contains(SWITCH)) itemView.findViewById<Switch>(R.id.itemcheck).isChecked = isProxiedApp(item)
         }
 
         override fun onClick(v: View?) {
@@ -182,6 +180,11 @@ class AppManager : AppCompatActivity() {
         override fun getPopupText(position: Int) = filteredApps[position].name.firstOrNull()?.toString() ?: ""
     }
 
+    private val loading by lazy { findViewById<View>(R.id.loading) }
+    private lateinit var toolbar: Toolbar
+    private lateinit var bypassGroup: RadioGroup
+    private lateinit var list: RecyclerView
+    private lateinit var search: SearchView
     private val proxiedUids = SparseBooleanArray()
     private val clipboard by lazy { getSystemService<ClipboardManager>()!! }
     private var loader: Job? = null
@@ -227,6 +230,7 @@ class AppManager : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_apps)
         ListHolderListener.setup(this)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -235,6 +239,7 @@ class AppManager : AppCompatActivity() {
             DataStore.dirty = true
         }
 
+        bypassGroup = findViewById(R.id.bypassGroup)
         bypassGroup.check(if (DataStore.bypass) R.id.btn_bypass else R.id.btn_on)
         bypassGroup.setOnCheckedChangeListener { _, checkedId ->
             DataStore.dirty = true
@@ -249,12 +254,14 @@ class AppManager : AppCompatActivity() {
         }
 
         initProxiedUids()
+        list = findViewById(R.id.list)
         list.setOnApplyWindowInsetsListener(ListListener)
         list.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         list.itemAnimator = DefaultItemAnimator()
         list.adapter = appsAdapter
         FastScrollerBuilder(list).useMd2Style().build()
 
+        search = findViewById(R.id.search)
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?) = true.also { appsAdapter.filter.filter(newText) }

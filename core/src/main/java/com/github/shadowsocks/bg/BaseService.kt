@@ -129,7 +129,7 @@ object BaseService {
 
         private suspend fun loop() {
             while (true) {
-                delay(bandwidthListeners.values.min() ?: return)
+                delay(bandwidthListeners.values.minOrNull() ?: return)
                 val proxies = listOfNotNull(data?.proxy, data?.udpFallback)
                 val stats = proxies
                         .map { Pair(it.profile.id, it.trafficMonitor?.requestUpdate()) }
@@ -189,12 +189,12 @@ object BaseService {
             callbacks.unregister(cb)
         }
 
-        fun stateChanged(s: State, msg: String?) {
+        fun stateChanged(s: State, msg: String?) = launch {
             val profileName = profileName
             broadcast { it.stateChanged(s.ordinal, profileName, msg) }
         }
 
-        fun trafficPersisted(ids: List<Long>) {
+        fun trafficPersisted(ids: List<Long>) = launch {
             if (bandwidthListeners.isNotEmpty() && ids.isNotEmpty()) broadcast { item ->
                 if (bandwidthListeners.contains(item.asBinder())) ids.forEach(item::trafficPersisted)
             }
