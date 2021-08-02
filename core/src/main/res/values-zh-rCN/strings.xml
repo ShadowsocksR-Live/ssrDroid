@@ -175,7 +175,7 @@
     <string name="ssrsub_remove_tip_delete">与节点一起删除</string>
 
     <!-- socks5 -->
-    <string name="socks_title">设置订阅代理</string>
+    <string name="socks_title">订阅代理</string>
     <string name="socks_summary">当未启动服务时，通过代理更新订阅</string>
     <string name="socks_host">Socks5 服务器</string>
     <string name="socks_port">Socks5 端口</string>

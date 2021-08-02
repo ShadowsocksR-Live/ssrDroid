@@ -51,21 +51,27 @@ object SSRSubManager {
 
     private suspend fun getResponse(url: String, useProxy: Boolean): String {
         val proxy = when {
+            DataStore.socksAddress == null -> Proxy.NO_PROXY
             useProxy -> Proxy(Proxy.Type.SOCKS, DataStore.socksAddress)
             DataStore.serviceMode != Key.modeVpn -> Proxy(Proxy.Type.SOCKS, DataStore.proxyAddress)
             else -> Proxy.NO_PROXY
         }
         if (DataStore.socksUser.isNotEmpty()) {
-            Authenticator.setDefault(object : Authenticator() {
-                override fun getPasswordAuthentication(): PasswordAuthentication {
-                    return PasswordAuthentication(DataStore.socksUser, DataStore.socksPswd.toCharArray())
-                }
-            })
+            val authenticator = object : Authenticator() {
+                override fun getPasswordAuthentication() =
+                        PasswordAuthentication(DataStore.socksUser, DataStore.socksPswd)
+            }
+            Authenticator.setDefault(authenticator)
         }
-        val connection = URL(url).openConnection(proxy) as HttpURLConnection
-        val body = connection.setUA().useCancellable { inputStream.bufferedReader().use { it.readText() } }
-        Authenticator.setDefault(null)
-        return String(Base64.decode(body, Base64.URL_SAFE))
+        try {
+            val connection = URL(url).openConnection(proxy) as HttpURLConnection
+            val body = connection.setUA().useCancellable {
+                inputStream.bufferedReader().use { it.readText() }
+            }
+            return String(Base64.decode(body, Base64.URL_SAFE))
+        } finally {
+            Authenticator.setDefault(null)
+        }
     }
 
     fun deletProfiles(ssrSub: SSRSub) {
