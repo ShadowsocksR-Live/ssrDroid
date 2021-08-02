@@ -1,37 +1,16 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-buildscript {
-    ext {
-        javaVersion = JavaVersion.VERSION_1_8
-        kotlinVersion = '1.5.21'
-        ndkVersion = '21.4.7075529'
-        minSdkVersion = 21
-        sdkVersion = 31
-        compileSdkVersion = 31
-        buildToolsVersion = '31.0.0'
-        desugarLibsVersion = '1.1.5'
-        versionCode = 410
-        versionName = '5.0.6R.2'
-        resConfigs = ['zh-rCN']
-    }
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    }
+ext {
+    javaVersion = JavaVersion.VERSION_1_8
+    ndkVersion = '21.4.7075529'
+    minSdkVersion = 21
+    sdkVersion = 31
+    compileSdkVersion = 31
+    buildToolsVersion = '31.0.0'
+    versionCode = 410
+    versionName = '5.0.6R.2'
+    resConfigs = ['zh-rCN']
 }
 
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        jcenter()
-    }
     configurations.all {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'

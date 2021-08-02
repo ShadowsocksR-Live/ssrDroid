@@ -1,1 +1,25 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+    plugins {
+        def agp = '7.0.0'
+        def kotlin = '1.5.21'
+        id 'com.android.application' version agp
+        id 'com.android.library' version agp
+        id 'org.jetbrains.kotlin.android' version kotlin
+        id 'org.jetbrains.kotlin.plugin.parcelize' version kotlin
+        id 'org.jetbrains.kotlin.kapt' version kotlin
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+}
 include ':mobile', ':core', ':plugin'
