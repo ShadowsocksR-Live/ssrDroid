@@ -3,12 +3,12 @@
 	url = https://github.com/shadowsocksRb/shadowsocksr-libev.git
 [submodule "core/src/main/jni/badvpn"]
 	path = core/src/main/jni/badvpn
-	url = https://github.com/shadowsocks/badvpn.git
+	url = https://github.com/ShadowsocksR-Live/badvpn.git
 	branch = shadowsocks-android
 [submodule "core/src/main/jni/libancillary"]
 	path = core/src/main/jni/libancillary
-	url = https://github.com/shadowsocks/libancillary.git
-	branch = shadowsocks-android
+	url = https://github.com/ShadowsocksR-Live/libancillary.git
+	branch = master
 [submodule "core/src/main/jni/libevent"]
 	path = core/src/main/jni/libevent
 	url = https://github.com/shadowsocks/libevent.git
