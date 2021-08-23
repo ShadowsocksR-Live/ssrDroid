@@ -236,7 +236,7 @@ LOCAL_STATIC_LIBRARIES := libevent
 
 LOCAL_MODULE := redsocks
 LOCAL_SRC_FILES := $(addprefix redsocks/, $(REDSOCKS_SOURCES))
-LOCAL_CFLAGS := -std=gnu99 -DUSE_IPTABLES \
+LOCAL_CFLAGS := -std=gnu99 -DUSE_IPTABLES -DNOT_GEN_VERSION \
 	-I$(LOCAL_PATH)/redsocks \
 	-I$(LOCAL_PATH)/libevent/include \
 	-I$(LOCAL_PATH)/libevent
