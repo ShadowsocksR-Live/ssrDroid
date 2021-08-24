@@ -1,6 +1,6 @@
 [submodule "core/src/main/jni/shadowsocks-libev"]
 	path = core/src/main/jni/shadowsocks-libev
-	url = https://github.com/shadowsocksRb/shadowsocksr-libev.git
+	url = https://github.com/ssrlive/ssr-libev.git
 [submodule "core/src/main/jni/badvpn"]
 	path = core/src/main/jni/badvpn
 	url = https://github.com/ShadowsocksR-Live/badvpn.git
