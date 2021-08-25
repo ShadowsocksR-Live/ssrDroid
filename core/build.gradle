@@ -20,11 +20,9 @@ android {
                 abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
                 arguments "-j${Runtime.runtime.availableProcessors()}"
             }
-            /*
             cmake {
-                // cFlags '-Wall -Wextra -std=gnu99'
+                cFlags '-Wall -Wextra -std=gnu99'
             }
-             */
         }
         kapt.arguments {
             arg("room.incremental", true)

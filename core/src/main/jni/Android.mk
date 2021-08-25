@@ -251,6 +251,8 @@ include $(CLEAR_VARS)
 
 SHADOWSOCKS_SOURCES := local.c cache.c udprelay.c encrypt.c \
 	utils.c netutils.c json.c jconf.c acl.c http.c tls.c rule.c \
+	obfs/verify.c  obfs/tls1.2_ticket.c obfs/obfsutil.c obfs/obfs.c obfs/http_simple.c \
+	obfs/crc32.c obfs/base64.c obfs/auth_chain.c obfs/auth.c \
 	android.c
 
 LOCAL_MODULE    := ss-local
