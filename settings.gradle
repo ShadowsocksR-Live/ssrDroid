@@ -5,7 +5,7 @@ pluginManagement {
         mavenCentral()
     }
     plugins {
-        def agp = '7.0.0'
+        def agp = '7.0.1'
         def kotlin = '1.5.21'
         id 'com.android.application' version agp
         id 'com.android.library' version agp

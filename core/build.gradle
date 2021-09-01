@@ -12,8 +12,6 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.sdkVersion
-        versionCode rootProject.versionCode
-        versionName rootProject.versionName
         buildConfigField("int", "VERSION_CODE", "${rootProject.versionCode}")
         externalNativeBuild {
             ndkBuild {
