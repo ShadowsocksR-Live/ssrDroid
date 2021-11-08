@@ -24,8 +24,8 @@
 	branch = mbedtls-2.16
 [submodule "core/src/main/jni/pcre"]
 	path = core/src/main/jni/pcre
-	url = https://android.googlesource.com/platform/external/pcre
-	branch = master
+	url = https://github.com/ssrlive/pcre.git
+	branch = v1
 [submodule "core/src/main/jni/libsodium"]
 	path = core/src/main/jni/libsodium
 	url = https://github.com/jedisct1/libsodium.git
