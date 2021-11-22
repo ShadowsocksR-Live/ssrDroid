@@ -40,15 +40,10 @@ android {
     kotlinOptions.jvmTarget = javaVersion
 
     externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
-        }
-        /*
         cmake {
             path file('src/main/jni/CMakeLists.txt')
             version '3.18.1'
         }
-         */
     }
 }
 
