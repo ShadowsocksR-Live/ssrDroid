@@ -394,6 +394,10 @@ data class Profile(
         put("protocol_param", protocol_param)
         put("obfs", obfs)
         put("obfs_param", obfs_param)
+        put("local_address", DataStore.listenAddress)
+        put("local_port", DataStore.portProxy)
+        put("timeout", 600)
+
         if (profiles == null) return@apply
         put("remarks", name)
         put("route", route)

@@ -255,7 +255,7 @@ SHADOWSOCKS_SOURCES := local.c cache.c udprelay.c encrypt.c \
 	obfs/crc32.c obfs/base64.c obfs/auth_chain.c obfs/auth.c \
 	android.c
 
-LOCAL_MODULE    := ss-local
+LOCAL_MODULE    := ssr-client
 LOCAL_SRC_FILES := $(addprefix shadowsocks-libev/src/, $(SHADOWSOCKS_SOURCES))
 LOCAL_CFLAGS    := -Wall -fno-strict-aliasing -DMODULE_LOCAL \
 					-DUSE_CRYPTO_MBEDTLS -DANDROID -DHAVE_CONFIG_H \

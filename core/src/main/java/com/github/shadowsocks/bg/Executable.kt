@@ -31,10 +31,10 @@ import java.io.IOException
 
 object Executable {
     const val REDSOCKS = "libredsocks.so"
-    const val SS_LOCAL = "libss-local.so"
+    const val SSR_CLIENT = "libssr-client.so"
     const val TUN2SOCKS = "libtun2socks.so"
 
-    private val EXECUTABLES = setOf(SS_LOCAL, REDSOCKS, TUN2SOCKS)
+    private val EXECUTABLES = setOf(SSR_CLIENT, REDSOCKS, TUN2SOCKS)
 
     fun killAll() {
         for (process in File("/proc").listFiles { _, name -> TextUtils.isDigitsOnly(name) } ?: return) {

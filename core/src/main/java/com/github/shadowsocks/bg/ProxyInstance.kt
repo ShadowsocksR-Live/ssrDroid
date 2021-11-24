@@ -77,14 +77,11 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
 
         this.configFile = configFile
         val config = profile.toJson()
-        config.put("local_address", DataStore.listenAddress)
-        config.put("local_port", DataStore.portProxy)
-        config.put("timeout", 600)
 
         configFile.writeText(config.toString())
 
         val cmd = service.buildAdditionalArguments(arrayListOf(
-                File((service as Context).applicationInfo.nativeLibraryDir, Executable.SS_LOCAL).absolutePath,
+                File((service as Context).applicationInfo.nativeLibraryDir, Executable.SSR_CLIENT).absolutePath,
                 "-S", stat.absolutePath,
                 "-c", configFile.absolutePath))
         if (extraFlag != null) cmd.add(extraFlag)
