@@ -56,5 +56,4 @@ set(PCRE_SOURCE_FILES
         )
 add_library(${PCRE_LIBRARY} STATIC ${PCRE_SOURCE_FILES})
 
-add_definitions(-DEV_CONFIG_H="${CMAKE_CURRENT_SOURCE_DIR}/include/libev/config.h")
 add_subdirectory(shadowsocks-libev)
