@@ -21,13 +21,6 @@ git clone --recurse-submodules https://github.com/ssrlive/ssrDroid3.git
 cd ssrDroid3
 ```
 
-#### 修改 CMake 脚本
-
-打開 `core/src/main/jni/mbedtls/CMakeLists.txt` 文件, 將第 11 行的 `ENABLE_PROGRAMS` 和第 24 行的 `ENABLE_TESTING`
-這兩個變量從 `ON` 設置為 `OFF`，如下圖, 否則下一步的編譯將報錯。
-
-![image](https://user-images.githubusercontent.com/30760636/130750898-61b08c51-67e4-4ddb-b554-2fdce3c5b58a.png)
-
 #### 編譯
 
 ```shell script
