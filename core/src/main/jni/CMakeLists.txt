@@ -16,6 +16,9 @@ add_subdirectory(redsocks)
 
 # =============== mbedtls ===============
 
+option(ENABLE_PROGRAMS "Build mbed TLS programs." OFF)
+option(ENABLE_TESTING "Build mbed TLS tests." OFF)
+
 add_subdirectory(mbedtls)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/mbedtls/include)
 set(MBEDTLS_CRYPTO_LIBRARY mbedcrypto)

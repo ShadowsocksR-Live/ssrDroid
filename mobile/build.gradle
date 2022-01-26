@@ -14,7 +14,7 @@ android {
         targetSdkVersion rootProject.sdkVersion
         versionCode rootProject.versionCode
         versionName rootProject.versionName
-        resConfigs rootProject.resConfigs
+        resConfigs 'zh-rCN'
         resValue 'string', 'applicationId', applicationId
     }
     buildTypes {
@@ -54,15 +54,20 @@ android {
         targetCompatibility javaVersion
     }
     packagingOptions {
-        exclude '/META-INF/**'
-        exclude '/kotlin/**'
-        exclude '/*.bin'
+        jniLibs {
+            excludes += ['/META-INF/**', '/kotlin/**']
+        }
+        resources {
+            excludes += ['/META-INF/**', '/kotlin/**', '/*.bin']
+        }
     }
     kotlinOptions.jvmTarget = javaVersion
-    lintOptions.checkReleaseBuilds false
     dependenciesInfo.includeInApk false
     androidResources {
         additionalParameters '--preferred-density', 'xxxhdpi'
+    }
+    lint {
+        checkReleaseBuilds false
     }
 }
 
