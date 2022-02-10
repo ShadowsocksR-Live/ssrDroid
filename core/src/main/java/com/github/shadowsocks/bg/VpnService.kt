@@ -150,11 +150,6 @@ class VpnService : BaseVpnService(), LocalDnsService.Interface {
         sendFd(startVpn())
     }
 
-    override fun buildAdditionalArguments(cmd: ArrayList<String>): ArrayList<String> {
-        cmd += "-V"
-        return cmd
-    }
-
     private suspend fun startVpn(): FileDescriptor {
         val profile = data.proxy!!.profile
         val builder = Builder()

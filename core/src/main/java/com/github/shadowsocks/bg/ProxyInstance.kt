@@ -82,10 +82,11 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
 
         configFile.writeText(config.toString())
 
-        val cmd = service.buildAdditionalArguments(arrayListOf(
+        val cmd = arrayListOf(
                 File((service as Context).applicationInfo.nativeLibraryDir, Executable.SSR_CLIENT).absolutePath,
+                "-V",
                 "-S", stat.absolutePath,
-                "-c", configFile.absolutePath))
+                "-c", configFile.absolutePath)
         if (extraFlag != null) cmd.add(extraFlag)
 
         if (route != Acl.ALL) {
