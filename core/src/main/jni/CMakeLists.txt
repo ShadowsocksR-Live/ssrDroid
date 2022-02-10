@@ -59,4 +59,5 @@ set(PCRE_SOURCE_FILES
         )
 add_library(${PCRE_LIBRARY} STATIC ${PCRE_SOURCE_FILES})
 
+option(BUILD_SSR_CLIENT_AS_EXE "Build ssr-client as executable." ON)
 add_subdirectory(shadowsocks-libev)
