@@ -43,6 +43,8 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
     var trafficMonitor: TrafficMonitor? = null
     private val host = profile.host
 
+    private var myThread: SsrClientThread? = null
+
     suspend fun init(service: BaseService.Interface, hosts: HostsFile) {
 
         // it's hard to resolve DNS on a specific interface so we'll do it here
@@ -94,7 +96,8 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         if (DataStore.tcpFastOpen) cmd += "--fast-open"
         if (BuildConfig.DEBUG) cmd += "-v"
 
-        service.data.processes!!.start(cmd)
+        myThread = SsrClientThread(cmd)
+        myThread?.start()
     }
 
     fun scheduleUpdate() {
@@ -102,6 +105,8 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
     }
 
     fun shutdown(scope: CoroutineScope) {
+        myThread?.terminate()
+
         trafficMonitor?.apply {
             thread.shutdown(scope)
             persistStats(profile.id)    // Make sure update total traffic when stopping the runner
@@ -109,5 +114,21 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         trafficMonitor = null
         configFile?.delete()    // remove old config possibly in device storage
         configFile = null
+    }
+
+    internal class SsrClientThread(cmd: ArrayList<String>?) : Thread() {
+        private var cmd: ArrayList<String>? = null
+        init {
+            this.cmd = cmd
+        }
+
+        override fun run() {
+            super.run()
+            cmd?.let { SsrClientWrapper.runSsrClient(it) }
+        }
+
+        fun terminate() {
+            SsrClientWrapper.stopSsrClient()
+        }
     }
 }
