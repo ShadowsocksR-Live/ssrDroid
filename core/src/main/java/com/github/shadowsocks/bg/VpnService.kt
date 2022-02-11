@@ -34,7 +34,6 @@ import com.github.shadowsocks.Core
 import com.github.shadowsocks.VpnRequestActivity
 import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.core.R
-import com.github.shadowsocks.net.ConcurrentLocalSocketListener
 import com.github.shadowsocks.net.DefaultNetworkListener
 import com.github.shadowsocks.net.HostsFile
 import com.github.shadowsocks.net.Subnet
@@ -62,34 +61,6 @@ class VpnService : BaseVpnService(), LocalDnsService.Interface {
         private const val PRIVATE_VLAN6_ROUTER = "fdfe:dcba:9876::2"
     }
 
-    private inner class ProtectWorker : ConcurrentLocalSocketListener("ShadowsocksVpnThread",
-            File(Core.deviceStorage.noBackupFilesDir, "protect_path")) {
-        override fun acceptInternal(socket: LocalSocket) {
-            if (socket.inputStream.read() == -1) return
-            val fd = socket.ancillaryFileDescriptors!!.single()!!
-            try {
-                socket.outputStream.write(if (underlyingNetwork.let { network ->
-                            if (network != null) try {
-                                DnsResolverCompat.bindSocket(network, fd)
-                                return@let true
-                            } catch (e: IOException) {
-                                when ((e.cause as? ErrnoException)?.errno) {
-                                    OsConstants.EPERM, OsConstants.EACCES, OsConstants.ENONET -> e.printStackTrace()
-                                    else -> printLog(e)
-                                }
-                                return@let false
-                            } catch (e: ReflectiveOperationException) {
-                                check(Build.VERSION.SDK_INT < 23)
-                                printLog(e)
-                            }
-                            protect(fd.int)
-                        }) 0 else 1)
-            } finally {
-                fd.closeQuietly()
-            }
-        }
-    }
-
     inner class NullConnectionException : NullPointerException(), BaseService.ExpectedException {
         override fun getLocalizedMessage() = getString(R.string.reboot_required)
     }
@@ -100,7 +71,6 @@ class VpnService : BaseVpnService(), LocalDnsService.Interface {
             ServiceNotification(this, profileName, "service-vpn")
 
     private var conn: ParcelFileDescriptor? = null
-    private var worker: ProtectWorker? = null
     private var active = false
     private var metered = false
     @Volatile
@@ -124,8 +94,6 @@ class VpnService : BaseVpnService(), LocalDnsService.Interface {
         super.killProcesses(scope)
         active = false
         scope.launch { DefaultNetworkListener.stop(this) }
-        worker?.shutdown(scope)
-        worker = null
         conn?.close()
         conn = null
     }
@@ -145,7 +113,6 @@ class VpnService : BaseVpnService(), LocalDnsService.Interface {
     override suspend fun resolver(host: String) = DnsResolverCompat.resolve(DefaultNetworkListener.get(), host)
 
     override suspend fun startProcesses(hosts: HostsFile) {
-        worker = ProtectWorker().apply { start() }
         super.startProcesses(hosts)
         sendFd(startVpn())
     }
