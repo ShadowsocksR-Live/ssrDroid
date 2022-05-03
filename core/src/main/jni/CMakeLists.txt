@@ -13,6 +13,13 @@ add_subdirectory(badvpn)
 add_subdirectory(libevent/android)
 add_subdirectory(redsocks)
 
+#add_definitions(-D__WAIT_DEBUGGER_ATTACH__)
+
+option(BUILD_SSR_NATIVE "build ssrNative" OFF)
+
+if (BUILD_SSR_NATIVE)
+    add_subdirectory(ssrNative)
+else()
 
 # =============== mbedtls ===============
 
@@ -61,3 +68,5 @@ add_library(${PCRE_LIBRARY} STATIC ${PCRE_SOURCE_FILES})
 
 option(BUILD_SSR_CLIENT_AS_EXE "Build ssr-client as executable." OFF)
 add_subdirectory(shadowsocks-libev)
+
+endif()
