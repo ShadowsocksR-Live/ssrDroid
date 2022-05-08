@@ -37,6 +37,9 @@
   <string name="ssr_protocol_param">Protocol Param</string>
   <string name="ssr_obfs">Obfs</string>
   <string name="ssr_obfs_param">Obfs Param</string>
+  <string name="over_tls_enable">SSRoT enable</string>
+  <string name="over_tls_server_domain">SSRoT domain name</string>
+  <string name="over_tls_path">SSRoT secret path</string>
 
   <!-- feature category -->
   <string name="ipv6">IPv6 Route</string>

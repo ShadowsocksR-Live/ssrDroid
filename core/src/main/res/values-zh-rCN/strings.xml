@@ -37,6 +37,9 @@
     <string name="ssr_protocol_param">"协议参数"</string>
     <string name="ssr_obfs">"混淆"</string>
     <string name="ssr_obfs_param">"混淆参数"</string>
+    <string name="over_tls_enable">"SSRoT 啓用"</string>
+    <string name="over_tls_server_domain">"SSRoT 服務器域名"</string>
+    <string name="over_tls_path">"SSRoT 祕密入口路徑"</string>
 
     <!-- feature category -->
     <string name="ipv6">"IPv6 路由"</string>

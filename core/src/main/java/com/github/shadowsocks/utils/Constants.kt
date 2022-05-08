@@ -62,6 +62,9 @@ object Key {
     const val protocol_param = "ssrProtocolParam"
     const val obfs = "ssrObfs"
     const val obfs_param = "ssrObfsParam"
+    const val over_tls_enable = "over_tls_enable"
+    const val over_tls_server_domain = "over_tls_server_domain"
+    const val over_tls_path = "over_tls_path"
     const val remotePort = "remotePortNum"
     const val remoteDns = "remoteDns"
 

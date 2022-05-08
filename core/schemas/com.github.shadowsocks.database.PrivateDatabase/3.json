@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "c93f95e0d0981dc42fc8c3ffc0436c05",
+    "identityHash": "5874667df376e76b7dca7c1941e86bd1",
     "entities": [
       {
         "tableName": "Profile",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `host` TEXT NOT NULL, `remotePort` INTEGER NOT NULL, `password` TEXT NOT NULL, `protocol` TEXT NOT NULL, `protocol_param` TEXT NOT NULL, `obfs` TEXT NOT NULL, `obfs_param` TEXT NOT NULL, `method` TEXT NOT NULL, `route` TEXT NOT NULL, `remoteDns` TEXT NOT NULL, `proxyApps` INTEGER NOT NULL, `bypass` INTEGER NOT NULL, `udpdns` INTEGER NOT NULL, `url_group` TEXT NOT NULL, `ipv6` INTEGER NOT NULL, `metered` INTEGER NOT NULL, `individual` TEXT NOT NULL, `plugin` TEXT, `udpFallback` INTEGER, `subscription` INTEGER NOT NULL, `tx` INTEGER NOT NULL, `rx` INTEGER NOT NULL, `elapsed` INTEGER NOT NULL, `userOrder` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `host` TEXT NOT NULL, `remotePort` INTEGER NOT NULL, `password` TEXT NOT NULL, `protocol` TEXT NOT NULL, `protocol_param` TEXT NOT NULL, `obfs` TEXT NOT NULL, `obfs_param` TEXT NOT NULL, `method` TEXT NOT NULL, `over_tls_enable` INTEGER NOT NULL, `over_tls_server_domain` TEXT NOT NULL, `over_tls_path` TEXT NOT NULL, `route` TEXT NOT NULL, `remoteDns` TEXT NOT NULL, `proxyApps` INTEGER NOT NULL, `bypass` INTEGER NOT NULL, `udpdns` INTEGER NOT NULL, `url_group` TEXT NOT NULL, `ipv6` INTEGER NOT NULL, `metered` INTEGER NOT NULL, `individual` TEXT NOT NULL, `plugin` TEXT, `udpFallback` INTEGER, `subscription` INTEGER NOT NULL, `tx` INTEGER NOT NULL, `rx` INTEGER NOT NULL, `elapsed` INTEGER NOT NULL, `userOrder` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -65,6 +65,24 @@
           {
             "fieldPath": "method",
             "columnName": "method",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "over_tls_enable",
+            "columnName": "over_tls_enable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "over_tls_server_domain",
+            "columnName": "over_tls_server_domain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "over_tls_path",
+            "columnName": "over_tls_path",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -248,7 +266,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c93f95e0d0981dc42fc8c3ffc0436c05')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5874667df376e76b7dca7c1941e86bd1')"
     ]
   }
 }

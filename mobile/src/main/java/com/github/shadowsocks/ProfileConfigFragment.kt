@@ -70,6 +70,9 @@ class ProfileConfigFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreC
     private var profileId = -1L
     private lateinit var isProxyApps: SwitchPreference
     private lateinit var udpFallback: Preference
+    private lateinit var over_tls_enable: SwitchPreference
+    private lateinit var over_tls_server_domain: EditTextPreference
+    private lateinit var over_tls_path: EditTextPreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = DataStore.privateStore
@@ -99,7 +102,20 @@ class ProfileConfigFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreC
         udpFallback = findPreference(Key.udpFallback)!!
         DataStore.privateStore.registerChangeListener(this)
 
+        over_tls_server_domain = findPreference(Key.over_tls_server_domain)!!
+        over_tls_path = findPreference(Key.over_tls_path)!!
+
+        over_tls_enable = findPreference(Key.over_tls_enable)!!
+        over_tls_enable.setOnPreferenceChangeListener { _, newValue ->
+            val value = newValue as Boolean
+            setEnableSSRoT(value)
+            newValue
+        }
+
         val profile = ProfileManager.getProfile(profileId) ?: Profile()
+
+        setEnableSSRoT(profile.over_tls_enable)
+
         if (profile.subscription == Profile.SubscriptionStatus.Active) {
             findPreference<Preference>(Key.group)!!.isEnabled = false
             findPreference<Preference>(Key.name)!!.isEnabled = false
@@ -111,12 +127,21 @@ class ProfileConfigFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreC
             findPreference<Preference>(Key.protocol_param)!!.isEnabled = false
             findPreference<Preference>(Key.obfs)!!.isEnabled = false
             findPreference<Preference>(Key.obfs_param)!!.isEnabled = false
+            findPreference<Preference>(Key.over_tls_enable)!!.isEnabled = false
+            findPreference<Preference>(Key.over_tls_server_domain)!!.isEnabled = false
+            findPreference<Preference>(Key.over_tls_path)!!.isEnabled = false
         } else findPreference<Preference>(Key.group)!!.isEnabled = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(listView, ListListener)
+    }
+
+    private fun setEnableSSRoT(enable: Boolean) {
+        over_tls_enable.isChecked = enable
+        over_tls_server_domain.isEnabled = enable
+        over_tls_path.isEnabled = enable
     }
 
     private fun saveAndExit() {

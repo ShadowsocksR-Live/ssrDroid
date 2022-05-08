@@ -67,6 +67,24 @@
             app:title="@string/ssr_obfs_param"
             app:useSimpleSummaryProvider="true" />
 
+        <SwitchPreference
+            app:icon="@drawable/ic_action_done"
+            app:key="over_tls_enable"
+            app:title="@string/over_tls_enable"
+            app:summary="@string/over_tls_enable" />
+
+        <EditTextPreference
+            app:icon="@drawable/ic_baseline_format_align_left"
+            app:key="over_tls_server_domain"
+            app:title="@string/over_tls_server_domain"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:icon="@drawable/ic_baseline_format_align_left"
+            app:key="over_tls_path"
+            app:title="@string/over_tls_path"
+            app:useSimpleSummaryProvider="true" />
+
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/feature_cat">

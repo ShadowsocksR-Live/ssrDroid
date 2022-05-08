@@ -56,6 +56,9 @@ data class Profile(
         var obfs: String = "plain",
         var obfs_param: String = "",
         var method: String = "aes-256-cfb",
+        var over_tls_enable: Boolean = false,
+        var over_tls_server_domain: String = "",
+        var over_tls_path: String = "",
 
         var route: String = "all",
         var remoteDns: String = "8.8.8.8:53",
@@ -113,6 +116,9 @@ data class Profile(
         private val decodedPattern_ssr_remarks = "(?i)(.*)[?&]remarks=([A-Za-z0-9_=-]*)(.*)".toRegex()
         private val decodedPattern_ssr_protocolparam = "(?i)(.*)[?&]protoparam=([A-Za-z0-9_=-]*)(.*)".toRegex()
         private val decodedPattern_ssr_groupparam = "(?i)(.*)[?&]group=([A-Za-z0-9_=-]*)(.*)".toRegex()
+        private val decodedPattern_ssr_over_tls_enable = "(?i)(.*)[?&]ot_enable=([0-9_=-]*)(.*)".toRegex()
+        private val decodedPattern_ssr_over_tls_server_domain = "(?i)(.*)[?&]ot_domain=([A-Za-z0-9_=-]*)(.*)".toRegex()
+        private val decodedPattern_ssr_over_tls_path = "(?i)(.*)[?&]ot_path=([A-Za-z0-9_=-]*)(.*)".toRegex()
 
         private fun base64Decode(data: String) = String(Base64.decode(data.replace("=", ""), Base64.URL_SAFE), Charsets.UTF_8)
 
@@ -142,6 +148,15 @@ data class Profile(
 
                     val match4 = decodedPattern_ssr_groupparam.matchEntire(match.groupValues[8])
                     if (match4 != null) profile.url_group = base64Decode(match4.groupValues[2])
+
+                    val match5 = decodedPattern_ssr_over_tls_enable.matchEntire(match.groupValues[8])
+                    if (match5 != null) profile.over_tls_enable = if (match5.groupValues[2].toInt() != 0) true else false
+
+                    val match6 = decodedPattern_ssr_over_tls_server_domain.matchEntire(match.groupValues[8])
+                    if (match6 != null) profile.over_tls_server_domain = base64Decode(match6.groupValues[2])
+
+                    val match7 = decodedPattern_ssr_over_tls_path.matchEntire(match.groupValues[8])
+                    if (match7 != null) profile.over_tls_path = base64Decode(match7.groupValues[2])
 
                     profile
                 } else {
@@ -233,10 +248,15 @@ data class Profile(
                 if (password.isNullOrEmpty()) return null
                 val protocol = json["protocol"].optString
                 if (protocol.isNullOrEmpty()) return null
-                val protocolParam = json["protocol_param"].optString ?: return null
+                val protocol_param = json["protocol_param"].optString ?: return null
                 val obfs = json["obfs"].optString
                 if (obfs.isNullOrEmpty()) return null
                 val obfsParam = json["obfs_param"].optString ?: return null
+
+                val over_tls_enable = json["over_tls_enable"]?.optBoolean
+                val over_tls_server_domain = json["over_tls_server_domain"].optString ?: return null
+                val over_tls_path = json["over_tls_path"].optString ?: return null
+
                 val method = json["method"].optString
                 if (method.isNullOrEmpty()) return null
                 return Profile().also {
@@ -245,9 +265,12 @@ data class Profile(
                     it.password = password
                     it.method = method
                     it.protocol = protocol
-                    it.protocol_param = protocolParam
+                    it.protocol_param = protocol_param
                     it.obfs = obfs
                     it.obfs_param = obfsParam
+                    it.over_tls_enable = if (over_tls_enable != null && over_tls_enable == true) true else false
+                    it.over_tls_server_domain = over_tls_server_domain
+                    it.over_tls_path = over_tls_path
                 }.apply {
                     feature?.copyFeatureSettingsTo(this)
                     name = json["remarks"].optString.toString()
@@ -286,6 +309,11 @@ data class Profile(
                                 fallback.password == it.password && fallback.method == it.method &&
                                 fallback.protocol == it.protocol && fallback.protocol_param == it.protocol_param &&
                                 fallback.obfs == it.obfs && fallback.obfs_param == it.obfs_param &&
+
+                                fallback.over_tls_enable == it.over_tls_enable &&
+                                fallback.over_tls_server_domain == it.over_tls_server_domain &&
+                                fallback.over_tls_path == it.over_tls_path &&
+
                                 it.plugin.isNullOrEmpty()
                     }
                     profile.udpFallback = (match ?: create(fallback)).id
@@ -364,6 +392,9 @@ data class Profile(
             profile.protocol_param = protocol_param
             profile.obfs = obfs
             profile.obfs_param = obfs_param
+            profile.over_tls_enable = over_tls_enable
+            profile.over_tls_server_domain = over_tls_server_domain
+            profile.over_tls_path = over_tls_path
             profile.method = method
         }
     }
@@ -372,15 +403,23 @@ data class Profile(
             other.password == password && other.method == method &&
             other.protocol == protocol && other.protocol_param == protocol_param &&
             other.obfs == obfs && other.obfs_param == obfs_param &&
+            other.over_tls_enable == over_tls_enable &&
+            other.over_tls_server_domain == over_tls_server_domain &&
+            other.over_tls_path == over_tls_path &&
             other.name == name && other.url_group == url_group
 
     override fun toString(): String {
         val flags = Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP
-        return "ssr://" + Base64.encodeToString("%s:%d:%s:%s:%s:%s/?obfsparam=%s&protoparam=%s&remarks=%s&group=%s"
+        return "ssr://" + Base64.encodeToString("%s:%d:%s:%s:%s:%s/?obfsparam=%s&protoparam=%s&ot_enable=%d&ot_domain=%s&ot_path=%s&remarks=%s&group=%s"
                 .format(Locale.ENGLISH, host, remotePort, protocol, method, obfs,
                         Base64.encodeToString("%s".format(Locale.ENGLISH, password).toByteArray(), flags),
                         Base64.encodeToString("%s".format(Locale.ENGLISH, obfs_param).toByteArray(), flags),
                         Base64.encodeToString("%s".format(Locale.ENGLISH, protocol_param).toByteArray(), flags),
+
+                        if (over_tls_enable) 1 else 0,
+                        Base64.encodeToString("%s".format(Locale.ENGLISH, over_tls_server_domain).toByteArray(), flags),
+                        Base64.encodeToString("%s".format(Locale.ENGLISH, over_tls_path).toByteArray(), flags),
+
                         Base64.encodeToString("%s".format(Locale.ENGLISH, name).toByteArray(), flags),
                         Base64.encodeToString("%s".format(Locale.ENGLISH, url_group).toByteArray(), flags)).toByteArray(), flags)
     }
@@ -397,6 +436,14 @@ data class Profile(
         put("local_address", DataStore.listenAddress)
         put("local_port", DataStore.portProxy)
         put("timeout", 600)
+
+        if (over_tls_enable) {
+            put("over_tls_settings", JSONObject().apply {
+                put("enable", over_tls_enable)
+                put("server_domain", over_tls_server_domain)
+                put("path", over_tls_path)
+            })
+        }
 
         if (profiles == null) return@apply
         put("remarks", name)
@@ -431,6 +478,11 @@ data class Profile(
         DataStore.privateStore.putString(Key.obfs, obfs)
         DataStore.privateStore.putString(Key.obfs_param, obfs_param)
         DataStore.privateStore.putString(Key.method, method)
+
+        DataStore.privateStore.putBoolean(Key.over_tls_enable, over_tls_enable)
+        DataStore.privateStore.putString(Key.over_tls_server_domain, over_tls_server_domain)
+        DataStore.privateStore.putString(Key.over_tls_path, over_tls_path)
+
         DataStore.proxyApps = proxyApps
         DataStore.bypass = bypass
         DataStore.privateStore.putBoolean(Key.udpdns, udpdns)
@@ -456,6 +508,11 @@ data class Profile(
         protocol_param = DataStore.privateStore.getString(Key.protocol_param) ?: ""
         obfs = DataStore.privateStore.getString(Key.obfs) ?: ""
         obfs_param = DataStore.privateStore.getString(Key.obfs_param) ?: ""
+
+        over_tls_enable = (DataStore.privateStore.getBoolean(Key.over_tls_enable) == true)
+        over_tls_server_domain = DataStore.privateStore.getString(Key.over_tls_server_domain) ?: ""
+        over_tls_path = DataStore.privateStore.getString(Key.over_tls_path) ?: ""
+
         method = DataStore.privateStore.getString(Key.method) ?: ""
         route = DataStore.privateStore.getString(Key.route) ?: ""
         remoteDns = DataStore.privateStore.getString(Key.remoteDns) ?: ""
