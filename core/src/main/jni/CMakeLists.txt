@@ -15,7 +15,7 @@ add_subdirectory(redsocks)
 
 #add_definitions(-D__WAIT_DEBUGGER_ATTACH__)
 
-option(BUILD_SSR_NATIVE "build ssrNative" OFF)
+option(BUILD_SSR_NATIVE "build ssrNative" ON)
 
 if (BUILD_SSR_NATIVE)
     add_subdirectory(ssrNative)

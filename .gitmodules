@@ -34,3 +34,7 @@
 	path = core/src/main/jni/re2
 	url = https://github.com/ssrlive/re2.git
 	branch = main
+[submodule "core/src/main/jni/ssrNative"]
+	path = core/src/main/jni/ssrNative
+	url = https://github.com/ShadowsocksR-Live/shadowsocksr-native.git
+	branch = master
