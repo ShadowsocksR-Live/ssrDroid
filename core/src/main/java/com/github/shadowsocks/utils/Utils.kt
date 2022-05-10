@@ -169,7 +169,7 @@ fun Context.getBitmap(id: Int): Bitmap {
 }
 
 fun HttpURLConnection.setUA(): HttpURLConnection {
-    setRequestProperty("User-Agent", "ShadowsocksRb (https://github.com/ShadowsocksRb)")
+    setRequestProperty("User-Agent", "ssrDroid (https://github.com/ShadowsocksR-Live)")
     setRequestProperty("X-Forwarded-For", "127.0.0.1")
     return this
 }

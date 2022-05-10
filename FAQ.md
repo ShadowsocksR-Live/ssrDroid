@@ -70,5 +70,5 @@ Scala on Android已经停止维护多年，本项目基于最新SS Android客户
 
 ## 下载地址
 
-* [GitHub](https://github.com/shadowsocksRb/shadowsocksRb-android/releases)
-* [Telegram](https://t.me/ShadowsocksRb)
+* [GitHub](https://github.com/ShadowsocksR-Live/ssrdroid/releases)
+

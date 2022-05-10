@@ -6,7 +6,7 @@ import com.github.shadowsocks.core.BuildConfig
 class Crashlytics {
     companion object {
         fun logException(throwable: Throwable) {
-            Log.e("shadowsocksRb", "Crashlytics logException:", throwable)
+            Log.e("ssrDroidJava", "Crashlytics logException:", throwable)
         }
 
         fun log(priority: Int, tag: String, msg: String?) {

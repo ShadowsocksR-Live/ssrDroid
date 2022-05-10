@@ -5,11 +5,12 @@ plugins {
 }
 
 android {
+    namespace 'com.github.shadowsocks'
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
     ndkVersion rootProject.ndkVersion
     defaultConfig {
-        applicationId "io.github.shadowsocksrb"
+        applicationId "com.ssrlive.ssrdroid"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.sdkVersion
         versionCode rootProject.versionCode
@@ -32,11 +33,21 @@ android {
                         '-Xmultifile-parts-inherit',
                 ]
             }
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "${appBinaryName}_${variant.buildType.name}_${defaultConfig.versionName}.apk"
+                }
+            }
         }
         debug {
             applicationIdSuffix '.debug'
             versionNameSuffix '-debug'
             resValue 'string', 'applicationId', defaultConfig.applicationId + applicationIdSuffix
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "${appBinaryName}_${variant.buildType.name}_${defaultConfig.versionName}.apk"
+                }
+            }
         }
     }
     signingConfigs {

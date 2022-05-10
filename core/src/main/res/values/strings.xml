@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <string name="app_name">ShadowsocksRb</string>
+  <string name="app_name">ssrDroid</string>
   <string name="quick_toggle">Toggle</string>
   <string name="send_email">Send email</string>
 
@@ -99,7 +99,7 @@
   <string name="profiles">Profiles</string>
   <string name="settings">Settings</string>
   <string name="faq">FAQ</string>
-  <string name="faq_url">https://github.com/shadowsocksRb/shadowsocksRb-android/blob/master/FAQ.md</string>
+  <string name="faq_url">https://github.com/ShadowsocksR-Live/ssrdroid/blob/master/FAQ.md</string>
   <string name="about">About</string>
   <string name="about_title">Shadowsocks %s</string>
   <string name="edit">Edit</string>

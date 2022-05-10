@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 class UpdateCheck(context: Context, workerParams: WorkerParameters) : CoroutineWorker(context, workerParams) {
     companion object {
 
-        const val url = "https://raw.githubusercontent.com/shadowsocksRb/shadowsocksRb-android/master/update.json"
+        const val url = "https://raw.githubusercontent.com/ShadowsocksR-Live/ssrdroid/master/update.json"
 
         fun enqueue() {
             if (Build.VERSION.SDK_INT >= 24 && !Core.user.isUserUnlocked) return

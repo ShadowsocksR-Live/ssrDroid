@@ -17,8 +17,8 @@
 #### 獲取源碼
 
 ```shell script
-git clone --recurse-submodules https://github.com/ssrlive/ssrDroid3.git
-cd ssrDroid3
+git clone --recursive https://github.com/ShadowsocksR-Live/ssrDroid.git
+cd ssrDroid
 ```
 
 #### 編譯
@@ -46,7 +46,7 @@ GPLv3
     <li>tun2socks: <a href="https://github.com/shadowsocks/badvpn/blob/shadowsocks-android/COPYING">BSD</a></li>
     <li>pcre: <a href="https://android.googlesource.com/platform/external/pcre/+/master/dist2/LICENCE">BSD</a></li>
     <li>libancillary: <a href="https://github.com/shadowsocks/libancillary/blob/shadowsocks-android/COPYING">BSD</a></li>
-    <li>shadowsocksr-libev: <a href="https://github.com/shadowsocksRb/shadowsocksr-libev/blob/master/LICENSE">GPLv3</a></li>
+    <li>ssr-libev: <a href="https://github.com/ssrlive/ssr-libev/blob/master/LICENSE">GPLv3</a></li>
     <li>libsodium: <a href="https://github.com/jedisct1/libsodium/blob/master/LICENSE">ISC</a></li>
 </ul>
 

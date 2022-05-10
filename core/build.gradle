@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+    namespace 'com.github.shadowsocks.core'
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
     ndkVersion rootProject.ndkVersion

@@ -1,4 +1,5 @@
 ext {
+    appBinaryName = "ssrdroid"
     javaVersion = JavaVersion.VERSION_1_8
     ndkVersion = '24.0.8215888'
     minSdkVersion = 21
