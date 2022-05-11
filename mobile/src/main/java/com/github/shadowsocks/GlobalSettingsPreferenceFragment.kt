@@ -108,7 +108,8 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
             serviceMode.isEnabled = stopped
             shareOverLan.isEnabled = stopped
             portProxy.isEnabled = stopped
-            if (stopped) onServiceModeChange.onPreferenceChange(null, DataStore.serviceMode) else {
+            // FIXME: *serviceMode* is something I wrote at will, please double-check it.
+            if (stopped) onServiceModeChange.onPreferenceChange(serviceMode, DataStore.serviceMode) else {
                 hosts.isEnabled = false
                 portLocalDns.isEnabled = false
                 portTransproxy.isEnabled = false
@@ -129,7 +130,7 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
         ViewCompat.setOnApplyWindowInsetsListener(listView, MainListListener)
     }
 
-    override fun onDisplayPreferenceDialog(preference: Preference?) {
+    override fun onDisplayPreferenceDialog(preference: Preference) {
         when (preference) {
             hosts -> BrowsableEditTextPreferenceDialogFragment().apply {
                 setKey(hosts.key)

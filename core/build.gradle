@@ -54,7 +54,7 @@ dependencies {
     api 'androidx.fragment:fragment-ktx:1.4.1'
     api "androidx.lifecycle:lifecycle-common-java8:2.4.1"
     api "androidx.lifecycle:lifecycle-livedata-core-ktx:2.4.1"
-    api 'androidx.preference:preference-ktx:1.1.1'
+    api 'androidx.preference:preference-ktx:1.2.0'
     api "androidx.room:room-runtime:2.4.2"
     api "androidx.work:work-runtime-ktx:2.7.1"
     api "androidx.work:work-multiprocess:2.7.1"

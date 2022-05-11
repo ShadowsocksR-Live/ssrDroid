@@ -48,7 +48,7 @@ import kotlinx.parcelize.Parcelize
 
 class ProfileConfigFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreChangeListener {
     companion object PasswordSummaryProvider : Preference.SummaryProvider<EditTextPreference> {
-        override fun provideSummary(preference: EditTextPreference?) = "\u2022".repeat(preference?.text?.length ?: 0)
+        override fun provideSummary(preference: EditTextPreference): CharSequence? = "\u2022".repeat(preference?.text?.length ?: 0)
 
         const val REQUEST_UNSAVED_CHANGES = 2
     }
