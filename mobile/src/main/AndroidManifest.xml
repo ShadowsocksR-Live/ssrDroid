@@ -5,12 +5,16 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
-    <application android:name=".App">
+    <application android:name=".App"
+        tools:replace="android:icon, android:theme, android:label"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/Theme.Shadowsocks"
+        android:label="@string/ssr_app_name">
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="@string/ssr_app_name"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Shadowsocks.Immersive.Navigation">
             <intent-filter>

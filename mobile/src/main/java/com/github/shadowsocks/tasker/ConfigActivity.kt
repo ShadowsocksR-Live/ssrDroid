@@ -98,7 +98,7 @@ class ConfigActivity : AppCompatActivity() {
         ListHolderListener.setup(this)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.setTitle(R.string.app_name)
+        toolbar.setTitle(R.string.ssr_app_name)
         toolbar.setNavigationIcon(R.drawable.ic_navigation_close)
         toolbar.setNavigationOnClickListener { finish() }
 

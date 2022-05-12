@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <string name="app_name">ssrDroid</string>
+  <string name="ssr_app_name">ssrDroid</string>
   <string name="quick_toggle">Toggle</string>
   <string name="send_email">Send email</string>
 

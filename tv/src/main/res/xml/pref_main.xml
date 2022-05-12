@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-                  app:title="@string/app_name">
+                  app:title="@string/ssr_app_name">
     <!-- profileId is stored in privateStore so its value needs to be populated manually -->
     <ListPreference
         app:key="profileId"

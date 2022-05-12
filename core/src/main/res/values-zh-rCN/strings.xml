@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">酸酸乳</string>
+    <string name="ssr_app_name">酸酸乳</string>
     <string name="quick_toggle">"开关"</string>
     <string name="send_email">"发送电子邮件"</string>
 

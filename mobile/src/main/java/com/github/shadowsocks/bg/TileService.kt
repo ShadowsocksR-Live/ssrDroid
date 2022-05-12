@@ -88,7 +88,7 @@ class TileService : BaseTileService(), ShadowsocksConnection.Callback {
                     state = Tile.STATE_INACTIVE
                 }
             }
-            label = label ?: getString(R.string.app_name)
+            label = label ?: getString(R.string.ssr_app_name)
             updateTile()
         }
     }
