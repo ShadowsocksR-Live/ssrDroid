@@ -20,6 +20,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 include ':mobile', ':core', ':plugin'
