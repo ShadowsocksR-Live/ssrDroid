@@ -55,7 +55,7 @@
     <string name="auto_connect">"자동 접속"</string>
 
     <!-- Fuzzy -->
-    <string name="auto_connect_summary">"장치가 켜질 때 Shadowsocks를 자동으로 활성화합니다"</string>
+    <string name="auto_connect_summary">"장치가 켜질 때 ssrDroid를 자동으로 활성화합니다"</string>
 
     <!-- Fuzzy -->
     <string name="tcp_fastopen_summary">"루트 권한이 필요합니다"</string>
@@ -104,7 +104,7 @@
 
     <!-- Fuzzy -->
     <string name="share_qr_nfc">"QR 코드/NFC"</string>
-    <string name="add_profile_dialog">"이 Shadowsocks 프로필을 추가하시겠습니까?"</string>
+    <string name="add_profile_dialog">"이 ssrDroid 프로필을 추가하시겠습니까?"</string>
     <string name="add_profile_methods_scan_qr_code">"QR 코드 읽기"</string>
     <plurals name="removed">
         <item quantity="other">"삭제했습니다"</item>

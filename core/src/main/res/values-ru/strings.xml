@@ -52,14 +52,14 @@
     <string name="auto_connect">"Авто-подключение"</string>
 
     <!-- Fuzzy -->
-    <string name="auto_connect_summary">"Запускать Shadowsocks при включении"</string>
+    <string name="auto_connect_summary">"Запускать ssrDroid при включении"</string>
     <string name="tcp_fastopen_summary">"Переключение может запрашивать ROOT права"</string>
     <string name="tcp_fastopen_summary_unsupported">"Неподдерживаемая версия ядра: %s &lt; 3.7.1"</string>
     <string name="udp_dns">"Отправить DNS-запросы через UDP"</string>
     <string name="udp_dns_summary">"Требоваться перенаправление UDP на удаленном сервере"</string>
 
     <!-- notification category -->
-    <string name="forward_success">"Shadowsocks запущен."</string>
+    <string name="forward_success">"ssrDroid запущен."</string>
     <string name="invalid_server">"Неправильное имя сервера"</string>
     <string name="service_failed">"Ошибка при подключении к удалённому серверу"</string>
     <string name="stop">"Остановить"</string>
@@ -78,7 +78,7 @@
     <string name="faq">"ЧаВо"</string>
     <string name="faq_url">"https://github.com/shadowsocks/shadowsocks-android/blob/master/.github/faq.ru.md"</string>
     <string name="about">"О приложении"</string>
-    <string name="about_title">"Shadowsocks %s"</string>
+    <string name="about_title">"ssrDroid %s"</string>
     <string name="edit">"Изменить"</string>
     <string name="share">"Поделиться"</string>
     <string name="add_profile">"Добавить профиль"</string>
@@ -97,7 +97,7 @@
 
     <!-- Fuzzy -->
     <string name="share_qr_nfc">"QR-код/NFC"</string>
-    <string name="add_profile_dialog">"Добавить этот профиль Shadowsocks?"</string>
+    <string name="add_profile_dialog">"Добавить этот профиль ssrDroid?"</string>
     <string name="add_profile_methods_scan_qr_code">"Сканировать QR-код"</string>
     <plurals name="removed">
         <item quantity="one">"Удалено %d элементов"</item>
@@ -161,7 +161,7 @@
     <string name="service_proxy">"Служба прокси"</string>
     <string name="service_transproxy">"Служба прозрачный прокси"</string>
     <string name="vpn_permission_denied">"Нет разрешения на создание VPN соединения"</string>
-    <string name="auto_connect_summary_v24">"Включить Shadowsocks во время запуска. Лучше использовать режим постоянной VPN."</string>
+    <string name="auto_connect_summary_v24">"Включить ssrDroid во время запуска. Лучше использовать режим постоянной VPN."</string>
     <string name="speed">"%s/с"</string>
     <string name="direct_boot_aware">"Разрешить переключение на экране блокировки"</string>
     <string name="direct_boot_aware_summary">"Данные в выбранном профиле будут хуже защищены"</string>

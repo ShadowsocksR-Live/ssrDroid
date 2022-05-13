@@ -55,7 +55,7 @@
     <string name="auto_connect">"自動連線"</string>
 
     <!-- Fuzzy -->
-    <string name="auto_connect_summary">"在裝置啟動時啟用 Shadowsocks"</string>
+    <string name="auto_connect_summary">"在裝置啟動時啟用 ssrDroid"</string>
 
     <!-- Fuzzy -->
     <string name="tcp_fastopen_summary">"切換需要 ROOT 權限"</string>
@@ -68,7 +68,7 @@
     <string name="udp_dns_summary">"使用 UDP 向遠端轉送 DNS 封包"</string>
 
     <!-- notification category -->
-    <string name="forward_success">"Shadowsocks 已啟動。"</string>
+    <string name="forward_success">"ssrDroid 已啟動。"</string>
     <string name="invalid_server">"伺服器名稱無效"</string>
     <string name="service_failed">"連線至遠端伺服器失敗"</string>
     <string name="stop">"停止"</string>
@@ -87,7 +87,7 @@
     <string name="settings">"設定"</string>
     <string name="faq">"常見問題"</string>
     <string name="about">"關於"</string>
-    <string name="about_title">"Shadowsocks %s"</string>
+    <string name="about_title">"ssrDroid %s"</string>
     <string name="edit">"編輯"</string>
     <string name="share">"分享"</string>
     <string name="add_profile">"新增設定檔"</string>
@@ -106,7 +106,7 @@
 
     <!-- Fuzzy -->
     <string name="share_qr_nfc">"QR 碼 / NFC"</string>
-    <string name="add_profile_dialog">"為 Shadowsocks 新增此設定檔？"</string>
+    <string name="add_profile_dialog">"為 ssrDroid 新增此設定檔？"</string>
     <string name="add_profile_methods_scan_qr_code">"掃描 QR 碼"</string>
     <plurals name="removed">
         <item quantity="other">"已移除 %d 項"</item>
@@ -167,7 +167,7 @@
     <string name="service_proxy">"代理服務"</string>
     <string name="service_transproxy">"透明代理服務"</string>
     <string name="vpn_permission_denied">"没有權限創建 VPN 服務"</string>
-    <string name="auto_connect_summary_v24">"允許 Shadowsocks 隨系統啟動，建議使用始終開啟的 VPN"</string>
+    <string name="auto_connect_summary_v24">"允許 ssrDroid 隨系統啟動，建議使用始終開啟的 VPN"</string>
     <string name="direct_boot_aware">"允許鎖屏時切換"</string>
     <string name="direct_boot_aware_summary">"選中的配置信息會不那麼安全"</string>
     <string name="acl_rule_online_config">"在線規則文件 URL"</string>
@@ -201,6 +201,6 @@
     <string name="edit_subscription">"編輯訂閱"</string>
     <string name="update_subscription">"更新訂閱"</string>
     <string name="service_subscription">"訂閱服務"</string>
-    <string name="service_subscription_working">"正在更新訂閱 (%d / %d)"</string>
+    <string name="service_subscription_working">"正在更新訂閱 (%1$d / %2$d)"</string>
     <string name="service_subscription_finishing">"訂閱更新中"</string>
 </resources>

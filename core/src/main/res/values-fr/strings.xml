@@ -54,7 +54,7 @@ Reçu : \t\t\t%4$s\t↓\t%2$s"</string>
     <string name="auto_connect">"Connection auto"</string>
 
     <!-- Fuzzy -->
-    <string name="auto_connect_summary">"Activer Shadowsocks au démarrage"</string>
+    <string name="auto_connect_summary">"Activer ssrDroid au démarrage"</string>
 
     <!-- Fuzzy -->
     <string name="tcp_fastopen_summary">"Activer nécessite la permission ROOT"</string>
@@ -64,7 +64,7 @@ Reçu : \t\t\t%4$s\t↓\t%2$s"</string>
     <string name="udp_dns_summary">"Faire suivre toutes les requêtes DNS au serveur distant"</string>
 
     <!-- notification category -->
-    <string name="forward_success">"Shadowsocks a démarré"</string>
+    <string name="forward_success">"ssrDroid a démarré"</string>
     <string name="invalid_server">"Nom de serveur invalide"</string>
     <string name="service_failed">"Échec de la connexion au serveur distant"</string>
     <string name="stop">"Stopper"</string>
@@ -99,7 +99,7 @@ Reçu : \t\t\t%4$s\t↓\t%2$s"</string>
 
     <!-- Fuzzy -->
     <string name="share_qr_nfc">"QR Code/NFC"</string>
-    <string name="add_profile_dialog">"Ajouter ce profil Shadowsocks?"</string>
+    <string name="add_profile_dialog">"Ajouter ce profil ssrDroid?"</string>
     <string name="add_profile_methods_scan_qr_code">"Scanner le QR Code"</string>
     <plurals name="removed">
         <item quantity="one">"Supprimé"</item>
@@ -156,7 +156,7 @@ Reçu : \t\t\t%4$s\t↓\t%2$s"</string>
     <string name="service_proxy">"Service Proxy"</string>
     <string name="service_transproxy">"Service Transproxy"</string>
     <string name="vpn_permission_denied">"Permission de créer un service VPN refusée"</string>
-    <string name="auto_connect_summary_v24">"Activer Shadowsocks au démarrage. Plutôt recommandé d'utiliser le VPN permanent"</string>
+    <string name="auto_connect_summary_v24">"Activer ssrDroid au démarrage. Plutôt recommandé d'utiliser le VPN permanent"</string>
     <string name="direct_boot_aware">"Activation-Désactivation sur écran verrouillé"</string>
     <string name="direct_boot_aware_summary">"Vos informations de profil sélectionnées seront moins protégées"</string>
     <string name="acl_rule_online_config">"URL de config en ligne"</string>

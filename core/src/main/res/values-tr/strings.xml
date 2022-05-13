@@ -50,7 +50,7 @@
     <string name="auto_connect">"Otomatik Bağlan"</string>
 
     <!-- Fuzzy -->
-    <string name="auto_connect_summary">"Shadowsocks'ı cihazı başlatırken aç"</string>
+    <string name="auto_connect_summary">"ssrDroid'ı cihazı başlatırken aç"</string>
 
     <!-- Fuzzy -->
     <string name="tcp_fastopen_summary">"Açıp kapamak için ROOT yetkisi gerekiyor"</string>
@@ -63,7 +63,7 @@
     <string name="udp_dns_summary">"Tüm DNS isteklerini remote'a yönlendir"</string>
 
     <!-- notification category -->
-    <string name="forward_success">"Shadowsocks başlatıldı."</string>
+    <string name="forward_success">"ssrDroid başlatıldı."</string>
     <string name="invalid_server">"Geçersiz sunucu ismi"</string>
     <string name="service_failed">"Remote sunucuya bağlanma hatası"</string>
     <string name="stop">"Dur"</string>
@@ -99,7 +99,7 @@
 
     <!-- Fuzzy -->
     <string name="share_qr_nfc">"QR kodu/NFC"</string>
-    <string name="add_profile_dialog">"Bu Shadowsocks Profilini ekle?"</string>
+    <string name="add_profile_dialog">"Bu ssrDroid Profilini ekle?"</string>
     <string name="add_profile_methods_scan_qr_code">"QR kodu tarat"</string>
     <plurals name="removed">
         <item quantity="one">"Kaldırıldı"</item>

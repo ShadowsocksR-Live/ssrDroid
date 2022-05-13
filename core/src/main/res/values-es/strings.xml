@@ -53,12 +53,12 @@ Recibido: \t%4$s\t↓\t%2$s"</string>
     <string name="auto_connect">"Conexión Automática"</string>
 
     <!-- Fuzzy -->
-    <string name="auto_connect_summary">"Activar Shadowsocks al iniciar"</string>
+    <string name="auto_connect_summary">"Activar ssrDroid al iniciar"</string>
     <string name="tcp_fastopen_summary_unsupported">"Versión del Núcleo sin soporte: %s &lt; 3.7.1"</string>
     <string name="udp_dns">"Enviar DNS sobre UDP"</string>
 
     <!-- notification category -->
-    <string name="forward_success">"Shadowsocks inició."</string>
+    <string name="forward_success">"ssrDroid inició."</string>
     <string name="invalid_server">"Nombre de servidor inválido"</string>
     <string name="service_failed">"Fallo al conectar al servidor remoto"</string>
     <string name="stop">"Detener"</string>
@@ -94,7 +94,7 @@ Recibido: \t%4$s\t↓\t%2$s"</string>
 
     <!-- Fuzzy -->
     <string name="share_qr_nfc">"Código QR/NFC"</string>
-    <string name="add_profile_dialog">"Agregar este Perfil Shadowsocks?"</string>
+    <string name="add_profile_dialog">"Agregar este Perfil ssrDroid?"</string>
     <string name="add_profile_methods_scan_qr_code">"Escanear código QR"</string>
     <plurals name="removed">
         <item quantity="one">"Removido"</item>
