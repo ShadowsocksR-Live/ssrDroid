@@ -40,6 +40,7 @@ import org.json.JSONObject
 import java.io.Serializable
 import java.net.URI
 import java.net.URISyntaxException
+import java.net.URLEncoder
 import java.util.*
 
 @Entity
@@ -410,18 +411,39 @@ data class Profile(
 
     override fun toString(): String {
         val flags = Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP
-        return "ssr://" + Base64.encodeToString("%s:%d:%s:%s:%s:%s/?obfsparam=%s&protoparam=%s&ot_enable=%d&ot_domain=%s&ot_path=%s&remarks=%s&group=%s"
-                .format(Locale.ENGLISH, host, remotePort, protocol, method, obfs,
-                        Base64.encodeToString("%s".format(Locale.ENGLISH, password).toByteArray(), flags),
-                        Base64.encodeToString("%s".format(Locale.ENGLISH, obfs_param).toByteArray(), flags),
-                        Base64.encodeToString("%s".format(Locale.ENGLISH, protocol_param).toByteArray(), flags),
 
-                        if (over_tls_enable) 1 else 0,
-                        Base64.encodeToString("%s".format(Locale.ENGLISH, over_tls_server_domain).toByteArray(), flags),
-                        Base64.encodeToString("%s".format(Locale.ENGLISH, over_tls_path).toByteArray(), flags),
+        val b64userinfo = Base64.encodeToString("%s:%s".format(Locale.ENGLISH, method, password).toByteArray(), flags)
 
-                        Base64.encodeToString("%s".format(Locale.ENGLISH, name).toByteArray(), flags),
-                        Base64.encodeToString("%s".format(Locale.ENGLISH, url_group).toByteArray(), flags)).toByteArray(), flags)
+        val b64password = Base64.encodeToString("%s".format(Locale.ENGLISH, password).toByteArray(), flags)
+        val b64obfs_param = Base64.encodeToString("%s".format(Locale.ENGLISH, obfs_param).toByteArray(), flags)
+        val b64protocol_param = Base64.encodeToString("%s".format(Locale.ENGLISH, protocol_param).toByteArray(), flags)
+        val b64name = Base64.encodeToString("%s".format(Locale.ENGLISH, name).toByteArray(), flags)
+        val b64url_group = Base64.encodeToString("%s".format(Locale.ENGLISH, url_group).toByteArray(), flags)
+        val b64over_tls_server_domain = Base64.encodeToString("%s".format(Locale.ENGLISH, over_tls_server_domain).toByteArray(), flags)
+        val b64over_tls_path = Base64.encodeToString("%s".format(Locale.ENGLISH, over_tls_path).toByteArray(), flags)
+
+        if (!over_tls_enable && obfs == "plain" && protocol == "origin") {
+            return "ss://" + b64userinfo + "@" + host + ":" + remotePort + "#" + URLEncoder.encode(name, "utf-8")
+        }
+
+        if (over_tls_enable) {
+            return "ssr://" + Base64.encodeToString(
+                "%s:%d:%s:%s:%s:%s/?obfsparam=%s&protoparam=%s&remarks=%s&group=%s&ot_enable=%d&ot_domain=%s&ot_path=%s"
+                    .format(
+                        Locale.ENGLISH, host, remotePort, protocol, method, obfs, b64password,
+                        b64obfs_param, b64protocol_param, b64name, b64url_group,
+                        1, b64over_tls_server_domain, b64over_tls_path
+                    ).toByteArray(), flags
+            )
+        } else {
+            return "ssr://" + Base64.encodeToString(
+                "%s:%d:%s:%s:%s:%s/?obfsparam=%s&protoparam=%s&remarks=%s&group=%s"
+                    .format(
+                        Locale.ENGLISH, host, remotePort, protocol, method, obfs, b64password,
+                        b64obfs_param, b64protocol_param, b64name, b64url_group
+                    ).toByteArray(), flags
+            )
+        }
     }
 
     fun toJson(profiles: LongSparseArray<Profile>? = null): JSONObject = JSONObject().apply {

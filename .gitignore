@@ -1,4 +1,6 @@
 # Gradle & Android Studio
+.vs/
+.vscode/
 local.properties
 .gradle/
 .externalNativeBuild/
