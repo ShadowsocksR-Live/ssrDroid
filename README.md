@@ -1,6 +1,6 @@
-## ShadowsocksR Android 客户端
+## SSRoT Android 客户端
 
-由 Shadowsocks Android 客户端修改而来，支持 SSR 协议。
+由 Shadowsocks Android 客户端修改而来，支持 SSRoT 协议。
 
 [常见问题](FAQ.md)
 
@@ -24,9 +24,12 @@ cd ssrDroid
 #### 編譯
 
 ```shell script
+# 在 Windows 下，要設置 JAVA_HOME 環境變量。
+set JAVA_HOME="C:\Program Files\Android\Android Studio\jre"
+
 # 建议编辑 mobile/build.gradle ,修改 applicationId 以规避检测
 ./gradlew aR
-adb install mobile/build/outputs/apk/release/mobile-release.apk
+adb install mobile/build/outputs/apk/release/ssrdroid_release_5.1.3.apk
 ```
 
 ### 贡献
