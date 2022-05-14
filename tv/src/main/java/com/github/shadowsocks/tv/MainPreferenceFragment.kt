@@ -78,7 +78,6 @@ class MainPreferenceFragment : LeanbackPreferenceFragmentCompat(), ShadowsocksCo
         val (enabledLocalDns, enabledTransproxy) = when (newValue as String?) {
             Key.modeProxy -> Pair(false, false)
             Key.modeVpn -> Pair(true, false)
-            Key.modeTransproxy -> Pair(true, true)
             else -> throw IllegalArgumentException("newValue: $newValue")
         }
         hosts.isEnabled = enabledLocalDns

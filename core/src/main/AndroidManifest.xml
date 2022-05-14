@@ -42,12 +42,6 @@
         </service>
 
         <service
-            android:name="com.github.shadowsocks.bg.TransproxyService"
-            android:directBootAware="true"
-            android:exported="false"
-            android:process=":bg" />
-
-        <service
             android:name="com.github.shadowsocks.bg.ProxyService"
             android:directBootAware="true"
             android:exported="false"

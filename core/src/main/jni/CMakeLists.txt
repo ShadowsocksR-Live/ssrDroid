@@ -10,9 +10,6 @@ target_link_libraries(jni-helper  log re2)
 add_subdirectory(libancillary)
 add_subdirectory(badvpn)
 
-add_subdirectory(libevent/android)
-add_subdirectory(redsocks)
-
 #add_definitions(-D__WAIT_DEBUGGER_ATTACH__)
 
 option(BUILD_SSR_NATIVE "build ssrNative" ON)

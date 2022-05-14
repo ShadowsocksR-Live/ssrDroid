@@ -10,14 +10,6 @@
 	path = core/src/main/jni/libancillary
 	url = https://github.com/ShadowsocksR-Live/libancillary.git
 	branch = master
-[submodule "core/src/main/jni/libevent"]
-	path = core/src/main/jni/libevent
-	url = https://github.com/ssrlive/libevent.git
-	branch = shadowsocks-android
-[submodule "core/src/main/jni/redsocks"]
-	path = core/src/main/jni/redsocks
-	url = https://github.com/ssrlive/redsocks.git
-	branch = shadowsocks-android
 [submodule "core/src/main/jni/mbedtls"]
 	path = core/src/main/jni/mbedtls
 	url = https://github.com/ARMmbed/mbedtls
