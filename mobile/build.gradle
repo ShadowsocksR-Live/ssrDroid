@@ -35,7 +35,7 @@ android {
             }
             applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "${appBinaryName}_${variant.buildType.name}_${defaultConfig.versionName}.apk"
+                    outputFileName = "${appBinaryName}-${variant.buildType.name}.apk"
                 }
             }
         }
@@ -45,7 +45,7 @@ android {
             resValue 'string', 'applicationId', defaultConfig.applicationId + applicationIdSuffix
             applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "${appBinaryName}_${variant.buildType.name}_${defaultConfig.versionName}.apk"
+                    outputFileName = "${appBinaryName}-${variant.buildType.name}.apk"
                 }
             }
         }

@@ -29,7 +29,7 @@ set JAVA_HOME="C:\Program Files\Android\Android Studio\jre"
 
 # 建议编辑 mobile/build.gradle ,修改 applicationId 以规避检测
 ./gradlew aR
-adb install mobile/build/outputs/apk/release/ssrdroid_release_5.1.3.apk
+adb install mobile/build/outputs/apk/release/ssrdroid-release.apk
 ```
 
 ### 贡献
