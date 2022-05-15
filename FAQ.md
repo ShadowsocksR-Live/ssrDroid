@@ -1,8 +1,6 @@
-## 二维码扫描功能
-
-依最小权限原则，删除非核心功能的QR码扫描。改为使用外部工具处理，需要安装[条码扫描器](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)。
-
-无法访问Google Play可以[从GitHub下载](https://github.com/shadowsocksRb/zxing-android/releases/latest)。
+## 怎麼找到可用節點
+- 在 google 上通過 `免費 ssr` 關鍵字搜索，能找到一些免費節點，但有效期都不長，一般一天左右。所以你得每天換。
+- 花點錢租用服務器VPS，自己搭建 [SSRoT 服務端](https://github.com/ShadowsocksR-Live/shadowsocksr-native/wiki)，GFW 目前封不了，一勞永逸。
 
 ## 插件栏的UDP配置是什么
 
