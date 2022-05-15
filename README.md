@@ -1,6 +1,6 @@
 ## SSRoT Android 客户端
 
-由 Shadowsocks Android 客户端修改而来，支持 SSRoT 协议。
+由 Shadowsocks Android 客户端修改而来，支持 [SSRoT 协议](https://github.com/ShadowsocksR-Live/shadowsocksr-native/wiki)。
 
 [常见问题](FAQ.md)
 
