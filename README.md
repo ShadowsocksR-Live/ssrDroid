@@ -27,6 +27,12 @@ cd ssrDroid
 # 在 Windows 下，要設置 JAVA_HOME 環境變量。
 set JAVA_HOME="C:\Program Files\Android\Android Studio\jre"
 
+# 在 macOS 下，设置 JAVA_HOME 环境变量的命令为
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home"
+
+# 在 Linux 里可以直接使用 系统预安装的 Java 环境，不用再设置自己的 JAVA_HOME 环境变量。
+
+# 下面的 "R" 开关表示 release 编译，去掉 "R" 就编译成 debug 版本。
 # 建议编辑 mobile/build.gradle ,修改 applicationId 以规避检测
 ./gradlew aR
 adb install mobile/build/outputs/apk/release/ssrdroid-release.apk
