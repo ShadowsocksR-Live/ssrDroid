@@ -1,4 +1,5 @@
 # Gradle & Android Studio
+*.hprof
 .vs/
 .vscode/
 local.properties
