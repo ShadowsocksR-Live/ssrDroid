@@ -25,7 +25,7 @@ cd ssrDroid
 
 ```shell script
 # 在 Windows 下，要設置 JAVA_HOME 環境變量。
-set JAVA_HOME="C:\Program Files\Android\Android Studio\jre"
+set JAVA_HOME="C:\Program Files\Android\Android Studio\jbr"
 
 # 在 macOS 下，设置 JAVA_HOME 环境变量的命令为
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home"
