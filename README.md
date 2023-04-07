@@ -2,17 +2,28 @@
 
 由 Shadowsocks Android 客户端修改而来，支持 [SSRoT 协议](https://github.com/ShadowsocksR-Live/shadowsocksr-native/wiki)。
 
+支持 [overtls](https://github.com/ShadowsocksR-Live/overtls), 一個新代理，相當於去掉 SSR 和 SS, 唯獨保留 OT 的 Rust 實現，速度飛快，穩如老狗。
+
 [常见问题](FAQ.md)
 
 ### 编译
+
+#### 工具準備
 
 * [Git](https://git-scm.com/downloads)
 * [OpenJDK 11+](https://jdk.java.net/)
 * [Android SDK](https://developer.android.com/studio#command-tools)
   - Android SDK Build-Tools 31.0.0
-  - Android SDK Platform 31
-  - NDK (Side by side) 21.4.7075529
+  - Android SDK Platform 33
+  - NDK (Side by side) 25.1.8937393
   - Android SDK Tools
+
+* [Rust](https://rust-lang.org/)
+  - Install rust on your PC from [rustup](https://rustup.rs/)
+  - Some Android targets (arm64, arm, x86_64, x86) for rust.
+    ```bash
+    rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+    ```
 
 #### 獲取源碼
 
