@@ -74,7 +74,9 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
      * Sensitive shadowsocks configuration file requires extra protection. It may be stored in encrypted storage or
      * device storage, depending on which is currently available.
      */
-    fun start(service: BaseService.Interface, stat: File, configFile: File, extraFlag: String? = null) {
+    fun start(
+        service: BaseService.Interface, stat: File, configFile: File, extraFlag: String? = null
+    ) {
         trafficMonitor = TrafficMonitor(stat)
 
         this.configFile = configFile
@@ -83,10 +85,10 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         configFile.writeText(config.toString())
 
         val cmd = arrayListOf(
-                File((service as Context).applicationInfo.nativeLibraryDir, Executable.SSR_CLIENT).absolutePath,
-                "-V",
-                "-S", stat.absolutePath,
-                "-c", configFile.absolutePath)
+            File(
+                (service as Context).applicationInfo.nativeLibraryDir, Executable.SSR_CLIENT
+            ).absolutePath, "-V", "-S", stat.absolutePath, "-c", configFile.absolutePath
+        )
         if (extraFlag != null) cmd.add(extraFlag)
 
         if (route != Acl.ALL) {
@@ -97,7 +99,7 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         if (DataStore.tcpFastOpen) cmd += "--fast-open"
         if (BuildConfig.DEBUG) cmd += "-v"
 
-        myThread = SsrClientThread(cmd)
+        myThread = SsrClientThread(service as VpnService, profile.isOverTLS(), cmd)
         myThread?.start()
     }
 
@@ -117,19 +119,49 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         configFile = null
     }
 
-    internal class SsrClientThread(cmd: ArrayList<String>?) : Thread() {
+    internal class SsrClientThread(
+        vpnService: VpnService, isOverTls: Boolean, cmd: ArrayList<String>?
+    ) : Thread() {
         private var cmd: ArrayList<String>? = null
+        private var vpnService: VpnService? = null
+        private var isOverTls: Boolean = false
+
         init {
             this.cmd = cmd
+            this.vpnService = vpnService
+            this.isOverTls = isOverTls
+        }
+
+        fun configPath(): String {
+            val index = cmd?.indexOfFirst { it == "-c" }
+            return cmd?.get(index?.plus(1) ?: -1).toString()
+        }
+
+        fun statPath(): String {
+            val v = cmd?.indexOfFirst { it == "-V" } ?: -1
+            val index = cmd?.indexOf("-S")
+            if (v >= 0) {
+                return cmd?.get(index?.plus(1) ?: -1).toString()
+            } else {
+                return ""
+            }
         }
 
         override fun run() {
             super.run()
-            cmd?.let { SsrClientWrapper.runSsrClient(it) }
+            if (isOverTls) {
+                vpnService?.let { OverTlsWrapper.runClient(it, configPath(), statPath()) }
+            } else {
+                cmd?.let { SsrClientWrapper.runSsrClient(it) }
+            }
         }
 
         fun terminate() {
-            SsrClientWrapper.stopSsrClient()
+            if (isOverTls) {
+                OverTlsWrapper.stopClient()
+            } else {
+                SsrClientWrapper.stopSsrClient()
+            }
         }
     }
 }

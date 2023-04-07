@@ -446,6 +446,9 @@ data class Profile(
         }
     }
 
+    fun isOverTLS() : Boolean =
+        over_tls_enable && method == "none" && obfs == "plain" && protocol == "origin"
+
     fun toJson(profiles: LongSparseArray<Profile>? = null): JSONObject = JSONObject().apply {
         put("server", host)
         put("server_port", remotePort)
