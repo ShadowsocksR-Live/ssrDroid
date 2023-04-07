@@ -11,6 +11,24 @@ ext {
     resConfigs = ['zh-rCN']
 }
 
+buildscript {
+    ext {
+        kotlin_version = '1.8.20'
+    }
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'org.mozilla.rust-android-gradle:plugin:0.9.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 allprojects {
     configurations.all {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
