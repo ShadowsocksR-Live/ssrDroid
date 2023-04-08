@@ -2,7 +2,7 @@
 
 由 Shadowsocks Android 客户端修改而来，支持 [SSRoT 协议](https://github.com/ShadowsocksR-Live/shadowsocksr-native/wiki)。
 
-支持 [overtls](https://github.com/ShadowsocksR-Live/overtls), 一個新代理，相當於去掉 SSR 和 SS, 唯獨保留 OT 的 Rust 實現，速度飛快，穩如老狗。
+支持 [overtls](https://github.com/ShadowsocksR-Live/overtls), 一個新代理，相當於是 SSRoT 去掉 SSR 和 SS, 唯獨保留 oT 的 Rust 實現，快如閃電，穩如老狗。
 
 [常见问题](FAQ.md)
 
@@ -43,9 +43,11 @@ export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home"
 
 # 在 Linux 里可以直接使用 系统预安装的 Java 环境，不用再设置自己的 JAVA_HOME 环境变量。
 
-# 下面的 "R" 开关表示 release 编译，去掉 "R" 就编译成 debug 版本。
+# 請準備 20G 硬盤空間。
+# 編譯時帶的開關有 "assembleDebug" 或 "assembleRelease", 分別表示 debug 或 release 编译。
 # 建议编辑 mobile/build.gradle ,修改 applicationId 以规避检测
-./gradlew aR
+./gradlew assembleDebug
+./gradlew assembleRelease
 adb install mobile/build/outputs/apk/release/ssrdroid-release.apk
 ```
 
