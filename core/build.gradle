@@ -51,7 +51,7 @@ android {
 apply plugin: 'org.mozilla.rust-android-gradle.rust-android'
 
 cargo {
-    module  = "src/main/jni/overtls"
+    module  = "../overtls"
     libname = "overtls"
     targets = ["arm64", "x86", "x86_64", "arm"]
     profile = gradle.startParameter.taskNames.any{it.toLowerCase().contains("release")} ? "release" : "debug"
