@@ -21,6 +21,7 @@
 package com.github.shadowsocks.bg
 
 import android.content.Context
+import android.net.VpnService
 import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.acl.AclSyncer
 import com.github.shadowsocks.core.BuildConfig

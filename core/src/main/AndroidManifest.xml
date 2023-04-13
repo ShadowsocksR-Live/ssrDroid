@@ -30,7 +30,7 @@
         android:usesCleartextTraffic="false">
 
         <service
-            android:name="com.github.shadowsocks.bg.VpnService"
+            android:name="com.github.shadowsocks.bg.SsrVpnService"
             android:directBootAware="true"
             android:exported="false"
             android:label="@string/ssr_app_name"

@@ -29,7 +29,6 @@ import android.net.Network
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.system.ErrnoException
-import android.system.OsConstants
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.VpnRequestActivity
 import com.github.shadowsocks.acl.Acl
@@ -39,8 +38,6 @@ import com.github.shadowsocks.net.HostsFile
 import com.github.shadowsocks.net.Subnet
 import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Key
-import com.github.shadowsocks.utils.closeQuietly
-import com.github.shadowsocks.utils.int
 import com.github.shadowsocks.utils.printLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -48,11 +45,9 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileDescriptor
 import java.io.IOException
-import java.net.URL
-import java.util.*
-import android.net.VpnService as BaseVpnService
+import android.net.VpnService
 
-class VpnService : BaseVpnService(), LocalDnsService.Interface {
+class SsrVpnService : VpnService(), LocalDnsService.Interface {
     companion object {
         private const val VPN_MTU = 1500
         private const val PRIVATE_VLAN4_CLIENT = "172.19.0.1"
@@ -84,7 +79,7 @@ class VpnService : BaseVpnService(), LocalDnsService.Interface {
         if (Build.VERSION.SDK_INT == 28 && metered) null else underlyingNetwork?.let { arrayOf(it) }
 
     override fun onBind(intent: Intent) = when (intent.action) {
-        SERVICE_INTERFACE -> super<BaseVpnService>.onBind(intent)
+        SERVICE_INTERFACE -> super<VpnService>.onBind(intent)
         else -> super<LocalDnsService.Interface>.onBind(intent)
     }
 
