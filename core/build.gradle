@@ -57,7 +57,7 @@ cargo {
     profile = gradle.startParameter.taskNames.any{it.toLowerCase().contains("release")} ? "release" : "debug"
     prebuiltToolchains = true
     apiLevel = 21
-    targetIncludes = ['libovertls.so']
+    targetIncludes = ['libovertls.so', 'libtun2proxy.so']
 }
 
 preBuild.dependsOn "cargoBuild"

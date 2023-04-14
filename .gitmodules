@@ -18,3 +18,7 @@
 	path = rust/overtls
 	url = https://github.com/ShadowsocksR-Live/overtls.git
 	branch = master
+[submodule "rust/tun2proxy"]
+	path = rust/tun2proxy
+	url = https://github.com/ssrlive/tun2proxy.git
+	branch = android
