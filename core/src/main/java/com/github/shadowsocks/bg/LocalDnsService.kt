@@ -51,7 +51,8 @@ object LocalDnsService {
                     !profile.udpdns,
                     if (profile.route == Acl.ALL) null else object {
                         suspend fun createAcl() = AclMatcher().apply { init(profile.route) }
-                    }::createAcl).also {
+                    }::createAcl
+            ).also {
                 servers[this] = it
             }.start(InetSocketAddress(DataStore.listenAddress, DataStore.portLocalDns))
         }

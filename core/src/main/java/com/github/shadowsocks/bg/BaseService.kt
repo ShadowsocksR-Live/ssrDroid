@@ -44,7 +44,6 @@ import com.github.shadowsocks.utils.*
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.IOException
-import java.net.URL
 import java.net.UnknownHostException
 
 /**
@@ -55,11 +54,7 @@ object BaseService {
         /**
          * Idle state is only used by UI and will never be returned by BaseService.
          */
-        Idle,
-        Connecting(true),
-        Connected(true),
-        Stopping,
-        Stopped,
+        Idle, Connecting(true), Connected(true), Stopping, Stopped,
     }
 
     const val CONFIG_FILE = "shadowsocks.conf"
@@ -301,8 +296,9 @@ object BaseService {
         fun persistStats() =
                 listOfNotNull(data.proxy, data.udpFallback).forEach { it.trafficMonitor?.persistStats(it.profile.id) }
 
-        suspend fun preInit() { }
+        suspend fun preInit() {}
         suspend fun getActiveNetwork() = if (Build.VERSION.SDK_INT >= 23) Core.connectivity.activeNetwork else null
+
         suspend fun resolver(host: String) = DnsResolverCompat.resolveOnActiveNetwork(host)
 
         fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

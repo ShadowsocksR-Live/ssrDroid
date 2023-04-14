@@ -39,7 +39,7 @@ class TrafficMonitor(statFile: File) {
         override fun acceptInternal(socket: LocalSocket) {
             when (val read = socket.inputStream.read(buffer)) {
                 -1 -> return
-                16 -> { }
+                16 -> {}
                 else -> throw IOException("Unexpected traffic stat length $read")
             }
             val tx = stat.getLong(0)

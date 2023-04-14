@@ -75,9 +75,7 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
      * Sensitive shadowsocks configuration file requires extra protection. It may be stored in encrypted storage or
      * device storage, depending on which is currently available.
      */
-    fun start(
-        service: BaseService.Interface, stat: File, configFile: File, extraFlag: String? = null
-    ) {
+    fun start(service: BaseService.Interface, stat: File, configFile: File, extraFlag: String? = null) {
         trafficMonitor = TrafficMonitor(stat)
 
         this.configFile = configFile
@@ -85,12 +83,11 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
 
         configFile.writeText(config.toString())
 
-        val cmd = arrayListOf(
-            File(
-                (service as Context).applicationInfo.nativeLibraryDir, Executable.SSR_CLIENT
-            ).absolutePath, "-V", "-S", stat.absolutePath, "-c", configFile.absolutePath
-        )
-        if (extraFlag != null) cmd.add(extraFlag)
+        val exe = File((service as Context).applicationInfo.nativeLibraryDir, Executable.SSR_CLIENT).absolutePath
+        val cmd = arrayListOf(exe, "-V", "-S", stat.absolutePath, "-c", configFile.absolutePath)
+        if (extraFlag != null) {
+            cmd.add(extraFlag)
+        }
 
         if (route != Acl.ALL) {
             cmd += "--acl"
@@ -120,9 +117,7 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         configFile = null
     }
 
-    internal class SsrClientThread(
-        vpnService: VpnService, isOverTls: Boolean, cmd: ArrayList<String>?
-    ) : Thread() {
+    internal class SsrClientThread(vpnService: VpnService, isOverTls: Boolean, cmd: ArrayList<String>?) : Thread() {
         private var cmd: ArrayList<String>? = null
         private var vpnService: VpnService? = null
         private var isOverTls: Boolean = false

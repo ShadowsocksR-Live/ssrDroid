@@ -1,7 +1,5 @@
 package com.github.shadowsocks.bg
 
-import kotlin.collections.ArrayList
-
 object SsrClientWrapper {
     init {
         System.loadLibrary("ssr-client")

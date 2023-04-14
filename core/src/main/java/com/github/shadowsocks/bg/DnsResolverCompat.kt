@@ -61,25 +61,33 @@ sealed class DnsResolverCompat {
         private val address4 = "8.8.8.8".parseNumericAddress()!!
         private val address6 = "2000::".parseNumericAddress()!!
         suspend fun haveIpv4(network: Network) = checkConnectivity(network, OsConstants.AF_INET, address4)
+
         suspend fun haveIpv6(network: Network) = checkConnectivity(network, OsConstants.AF_INET6, address6)
-        private suspend fun checkConnectivity(network: Network, domain: Int, addr: InetAddress) = try {
-            val socket = Os.socket(domain, OsConstants.SOCK_DGRAM, OsConstants.IPPROTO_UDP)
-            try {
-                instance.bindSocket(network, socket)
-                instance.connectUdp(socket, addr)
-            } finally {
-                socket.closeQuietly()
-            }
-            true
-        } catch (e: IOException) {
-            if ((e.cause as? ErrnoException)?.errno == OsConstants.EPERM) checkConnectivity(network, addr) else false
-        } catch (_: ErrnoException) {
-            false
-        } catch (e: ReflectiveOperationException) {
-            check(Build.VERSION.SDK_INT < 23)
-            printLog(e)
-            checkConnectivity(network, addr)
-        }
+
+        private suspend fun checkConnectivity(network: Network, domain: Int, addr: InetAddress) =
+                try {
+                    val socket = Os.socket(domain, OsConstants.SOCK_DGRAM, OsConstants.IPPROTO_UDP)
+                    try {
+                        instance.bindSocket(network, socket)
+                        instance.connectUdp(socket, addr)
+                    } finally {
+                        socket.closeQuietly()
+                    }
+                    true
+                } catch (e: IOException) {
+                    if ((e.cause as? ErrnoException)?.errno == OsConstants.EPERM) {
+                        checkConnectivity(network, addr)
+                    } else {
+                        false
+                    }
+                } catch (_: ErrnoException) {
+                    false
+                } catch (e: ReflectiveOperationException) {
+                    check(Build.VERSION.SDK_INT < 23)
+                    printLog(e)
+                    checkConnectivity(network, addr)
+                }
+
         private fun checkConnectivity(network: Network, addr: InetAddress): Boolean {
             return Core.connectivity.getLinkProperties(network)?.routes?.any {
                 try {
@@ -92,7 +100,9 @@ sealed class DnsResolverCompat {
         }
 
         override fun bindSocket(network: Network, socket: FileDescriptor) = instance.bindSocket(network, socket)
+
         override suspend fun resolve(network: Network, host: String) = instance.resolve(network, host)
+
         override suspend fun resolveOnActiveNetwork(host: String) = instance.resolveOnActiveNetwork(host)
     }
 
@@ -100,6 +110,7 @@ sealed class DnsResolverCompat {
     abstract fun bindSocket(network: Network, socket: FileDescriptor)
     internal open suspend fun connectUdp(fd: FileDescriptor, address: InetAddress, port: Int = 0) =
             Os.connect(fd, address, port)
+
     abstract suspend fun resolve(network: Network, host: String): Array<InetAddress>
     abstract suspend fun resolveOnActiveNetwork(host: String): Array<InetAddress>
 
@@ -107,7 +118,8 @@ sealed class DnsResolverCompat {
     private open class DnsResolverCompat21 : DnsResolverCompat() {
         private val bindSocketToNetwork by lazy {
             Class.forName("android.net.NetworkUtils").getDeclaredMethod(
-                    "bindSocketToNetwork", Int::class.java, Int::class.java)
+                    "bindSocketToNetwork", Int::class.java, Int::class.java
+            )
         }
         private val netId by lazy { Network::class.java.getDeclaredField("netId") }
         override fun bindSocket(network: Network, socket: FileDescriptor) {
@@ -136,6 +148,7 @@ sealed class DnsResolverCompat {
 
         override suspend fun resolve(network: Network, host: String) =
                 GlobalScope.async(unboundedIO) { network.getAllByName(host) }.await()
+
         override suspend fun resolveOnActiveNetwork(host: String) =
                 GlobalScope.async(unboundedIO) { InetAddress.getAllByName(host) }.await()
     }
@@ -163,6 +176,7 @@ sealed class DnsResolverCompat {
                         signal, object : DnsResolver.Callback<Collection<InetAddress>> {
                     override fun onAnswer(answer: Collection<InetAddress>, rcode: Int) =
                             cont.resume(answer.toTypedArray())
+
                     override fun onError(error: DnsResolver.DnsException) = cont.resumeWithException(IOException(error))
                 })
             }

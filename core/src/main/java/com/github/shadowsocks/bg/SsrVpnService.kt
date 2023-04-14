@@ -26,6 +26,7 @@ import android.content.pm.PackageManager
 import android.net.LocalSocket
 import android.net.LocalSocketAddress
 import android.net.Network
+import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.system.ErrnoException
@@ -45,7 +46,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileDescriptor
 import java.io.IOException
-import android.net.VpnService
 
 class SsrVpnService : VpnService(), LocalDnsService.Interface {
     companion object {
@@ -68,15 +68,18 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
     private var conn: ParcelFileDescriptor? = null
     private var active = false
     private var metered = false
+
     @Volatile
     private var underlyingNetwork: Network? = null
         set(value) {
             field = value
             if (active && Build.VERSION.SDK_INT >= 22) setUnderlyingNetworks(underlyingNetworks)
         }
-    private val underlyingNetworks get() =
-        // clearing underlyingNetworks makes Android 9 consider the network to be metered
-        if (Build.VERSION.SDK_INT == 28 && metered) null else underlyingNetwork?.let { arrayOf(it) }
+
+    // clearing underlyingNetworks makes Android 9 consider the network to be metered
+    private val underlyingNetworks
+        get() =
+            if (Build.VERSION.SDK_INT == 28 && metered) null else underlyingNetwork?.let { arrayOf(it) }
 
     override fun onBind(intent: Intent) = when (intent.action) {
         SERVICE_INTERFACE -> super<VpnService>.onBind(intent)
@@ -164,13 +167,15 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         val conn = builder.establish() ?: throw NullConnectionException()
         this.conn = conn
 
-        val cmd = arrayListOf(File(applicationInfo.nativeLibraryDir, Executable.TUN2SOCKS).absolutePath,
+        val cmd = arrayListOf(
+                File(applicationInfo.nativeLibraryDir, Executable.TUN2SOCKS).absolutePath,
                 "--netif-ipaddr", PRIVATE_VLAN4_ROUTER,
                 "--socks-server-addr", "${DataStore.listenAddress}:${DataStore.portProxy}",
                 "--tunmtu", VPN_MTU.toString(),
                 "--sock-path", "sock_path",
                 "--dnsgw", "127.0.0.1:${DataStore.portLocalDns}",
-                "--loglevel", "warning")
+                "--loglevel", "warning"
+        )
         if (profile.ipv6) {
             cmd += "--netif-ip6addr"
             cmd += PRIVATE_VLAN6_ROUTER
