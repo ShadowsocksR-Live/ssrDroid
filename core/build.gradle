@@ -56,7 +56,7 @@ cargo {
     targets = ["arm64", "x86", "x86_64", "arm"]
     profile = gradle.startParameter.taskNames.any{it.toLowerCase().contains("release")} ? "release" : "debug"
     prebuiltToolchains = true
-    apiLevel = 21
+    apiLevel = 24
     targetIncludes = ['libovertls.so', 'libtun2proxy.so']
 }
 

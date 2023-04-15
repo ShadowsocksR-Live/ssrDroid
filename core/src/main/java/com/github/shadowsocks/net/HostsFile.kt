@@ -33,6 +33,6 @@ class HostsFile(input: String = "") {
         }
     }
 
-    val configuredHostnames get() = map.size
+    val configuredHostnameCount get() = map.size
     fun resolve(hostname: String) = map[hostname]?.shuffled() ?: emptyList()
 }

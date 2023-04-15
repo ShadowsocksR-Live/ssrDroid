@@ -27,7 +27,7 @@ import com.github.shadowsocks.net.HostsFile
 
 object HostsSummaryProvider : Preference.SummaryProvider<EditTextPreference> {
     override fun provideSummary(preference: EditTextPreference): CharSequence? {
-        val count = HostsFile(preference!!.text ?: "").configuredHostnames
+        val count = HostsFile(preference!!.text ?: "").configuredHostnameCount
         return preference.context.resources.getQuantityString(R.plurals.hosts_summary, count, count)
     }
 }
