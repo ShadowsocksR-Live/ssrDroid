@@ -23,16 +23,14 @@ package com.github.shadowsocks.bg
 import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.LocalSocket
-import android.net.LocalSocketAddress
 import android.net.Network
 import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
-import android.system.ErrnoException
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.VpnRequestActivity
 import com.github.shadowsocks.acl.Acl
+import com.github.shadowsocks.core.BuildConfig
 import com.github.shadowsocks.core.R
 import com.github.shadowsocks.net.DefaultNetworkListener
 import com.github.shadowsocks.net.HostsFile
@@ -41,11 +39,8 @@ import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Key
 import com.github.shadowsocks.utils.printLog
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
-import java.io.FileDescriptor
-import java.io.IOException
 
 class SsrVpnService : VpnService(), LocalDnsService.Interface {
     companion object {
@@ -89,6 +84,8 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
     override fun onRevoke() = stopRunner()
 
     override fun killProcesses(scope: CoroutineScope) {
+        tunThread?.terminate()
+        tunThread?.join()
         super.killProcesses(scope)
         active = false
         scope.launch { DefaultNetworkListener.stop(this) }
@@ -112,10 +109,10 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
 
     override suspend fun startProcesses(hosts: HostsFile) {
         super.startProcesses(hosts)
-        sendFd(startVpn())
+        startVpn()
     }
 
-    private suspend fun startVpn(): FileDescriptor {
+    private suspend fun startVpn() {
         val profile = data.proxy!!.profile
         val builder = Builder()
                 .setConfigureIntent(Core.configureIntent(this))
@@ -181,35 +178,63 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
             cmd += PRIVATE_VLAN6_ROUTER
         }
         cmd += "--enable-udprelay"
-        data.processes!!.start(cmd, onRestartCallback = {
-            try {
-                sendFd(conn.fileDescriptor)
-            } catch (e: ErrnoException) {
-                stopRunner(false, e.message)
-            }
-        })
-        return conn.fileDescriptor
-    }
 
-    private suspend fun sendFd(fd: FileDescriptor) {
-        var tries = 0
-        val path = File(Core.deviceStorage.noBackupFilesDir, "sock_path").absolutePath
-        while (true) try {
-            delay(50L shl tries)
-            LocalSocket().use { localSocket ->
-                localSocket.connect(LocalSocketAddress(path, LocalSocketAddress.Namespace.FILESYSTEM))
-                localSocket.setFileDescriptorsForSend(arrayOf(fd))
-                localSocket.outputStream.write(42)
-            }
-            return
-        } catch (e: IOException) {
-            if (tries > 5) throw e
-            tries += 1
-        }
+        cmd += "--proxy"
+        cmd += "socks5://${DataStore.listenAddress}:${DataStore.portProxy}"
+
+        cmd += "--tunfd"
+        cmd += conn.getFd().toString()
+
+        if (BuildConfig.DEBUG) cmd += "--verbose"
+
+        tunThread = Tun2proxyThread(cmd)
+        tunThread?.start()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         data.binder.close()
+    }
+
+    private var tunThread: Tun2proxyThread? = null
+
+    internal class Tun2proxyThread(cmd: ArrayList<String>?) : Thread() {
+        private var cmd: ArrayList<String>? = null
+        init {
+            this.cmd = cmd
+        }
+
+        override fun run() {
+            super.run()
+            if (cmd != null) {
+                Tun2proxy.run(proxyUrl(), tunFd(), tunMtu(), verbose())
+            }
+        }
+
+        fun terminate() {
+            Tun2proxy.stop()
+        }
+
+        fun proxyUrl(): String {
+            val index = cmd?.indexOfFirst { it == "--proxy" }
+            return cmd?.get(index?.plus(1) ?: -1).toString()
+        }
+
+        fun tunFd(): Int {
+            val index = cmd?.indexOfFirst { it == "--tunfd" }
+            val fd = cmd?.get(index?.plus(1) ?: -1).toString()
+            return fd.toInt()
+        }
+
+        fun tunMtu(): Int {
+            val index = cmd?.indexOfFirst { it == "--tunmtu" }
+            val mtu = cmd?.get(index?.plus(1) ?: -1).toString()
+            return mtu.toInt()
+        }
+
+        fun verbose(): Boolean {
+            val v = cmd?.indexOfFirst { it == "--verbose" } ?: -1
+            return v >= 0
+        }
     }
 }
