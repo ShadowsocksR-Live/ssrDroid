@@ -86,6 +86,8 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
     override fun killProcesses(scope: CoroutineScope) {
         tunThread?.terminate()
         tunThread?.join()
+        tunThread = null
+
         super.killProcesses(scope)
         active = false
         scope.launch { DefaultNetworkListener.stop(this) }
@@ -164,30 +166,13 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         val conn = builder.establish() ?: throw NullConnectionException()
         this.conn = conn
 
-        val cmd = arrayListOf(
-                File(applicationInfo.nativeLibraryDir, Executable.TUN2SOCKS).absolutePath,
-                "--netif-ipaddr", PRIVATE_VLAN4_ROUTER,
-                "--socks-server-addr", "${DataStore.listenAddress}:${DataStore.portProxy}",
-                "--tunmtu", VPN_MTU.toString(),
-                "--sock-path", "sock_path",
-                "--dnsgw", "127.0.0.1:${DataStore.portLocalDns}",
-                "--loglevel", "warning"
-        )
-        if (profile.ipv6) {
-            cmd += "--netif-ip6addr"
-            cmd += PRIVATE_VLAN6_ROUTER
-        }
-        cmd += "--enable-udprelay"
+        val proxyUrl = "socks5://${DataStore.listenAddress}:${DataStore.portProxy}"
+        val tunFd = conn.getFd()
+        val tunMtu = VPN_MTU
+        val verbose = BuildConfig.DEBUG
 
-        cmd += "--proxy"
-        cmd += "socks5://${DataStore.listenAddress}:${DataStore.portProxy}"
-
-        cmd += "--tunfd"
-        cmd += conn.getFd().toString()
-
-        if (BuildConfig.DEBUG) cmd += "--verbose"
-
-        tunThread = Tun2proxyThread(cmd)
+        tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose)
+        tunThread?.isDaemon = true
         tunThread?.start()
     }
 
@@ -198,43 +183,18 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
 
     private var tunThread: Tun2proxyThread? = null
 
-    internal class Tun2proxyThread(cmd: ArrayList<String>?) : Thread() {
-        private var cmd: ArrayList<String>? = null
-        init {
-            this.cmd = cmd
-        }
-
+    internal class Tun2proxyThread(
+        private val proxyUrl: String,
+        private val tunFd: Int,
+        private val tunMtu: Int,
+        private val verbose: Boolean
+    ) : Thread() {
         override fun run() {
-            super.run()
-            if (cmd != null) {
-                Tun2proxy.run(proxyUrl(), tunFd(), tunMtu(), verbose())
-            }
+            Tun2proxy.run(proxyUrl, tunFd, tunMtu, verbose)
         }
 
         fun terminate() {
             Tun2proxy.stop()
-        }
-
-        fun proxyUrl(): String {
-            val index = cmd?.indexOfFirst { it == "--proxy" }
-            return cmd?.get(index?.plus(1) ?: -1).toString()
-        }
-
-        fun tunFd(): Int {
-            val index = cmd?.indexOfFirst { it == "--tunfd" }
-            val fd = cmd?.get(index?.plus(1) ?: -1).toString()
-            return fd.toInt()
-        }
-
-        fun tunMtu(): Int {
-            val index = cmd?.indexOfFirst { it == "--tunmtu" }
-            val mtu = cmd?.get(index?.plus(1) ?: -1).toString()
-            return mtu.toInt()
-        }
-
-        fun verbose(): Boolean {
-            val v = cmd?.indexOfFirst { it == "--verbose" } ?: -1
-            return v >= 0
         }
     }
 }
