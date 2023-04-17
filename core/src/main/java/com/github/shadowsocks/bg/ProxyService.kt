@@ -30,11 +30,11 @@ class ProxyService : Service(), BaseService.Interface {
     override val data = BaseService.Data(this)
     override val tag: String get() = "ShadowsocksProxyService"
     override fun createNotification(profileName: String): ServiceNotification =
-            ServiceNotification(this, profileName, "service-proxy", true)
+        ServiceNotification(this, profileName, "service-proxy", true)
 
     override fun onBind(intent: Intent) = super.onBind(intent)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int =
-            super<BaseService.Interface>.onStartCommand(intent, flags, startId)
+        super<BaseService.Interface>.onStartCommand(intent, flags, startId)
 
     override fun onDestroy() {
         super.onDestroy()

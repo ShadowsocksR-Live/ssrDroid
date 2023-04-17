@@ -30,7 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import java.net.InetSocketAddress
 import java.net.URI
 import java.net.URISyntaxException
-import java.util.*
+import java.util.WeakHashMap
 
 object LocalDnsService {
     private val servers = WeakHashMap<Interface, LocalDnsServer>()
@@ -44,14 +44,15 @@ object LocalDnsService {
             } catch (e: URISyntaxException) {
                 throw BaseService.ExpectedExceptionWrapper(e)
             }
-            LocalDnsServer(this::resolver,
-                    Socks5Endpoint(dns.host, if (dns.port < 0) 53 else dns.port),
-                    DataStore.proxyAddress,
-                    hosts,
-                    !profile.udpdns,
-                    if (profile.route == Acl.ALL) null else object {
-                        suspend fun createAcl() = AclMatcher().apply { init(profile.route) }
-                    }::createAcl
+            LocalDnsServer(
+                this::resolver,
+                Socks5Endpoint(dns.host, if (dns.port < 0) 53 else dns.port),
+                DataStore.proxyAddress,
+                hosts,
+                !profile.udpdns,
+                if (profile.route == Acl.ALL) null else object {
+                    suspend fun createAcl() = AclMatcher().apply { init(profile.route) }
+                }::createAcl
             ).also {
                 servers[this] = it
             }.start(InetSocketAddress(DataStore.listenAddress, DataStore.portLocalDns))

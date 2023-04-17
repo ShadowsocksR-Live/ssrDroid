@@ -50,8 +50,8 @@ import com.github.shadowsocks.utils.Action
  * See also: https://github.com/aosp-mirror/platform_frameworks_base/commit/070d142993403cc2c42eca808ff3fafcee220ac4
  */
 class ServiceNotification(
-        private val service: BaseService.Interface, profileName: String,
-        channel: String, visible: Boolean = false
+    private val service: BaseService.Interface, profileName: String,
+    channel: String, visible: Boolean = false
 ) : BroadcastReceiver() {
     private val callback: IShadowsocksServiceCallback by lazy {
         object : IShadowsocksServiceCallback.Stub() {
@@ -60,24 +60,24 @@ class ServiceNotification(
                 if (profileId != 0L) return
                 builder.apply {
                     setContentText(
-                            (service as Context).getString(
-                                    R.string.traffic,
-                                    service.getString(
-                                            R.string.speed,
-                                            Formatter.formatFileSize(service, stats.txRate)
-                                    ),
-                                    service.getString(
-                                            R.string.speed,
-                                            Formatter.formatFileSize(service, stats.rxRate)
-                                    )
+                        (service as Context).getString(
+                            R.string.traffic,
+                            service.getString(
+                                R.string.speed,
+                                Formatter.formatFileSize(service, stats.txRate)
+                            ),
+                            service.getString(
+                                R.string.speed,
+                                Formatter.formatFileSize(service, stats.rxRate)
                             )
+                        )
                     )
                     setSubText(
-                            service.getString(
-                                    R.string.traffic,
-                                    Formatter.formatFileSize(service, stats.txTotal),
-                                    Formatter.formatFileSize(service, stats.rxTotal)
-                            )
+                        service.getString(
+                            R.string.traffic,
+                            Formatter.formatFileSize(service, stats.txTotal),
+                            Formatter.formatFileSize(service, stats.rxTotal)
+                        )
                     )
                 }
                 show()
@@ -90,24 +90,24 @@ class ServiceNotification(
     private var isChannelClosed = false
 
     private val builder = NotificationCompat.Builder(service as Context, channel)
-            .setWhen(0)
-            .setColor(ContextCompat.getColor(service, R.color.material_primary_500))
-            .setTicker(service.getString(R.string.forward_success))
-            .setContentTitle(profileName)
-            .setContentIntent(Core.configureIntent(service))
-            .setSmallIcon(R.drawable.ic_service_active)
-            .setCategory(NotificationCompat.CATEGORY_SERVICE)
-            .setPriority(if (visible) NotificationCompat.PRIORITY_LOW else NotificationCompat.PRIORITY_MIN)
+        .setWhen(0)
+        .setColor(ContextCompat.getColor(service, R.color.material_primary_500))
+        .setTicker(service.getString(R.string.forward_success))
+        .setContentTitle(profileName)
+        .setContentIntent(Core.configureIntent(service))
+        .setSmallIcon(R.drawable.ic_service_active)
+        .setCategory(NotificationCompat.CATEGORY_SERVICE)
+        .setPriority(if (visible) NotificationCompat.PRIORITY_LOW else NotificationCompat.PRIORITY_MIN)
 
     init {
         service as Context
         val closeAction = NotificationCompat.Action.Builder(
-                R.drawable.ic_navigation_close,
-                service.getText(R.string.stop),
-                PendingIntent.getBroadcast(
-                        service, 0, Intent(Action.CLOSE).setPackage(service.packageName),
-                        PendingIntent.FLAG_IMMUTABLE
-                )
+            R.drawable.ic_navigation_close,
+            service.getText(R.string.stop),
+            PendingIntent.getBroadcast(
+                service, 0, Intent(Action.CLOSE).setPackage(service.packageName),
+                PendingIntent.FLAG_IMMUTABLE
+            )
         ).apply { setShowsUserInterface(false) }.build()
         if (Build.VERSION.SDK_INT < 24) {
             builder.addAction(closeAction)

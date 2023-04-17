@@ -40,7 +40,6 @@ import com.github.shadowsocks.utils.Key
 import com.github.shadowsocks.utils.printLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.io.File
 
 class SsrVpnService : VpnService(), LocalDnsService.Interface {
     companion object {
@@ -58,7 +57,7 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
     override val data = BaseService.Data(this)
     override val tag: String get() = "ShadowsocksVpnService"
     override fun createNotification(profileName: String): ServiceNotification =
-            ServiceNotification(this, profileName, "service-vpn")
+        ServiceNotification(this, profileName, "service-vpn")
 
     private var conn: ParcelFileDescriptor? = null
     private var active = false
@@ -117,26 +116,26 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
     private suspend fun startVpn() {
         val profile = data.proxy!!.profile
         val builder = Builder()
-                .setConfigureIntent(Core.configureIntent(this))
-                .setSession(profile.formattedName)
-                .setMtu(VPN_MTU)
-                .addAddress(PRIVATE_VLAN4_CLIENT, 30)
-                .addDnsServer(PRIVATE_VLAN4_ROUTER)
+            .setConfigureIntent(Core.configureIntent(this))
+            .setSession(profile.formattedName)
+            .setMtu(VPN_MTU)
+            .addAddress(PRIVATE_VLAN4_CLIENT, 30)
+            .addDnsServer(PRIVATE_VLAN4_ROUTER)
 
         if (profile.ipv6) builder.addAddress(PRIVATE_VLAN6_CLIENT, 126)
 
         if (profile.proxyApps) {
             val me = packageName
             profile.individual.split('\n')
-                    .filter { it != me }
-                    .forEach {
-                        try {
-                            if (profile.bypass) builder.addDisallowedApplication(it)
-                            else builder.addAllowedApplication(it)
-                        } catch (ex: PackageManager.NameNotFoundException) {
-                            printLog(ex)
-                        }
+                .filter { it != me }
+                .forEach {
+                    try {
+                        if (profile.bypass) builder.addDisallowedApplication(it)
+                        else builder.addAllowedApplication(it)
+                    } catch (ex: PackageManager.NameNotFoundException) {
+                        printLog(ex)
                     }
+                }
             if (!profile.bypass) builder.addAllowedApplication(me)
         }
 
@@ -145,6 +144,7 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
                 builder.addRoute("0.0.0.0", 0)
                 if (profile.ipv6) builder.addRoute("::", 0)
             }
+
             else -> {
                 resources.getStringArray(R.array.bypass_private_route).forEach {
                     val subnet = Subnet.fromString(it)!!

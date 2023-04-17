@@ -30,8 +30,17 @@ import androidx.annotation.MainThread
 import com.crashlytics.android.Crashlytics
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.utils.Commandline
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -80,14 +89,15 @@ class GuardedProcessPool(private val onFatal: suspend (IOException) -> Unit) : C
                     running = false
                     when {
                         SystemClock.elapsedRealtime() - startTime < 1000 -> throw IOException(
-                                "$cmdName exits too fast (exit code: $exitCode)"
+                            "$cmdName exits too fast (exit code: $exitCode)"
                         )
+
                         exitCode == 128 + OsConstants.SIGKILL -> Crashlytics.log(Log.WARN, TAG, "$cmdName was killed")
                         else -> Crashlytics.logException(IOException("$cmdName unexpectedly exits with code $exitCode"))
                     }
                     Crashlytics.log(
-                            Log.DEBUG, TAG,
-                            "restart process: ${Commandline.toString(cmd)} (last exit code: $exitCode)"
+                        Log.DEBUG, TAG,
+                        "restart process: ${Commandline.toString(cmd)} (last exit code: $exitCode)"
                     )
                     start()
                     running = true

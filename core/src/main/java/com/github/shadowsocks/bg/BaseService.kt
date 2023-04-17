@@ -40,8 +40,22 @@ import com.github.shadowsocks.aidl.TrafficStats
 import com.github.shadowsocks.core.R
 import com.github.shadowsocks.net.HostsFile
 import com.github.shadowsocks.preference.DataStore
-import com.github.shadowsocks.utils.*
-import kotlinx.coroutines.*
+import com.github.shadowsocks.utils.Action
+import com.github.shadowsocks.utils.Key
+import com.github.shadowsocks.utils.broadcastReceiver
+import com.github.shadowsocks.utils.printLog
+import com.github.shadowsocks.utils.readableMessage
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 import java.net.UnknownHostException
@@ -128,9 +142,9 @@ object BaseService {
                 delay(bandwidthListeners.values.minOrNull() ?: return)
                 val proxies = listOfNotNull(data?.proxy, data?.udpFallback)
                 val stats = proxies
-                        .map { Pair(it.profile.id, it.trafficMonitor?.requestUpdate()) }
-                        .filter { it.second != null }
-                        .map { Triple(it.first, it.second!!.first, it.second!!.second) }
+                    .map { Pair(it.profile.id, it.trafficMonitor?.requestUpdate()) }
+                    .filter { it.second != null }
+                    .map { Triple(it.first, it.second!!.first, it.second!!.second) }
                 if (stats.any { it.third } && data?.state == State.Connected && bandwidthListeners.isNotEmpty()) {
                     val sum = stats.fold(TrafficStats()) { a, b -> a + b.second }
                     broadcast { item ->
@@ -154,17 +168,21 @@ object BaseService {
                 val data = data
                 val proxy = data?.proxy ?: return@launch
                 proxy.trafficMonitor?.out.also { stats ->
-                    cb.trafficUpdated(proxy.profile.id, if (stats == null) sum else {
-                        sum += stats
-                        stats
-                    })
+                    cb.trafficUpdated(
+                        proxy.profile.id, if (stats == null) sum else {
+                            sum += stats
+                            stats
+                        }
+                    )
                 }
                 data.udpFallback?.also { udpFallback ->
                     udpFallback.trafficMonitor?.out.also { stats ->
-                        cb.trafficUpdated(udpFallback.profile.id, if (stats == null) TrafficStats() else {
-                            sum += stats
-                            stats
-                        })
+                        cb.trafficUpdated(
+                            udpFallback.profile.id, if (stats == null) TrafficStats() else {
+                                sum += stats
+                                stats
+                            }
+                        )
                     }
                 }
                 cb.trafficUpdated(0, sum)
@@ -212,9 +230,10 @@ object BaseService {
 
         fun forceLoad() {
             val (profile, fallback) = Core.currentProfile
-                    ?: return stopRunner(false, (this as Context).getString(R.string.profile_empty))
+                ?: return stopRunner(false, (this as Context).getString(R.string.profile_empty))
             if (profile.host.isEmpty() || profile.password.isEmpty() ||
-                    fallback != null && (fallback.host.isEmpty() || fallback.password.isEmpty())) {
+                fallback != null && (fallback.host.isEmpty() || fallback.password.isEmpty())
+            ) {
                 stopRunner(false, (this as Context).getString(R.string.proxy_empty))
                 return
             }
@@ -230,14 +249,18 @@ object BaseService {
             val context = if (Build.VERSION.SDK_INT < 24 || Core.user.isUserUnlocked) app else Core.deviceStorage
             val configRoot = context.noBackupFilesDir
             val udpFallback = data.udpFallback
-            data.proxy!!.start(this,
-                    File(Core.deviceStorage.noBackupFilesDir, "stat_main"),
-                    File(configRoot, CONFIG_FILE),
-                    if (udpFallback == null) "-u" else null)
-            udpFallback?.start(this,
-                    File(Core.deviceStorage.noBackupFilesDir, "stat_udp"),
-                    File(configRoot, CONFIG_FILE_UDP),
-                    "-U")
+            data.proxy!!.start(
+                this,
+                File(Core.deviceStorage.noBackupFilesDir, "stat_main"),
+                File(configRoot, CONFIG_FILE),
+                if (udpFallback == null) "-u" else null
+            )
+            udpFallback?.start(
+                this,
+                File(Core.deviceStorage.noBackupFilesDir, "stat_udp"),
+                File(configRoot, CONFIG_FILE_UDP),
+                "-U"
+            )
         }
 
         fun startRunner() {
@@ -294,7 +317,7 @@ object BaseService {
         }
 
         fun persistStats() =
-                listOfNotNull(data.proxy, data.udpFallback).forEach { it.trafficMonitor?.persistStats(it.profile.id) }
+            listOfNotNull(data.proxy, data.udpFallback).forEach { it.trafficMonitor?.persistStats(it.profile.id) }
 
         suspend fun preInit() {}
         suspend fun getActiveNetwork() = if (Build.VERSION.SDK_INT >= 23) Core.connectivity.activeNetwork else null
