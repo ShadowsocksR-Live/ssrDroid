@@ -20,5 +20,5 @@
 	branch = master
 [submodule "rust/tun2proxy"]
 	path = rust/tun2proxy
-	url = https://github.com/ssrlive/tun2proxy.git
-	branch = android
+	url = https://github.com/blechschmidt/tun2proxy.git
+	branch = master
