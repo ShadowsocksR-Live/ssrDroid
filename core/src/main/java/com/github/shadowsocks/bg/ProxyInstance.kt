@@ -97,7 +97,8 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         if (DataStore.tcpFastOpen) cmd += "--fast-open"
         if (BuildConfig.DEBUG) cmd += "-v"
 
-        myThread = SsrClientThread(service as VpnService, profile.isOverTLS(), cmd)
+        val isOverTLS = DataStore.useOverTLS && profile.isOverTLS()
+        myThread = SsrClientThread(service as VpnService, isOverTLS, cmd)
         myThread?.start()
     }
 

@@ -59,6 +59,10 @@
             app:icon="@drawable/ic_baseline_settings_remote_24"
             app:key="useTun2proxy"
             app:title="useTun2proxy" />
+        <SwitchPreference
+            app:icon="@drawable/ic_baseline_settings_remote_24"
+            app:key="useOverTLS"
+            app:title="useOverTLS" />
     </PreferenceCategory>
 
     <Preference

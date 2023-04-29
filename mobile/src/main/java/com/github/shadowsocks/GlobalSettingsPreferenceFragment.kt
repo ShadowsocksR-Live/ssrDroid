@@ -91,6 +91,7 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
         val portTransproxy = findPreference<EditTextPreference>(Key.portTransproxy)!!
         portTransproxy.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
         val useTun2proxy = findPreference<SwitchPreference>(Key.useTun2proxy)!!
+        val useOverTLS = findPreference<SwitchPreference>(Key.useOverTLS)!!
         val onServiceModeChange = Preference.OnPreferenceChangeListener { _, newValue ->
             val (enabledLocalDns, enabledTransproxy) = when (newValue as String?) {
                 Key.modeProxy -> Pair(false, false)
@@ -115,6 +116,7 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
                 portTransproxy.isEnabled = false
             }
             useTun2proxy.isEnabled = stopped
+            useOverTLS.isEnabled = stopped
         }
         listener((activity as MainActivity).state)
         MainActivity.stateListener = listener

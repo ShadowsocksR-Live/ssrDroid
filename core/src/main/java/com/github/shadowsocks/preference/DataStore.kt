@@ -82,6 +82,9 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     val useTun2proxy: Boolean
         get() = publicStore.getBoolean(Key.useTun2proxy, false)
 
+    val useOverTLS: Boolean
+        get() = publicStore.getBoolean(Key.useOverTLS, false)
+
     val socksAddress: InetSocketAddress?
         get() = if (publicStore.getString(Key.socksHost).isNullOrBlank()) null
         else InetSocketAddress(
