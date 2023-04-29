@@ -55,6 +55,10 @@
             app:key="portTransproxy"
             app:title="@string/port_transproxy"
             app:useSimpleSummaryProvider="true"/>
+        <SwitchPreference
+            app:icon="@drawable/ic_baseline_settings_remote_24"
+            app:key="useTun2proxy"
+            app:title="useTun2proxy" />
     </PreferenceCategory>
 
     <Preference

@@ -23,10 +23,13 @@ package com.github.shadowsocks.bg
 import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.LocalSocket
+import android.net.LocalSocketAddress
 import android.net.Network
 import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.system.ErrnoException
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.VpnRequestActivity
 import com.github.shadowsocks.acl.Acl
@@ -39,7 +42,11 @@ import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Key
 import com.github.shadowsocks.utils.printLog
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileDescriptor
+import java.io.IOException
 
 class SsrVpnService : VpnService(), LocalDnsService.Interface {
     companion object {
@@ -110,10 +117,14 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
 
     override suspend fun startProcesses(hosts: HostsFile) {
         super.startProcesses(hosts)
-        startVpn()
+        if (DataStore.useTun2proxy) {
+            startVpn()
+        } else {
+            sendFd(startVpn())
+        }
     }
 
-    private suspend fun startVpn() {
+    private suspend fun startVpn(): FileDescriptor {
         val profile = data.proxy!!.profile
         val builder = Builder()
             .setConfigureIntent(Core.configureIntent(this))
@@ -166,14 +177,56 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         val conn = builder.establish() ?: throw NullConnectionException()
         this.conn = conn
 
-        val proxyUrl = "socks5://${DataStore.listenAddress}:${DataStore.portProxy}"
-        val tunFd = conn.getFd()
-        val tunMtu = VPN_MTU
-        val verbose = BuildConfig.DEBUG
+        if (DataStore.useTun2proxy) {
+            val proxyUrl = "socks5://${DataStore.listenAddress}:${DataStore.portProxy}"
+            val tunFd = conn.getFd()
+            val tunMtu = VPN_MTU
+            val verbose = BuildConfig.DEBUG
 
-        tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose)
-        tunThread?.isDaemon = true
-        tunThread?.start()
+            tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose)
+            tunThread?.isDaemon = true
+            tunThread?.start()
+        } else {
+            val cmd = arrayListOf(
+                File(applicationInfo.nativeLibraryDir, Executable.TUN2SOCKS).absolutePath,
+                "--netif-ipaddr", PRIVATE_VLAN4_ROUTER,
+                "--socks-server-addr", "${DataStore.listenAddress}:${DataStore.portProxy}",
+                "--tunmtu", VPN_MTU.toString(),
+                "--sock-path", "sock_path",
+                "--dnsgw", "127.0.0.1:${DataStore.portLocalDns}",
+                "--loglevel", "warning"
+            )
+            if (profile.ipv6) {
+                cmd += "--netif-ip6addr"
+                cmd += PRIVATE_VLAN6_ROUTER
+            }
+            cmd += "--enable-udprelay"
+            data.processes!!.start(cmd, onRestartCallback = {
+                try {
+                    sendFd(conn.fileDescriptor)
+                } catch (e: ErrnoException) {
+                    stopRunner(false, e.message)
+                }
+            })
+        }
+        return conn.fileDescriptor
+    }
+
+    private suspend fun sendFd(fd: FileDescriptor) {
+        var tries = 0
+        val path = File(Core.deviceStorage.noBackupFilesDir, "sock_path").absolutePath
+        while (true) try {
+            delay(50L shl tries)
+            LocalSocket().use { localSocket ->
+                localSocket.connect(LocalSocketAddress(path, LocalSocketAddress.Namespace.FILESYSTEM))
+                localSocket.setFileDescriptorsForSend(arrayOf(fd))
+                localSocket.outputStream.write(42)
+            }
+            return
+        } catch (e: IOException) {
+            if (tries > 5) throw e
+            tries += 1
+        }
     }
 
     override fun onDestroy() {

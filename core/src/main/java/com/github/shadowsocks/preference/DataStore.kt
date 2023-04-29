@@ -78,6 +78,10 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     var portTransproxy: Int
         get() = getLocalPort(Key.portTransproxy, 8200)
         set(value) = publicStore.putString(Key.portTransproxy, value.toString())
+
+    val useTun2proxy: Boolean
+        get() = publicStore.getBoolean(Key.useTun2proxy, false)
+
     val socksAddress: InetSocketAddress?
         get() = if (publicStore.getString(Key.socksHost).isNullOrBlank()) null
         else InetSocketAddress(
