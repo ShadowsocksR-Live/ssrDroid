@@ -77,9 +77,14 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
      */
     fun start(service: BaseService.Interface, stat: File, configFile: File, extraFlag: String? = null) {
         trafficMonitor = TrafficMonitor(stat)
+        val isOverTLS = DataStore.useOverTLS && profile.isOverTLS()
 
         this.configFile = configFile
-        val config = profile.toJson()
+        val config = if (isOverTLS) {
+            profile.toOverTlsJson()
+        } else {
+            profile.toJson()
+        }
 
         configFile.writeText(config.toString())
 
@@ -97,7 +102,6 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         if (DataStore.tcpFastOpen) cmd += "--fast-open"
         if (BuildConfig.DEBUG) cmd += "-v"
 
-        val isOverTLS = DataStore.useOverTLS && profile.isOverTLS()
         myThread = SsrClientThread(service as VpnService, isOverTLS, cmd)
         myThread?.start()
     }
