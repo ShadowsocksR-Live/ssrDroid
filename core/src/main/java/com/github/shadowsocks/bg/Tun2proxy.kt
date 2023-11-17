@@ -6,7 +6,7 @@ object Tun2proxy {
     }
 
     @JvmStatic
-    external fun run(proxyUrl: String, tunFd: Int, tunMtu: Int, verbose: Boolean): Int
+    external fun run(proxyUrl: String, tunFd: Int, tunMtu: Int, verbose: Boolean, dnsOverTcp: Boolean): Int
 
     @JvmStatic
     external fun stop(): Int

@@ -182,8 +182,9 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
             val tunFd = conn.getFd()
             val tunMtu = VPN_MTU
             val verbose = BuildConfig.DEBUG
+            val dnsOverTcp = !(DataStore.useOverTLS && profile.isOverTLS())
 
-            tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose)
+            tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose, dnsOverTcp)
             tunThread?.isDaemon = true
             tunThread?.start()
         } else {
@@ -240,10 +241,11 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         private val proxyUrl: String,
         private val tunFd: Int,
         private val tunMtu: Int,
-        private val verbose: Boolean
+        private val verbose: Boolean,
+        private val dnsOverTcp: Boolean
     ) : Thread() {
         override fun run() {
-            Tun2proxy.run(proxyUrl, tunFd, tunMtu, verbose)
+            Tun2proxy.run(proxyUrl, tunFd, tunMtu, verbose, dnsOverTcp)
         }
 
         fun terminate() {
