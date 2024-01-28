@@ -48,6 +48,12 @@ export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home"
 # 建议编辑 mobile/build.gradle ,修改 applicationId 以规避检测
 ./gradlew assembleDebug
 ./gradlew assembleRelease
+
+# 在 windows 系統下，上述編譯命令應該是：
+.\gradlew.bat assembleDebug
+.\gradlew.bat assembleRelease
+
+# 將編譯出的 apk 包安裝到當前連接到電腦上的手機裏：
 adb install mobile/build/outputs/apk/release/ssrdroid-release.apk
 ```
 
