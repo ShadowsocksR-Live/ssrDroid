@@ -156,7 +156,8 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         override fun run() {
             super.run()
             if (isOverTls) {
-                vpnService?.let { OverTlsWrapper.runClient(it, configPath(), statPath(), verbose()) }
+                val verbosity = if (verbose()) 5 else 3
+                vpnService?.let { OverTlsWrapper.runClient(it, configPath(), statPath(), verbosity) }
             } else {
                 cmd?.let { SsrClientWrapper.runSsrClient(it) }
             }
