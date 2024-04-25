@@ -74,8 +74,6 @@ class MainPreferenceFragment : LeanbackPreferenceFragmentCompat(), ShadowsocksCo
     private lateinit var portProxy: EditTextPreference
     private lateinit var portLocalDns: EditTextPreference
     private lateinit var portTransproxy: EditTextPreference
-    private lateinit var useTun2proxy: Preference
-    private lateinit var useOverTLS: Preference
     private val onServiceModeChange = Preference.OnPreferenceChangeListener { _, newValue ->
         val (enabledLocalDns, enabledTransproxy) = when (newValue as String?) {
             Key.modeProxy -> Pair(false, false)
@@ -132,8 +130,6 @@ class MainPreferenceFragment : LeanbackPreferenceFragmentCompat(), ShadowsocksCo
             portLocalDns.isEnabled = false
             portTransproxy.isEnabled = false
         }
-        useTun2proxy.isEnabled = stopped
-        useOverTLS.isEnabled = stopped
     }
 
     private val connection = ShadowsocksConnection(true)
@@ -189,8 +185,6 @@ class MainPreferenceFragment : LeanbackPreferenceFragmentCompat(), ShadowsocksCo
         portLocalDns.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
         portTransproxy = findPreference(Key.portTransproxy)!!
         portTransproxy.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
-        useTun2proxy = findPreference(Key.useTun2proxy)!!
-        useOverTLS = findPreference(Key.useOverTLS)!!
         serviceMode.onPreferenceChangeListener = onServiceModeChange
         findPreference<Preference>(Key.about)!!.summary = getString(R.string.about_title, BuildConfig.VERSION_NAME)
 

@@ -42,8 +42,6 @@ object Key {
     const val portProxy = "portProxy"
     const val portLocalDns = "portLocalDns"
     const val portTransproxy = "portTransproxy"
-    const val useTun2proxy = "useTun2proxy"
-    const val useOverTLS = "useOverTLS"
 
     const val route = "route"
 

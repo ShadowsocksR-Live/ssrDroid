@@ -77,7 +77,7 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
      */
     fun start(service: BaseService.Interface, stat: File, configFile: File, extraFlag: String? = null) {
         trafficMonitor = TrafficMonitor(stat)
-        val isOverTLS = DataStore.useOverTLS && profile.isOverTLS()
+        val isOverTLS = profile.isOverTLS()
 
         this.configFile = configFile
         val config = if (isOverTLS) {

@@ -8,7 +8,7 @@ object OverTlsWrapper {
     }
 
     @JvmStatic
-    external fun runClient(vpnService: VpnService, cofigPath: String, statPath: String, verbosity: Int): Int
+    external fun runClient(vpnService: VpnService, configPath: String, statPath: String, verbosity: Int): Int
 
     @JvmStatic
     external fun stopClient(): Int

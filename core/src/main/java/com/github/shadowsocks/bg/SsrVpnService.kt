@@ -117,11 +117,7 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
 
     override suspend fun startProcesses(hosts: HostsFile) {
         super.startProcesses(hosts)
-        if (DataStore.useTun2proxy) {
-            startVpn()
-        } else {
-            sendFd(startVpn())
-        }
+        startVpn()
     }
 
     private suspend fun startVpn(): FileDescriptor {
@@ -177,39 +173,16 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         val conn = builder.establish() ?: throw NullConnectionException()
         this.conn = conn
 
-        if (DataStore.useTun2proxy) {
-            val proxyUrl = "socks5://${DataStore.listenAddress}:${DataStore.portProxy}"
-            val tunFd = conn.getFd()
-            val tunMtu = VPN_MTU
-            val verbose = BuildConfig.DEBUG
-            val dnsOverTcp = !(DataStore.useOverTLS && profile.isOverTLS())
+        val proxyUrl = "socks5://${DataStore.listenAddress}:${DataStore.portProxy}"
+        val tunFd = conn.getFd()
+        val tunMtu = VPN_MTU
+        val verbose = BuildConfig.DEBUG
+        val dnsOverTcp = !profile.isOverTLS()
 
-            tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose, dnsOverTcp)
-            tunThread?.isDaemon = true
-            tunThread?.start()
-        } else {
-            val cmd = arrayListOf(
-                File(applicationInfo.nativeLibraryDir, Executable.TUN2SOCKS).absolutePath,
-                "--netif-ipaddr", PRIVATE_VLAN4_ROUTER,
-                "--socks-server-addr", "${DataStore.listenAddress}:${DataStore.portProxy}",
-                "--tunmtu", VPN_MTU.toString(),
-                "--sock-path", "sock_path",
-                "--dnsgw", "127.0.0.1:${DataStore.portLocalDns}",
-                "--loglevel", "warning"
-            )
-            if (profile.ipv6) {
-                cmd += "--netif-ip6addr"
-                cmd += PRIVATE_VLAN6_ROUTER
-            }
-            cmd += "--enable-udprelay"
-            data.processes!!.start(cmd, onRestartCallback = {
-                try {
-                    sendFd(conn.fileDescriptor)
-                } catch (e: ErrnoException) {
-                    stopRunner(false, e.message)
-                }
-            })
-        }
+        tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose, dnsOverTcp)
+        tunThread?.isDaemon = true
+        tunThread?.start()
+
         return conn.fileDescriptor
     }
 
