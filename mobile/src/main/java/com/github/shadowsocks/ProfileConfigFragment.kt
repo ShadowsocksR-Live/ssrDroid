@@ -73,6 +73,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreC
     private lateinit var over_tls_enable: SwitchPreference
     private lateinit var over_tls_server_domain: EditTextPreference
     private lateinit var over_tls_path: EditTextPreference
+    private lateinit var over_tls_cafile: EditTextPreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = DataStore.privateStore
@@ -104,6 +105,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreC
 
         over_tls_server_domain = findPreference(Key.over_tls_server_domain)!!
         over_tls_path = findPreference(Key.over_tls_path)!!
+        over_tls_cafile = findPreference(Key.over_tls_cafile)!!
 
         over_tls_enable = findPreference(Key.over_tls_enable)!!
         over_tls_enable.setOnPreferenceChangeListener { _, newValue ->
@@ -130,6 +132,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreC
             findPreference<Preference>(Key.over_tls_enable)!!.isEnabled = false
             findPreference<Preference>(Key.over_tls_server_domain)!!.isEnabled = false
             findPreference<Preference>(Key.over_tls_path)!!.isEnabled = false
+            findPreference<Preference>(Key.over_tls_cafile)!!.isEnabled = false
         } else findPreference<Preference>(Key.group)!!.isEnabled = false
     }
 
@@ -142,6 +145,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreC
         over_tls_enable.isChecked = enable
         over_tls_server_domain.isEnabled = enable
         over_tls_path.isEnabled = enable
+        over_tls_cafile.isEnabled = enable
     }
 
     private fun saveAndExit() {

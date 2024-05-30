@@ -203,7 +203,11 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener, Sea
 
         override fun onMenuItemClick(item: MenuItem): Boolean = when (item.itemId) {
             R.id.action_qr_code -> {
-                QRCodeDialog(this.item.toString()).showAllowingStateLoss(parentFragmentManager)
+                if (this.item.over_tls_cafile.length > 0) {
+                    (activity as MainActivity).snackbar().setText(R.string.qr_code_not_support).setDuration(4000).show()
+                } else {
+                    QRCodeDialog(this.item.toString()).showAllowingStateLoss(parentFragmentManager)
+                }
                 true
             }
             R.id.action_export_clipboard -> {

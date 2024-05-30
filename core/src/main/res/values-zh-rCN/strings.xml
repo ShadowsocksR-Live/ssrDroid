@@ -40,6 +40,8 @@
     <string name="over_tls_enable">"SSRoT 啓用"</string>
     <string name="over_tls_server_domain">"SSRoT 服務器域名"</string>
     <string name="over_tls_path">"SSRoT 祕密入口路徑"</string>
+    <string name="over_tls_cafile">"over_tls CA 憑證文件"</string>
+    <string name="qr_code_not_support">這個節點不支持二維碼因爲它含有自簽名證書</string>
 
     <!-- feature category -->
     <string name="ipv6">"IPv6 路由"</string>

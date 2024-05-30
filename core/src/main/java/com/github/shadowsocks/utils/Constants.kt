@@ -64,6 +64,7 @@ object Key {
     const val over_tls_enable = "over_tls_enable"
     const val over_tls_server_domain = "over_tls_server_domain"
     const val over_tls_path = "over_tls_path"
+    const val over_tls_cafile = "over_tls_cafile"
     const val remotePort = "remotePortNum"
     const val remoteDns = "remoteDns"
 

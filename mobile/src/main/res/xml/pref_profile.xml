@@ -85,6 +85,12 @@
             app:title="@string/over_tls_path"
             app:useSimpleSummaryProvider="true" />
 
+        <EditTextPreference
+            app:icon="@drawable/ic_baseline_format_align_left"
+            app:key="over_tls_cafile"
+            app:title="@string/over_tls_cafile"
+            app:useSimpleSummaryProvider="true" />
+
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/feature_cat">
