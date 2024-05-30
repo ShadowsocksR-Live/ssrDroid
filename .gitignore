@@ -2,6 +2,7 @@
 *.hprof
 .vs/
 .vscode/
+.VSCodeCounter/
 local.properties
 .gradle/
 .externalNativeBuild/
