@@ -7,4 +7,5 @@ include_directories(${LIB_RE2_DIR})
 add_library( jni-helper SHARED jni-helper.cpp )
 target_link_libraries(jni-helper  log re2)
 
+add_subdirectory(fake-dlfcn)
 add_subdirectory(ssrNative)

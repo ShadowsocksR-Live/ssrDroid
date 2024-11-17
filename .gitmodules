@@ -14,3 +14,7 @@
 	path = rust/tun2proxy
 	url = https://github.com/blechschmidt/tun2proxy.git
 	branch = master
+[submodule "core/src/main/jni/fake-dlfcn"]
+	path = core/src/main/jni/fake-dlfcn
+	url = https://github.com/ssrlive/fake-dlfcn.git
+	branch = master
