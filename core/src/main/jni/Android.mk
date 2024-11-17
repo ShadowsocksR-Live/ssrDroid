@@ -124,21 +124,6 @@ LOCAL_CFLAGS := -I$(LOCAL_PATH)/libevent \
 include $(BUILD_STATIC_LIBRARY)
 
 ########################################################
-## libancillary
-########################################################
-
-include $(CLEAR_VARS)
-
-ANCILLARY_SOURCE := fd_recv.c fd_send.c
-
-LOCAL_MODULE := libancillary
-LOCAL_CFLAGS += -I$(LOCAL_PATH)/libancillary
-
-LOCAL_SRC_FILES := $(addprefix libancillary/, $(ANCILLARY_SOURCE))
-
-include $(BUILD_STATIC_LIBRARY)
-
-########################################################
 ## libipset
 ########################################################
 
@@ -262,7 +247,6 @@ LOCAL_CFLAGS    := -Wall -fno-strict-aliasing -DMODULE_LOCAL \
 					-DCONNECT_IN_PROGRESS=EINPROGRESS \
 					-I$(LOCAL_PATH)/include/shadowsocks-libev \
 					-I$(LOCAL_PATH)/include \
-					-I$(LOCAL_PATH)/libancillary \
 					-I$(LOCAL_PATH)/mbedtls/include  \
 					-I$(LOCAL_PATH)/pcre \
 					-I$(LOCAL_PATH)/shadowsocks-libev/libudns \
@@ -274,7 +258,7 @@ LOCAL_CFLAGS    := -Wall -fno-strict-aliasing -DMODULE_LOCAL \
 					-I$(LOCAL_PATH)/shadowsocks-libev/src
 
 LOCAL_STATIC_LIBRARIES := libev libmbedtls libipset libcork libudns \
-	libsodium libancillary libpcre
+	libsodium libpcre
 
 LOCAL_LDLIBS := -llog
 
