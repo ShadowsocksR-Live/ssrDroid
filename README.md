@@ -1,8 +1,10 @@
-## SSRoT Android 客户端
+## OverTLS & SSRoT Android 客户端
 
-由 Shadowsocks Android 客户端修改而来，支持 [SSRoT 协议](https://github.com/ShadowsocksR-Live/shadowsocksr-native/wiki)。
+由 Shadowsocks Android 客户端修改而来. 
 
-支持 [overtls](https://github.com/ShadowsocksR-Live/overtls), 一個新代理，相當於是 SSRoT 去掉 SSR 和 SS, 唯獨保留 oT 的 Rust 實現，快如閃電，穩如老狗。
+支持 [OverTLS](https://github.com/ShadowsocksR-Live/overtls), 一個新代理，相當於是 SSRoT 去掉 SSR 和 SS, 唯獨保留 oT 的 Rust 實現，快如閃電，穩如老狗。
+
+支持 [SSRoT 协议](https://github.com/ShadowsocksR-Live/shadowsocksr-native/wiki)。
 
 [常见问题](FAQ.md)
 
