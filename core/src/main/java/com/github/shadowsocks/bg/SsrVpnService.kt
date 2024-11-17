@@ -220,7 +220,7 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         override fun run() {
             val verbosity = if (verbose) 5 else 3
             val dnsStrategy = if (dnsOverTcp) 1 else 2
-            Tun2proxy.run(proxyUrl, tunFd, tunMtu.toChar(), verbosity, dnsStrategy)
+            Tun2proxy.run(proxyUrl, tunFd, false, tunMtu.toChar(), verbosity, dnsStrategy)
         }
 
         fun terminate() {
