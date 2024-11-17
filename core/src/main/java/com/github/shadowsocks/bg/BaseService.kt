@@ -356,7 +356,6 @@ object BaseService {
             data.changeState(State.Connecting)
             data.connectingJob = GlobalScope.launch(Dispatchers.Main) {
                 try {
-                    Executable.killAll()    // clean up old processes
                     preInit()
                     val hosts = HostsFile(DataStore.publicStore.getString(Key.hosts) ?: "")
                     proxy.init(this@Interface, hosts)

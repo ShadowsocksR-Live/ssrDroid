@@ -88,7 +88,8 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
 
         configFile.writeText(config.toString())
 
-        val exe = File((service as Context).applicationInfo.nativeLibraryDir, Executable.SSR_CLIENT).absolutePath
+        val ssrClient = "libssr-client.so"
+        val exe = File((service as Context).applicationInfo.nativeLibraryDir, ssrClient).absolutePath
         val cmd = arrayListOf(exe, "-V", "-S", stat.absolutePath, "-c", configFile.absolutePath)
         if (extraFlag != null) {
             cmd.add(extraFlag)

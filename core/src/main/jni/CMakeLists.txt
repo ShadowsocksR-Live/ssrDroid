@@ -8,6 +8,5 @@ add_library( jni-helper SHARED jni-helper.cpp )
 target_link_libraries(jni-helper  log re2)
 
 add_subdirectory(libancillary)
-add_subdirectory(badvpn)
 
 add_subdirectory(ssrNative)
