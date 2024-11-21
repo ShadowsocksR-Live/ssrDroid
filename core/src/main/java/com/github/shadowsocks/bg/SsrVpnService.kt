@@ -120,7 +120,7 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         startVpn()
     }
 
-    private suspend fun startVpn(): FileDescriptor {
+    private suspend fun startVpn() {
         val profile = data.proxy!!.profile
         val builder = Builder()
             .setConfigureIntent(Core.configureIntent(this))
@@ -155,7 +155,7 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
             else -> {
                 resources.getStringArray(R.array.bypass_private_route).forEach {
                     val subnet = Subnet.fromString(it)!!
-                    builder.addRoute(subnet.address.hostAddress, subnet.prefixSize)
+                    builder.addRoute(subnet.address.hostAddress!!, subnet.prefixSize)
                 }
                 builder.addRoute(PRIVATE_VLAN4_ROUTER, 32)
                 // https://issuetracker.google.com/issues/149636790
@@ -174,7 +174,7 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         this.conn = conn
 
         val proxyUrl = "socks5://${DataStore.listenAddress}:${DataStore.portProxy}"
-        val tunFd = conn.getFd()
+        val tunFd = conn.fd
         val tunMtu = VPN_MTU
         val verbose = BuildConfig.DEBUG
         val dnsOverTcp = !profile.isOverTLS()
@@ -182,25 +182,6 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose, dnsOverTcp)
         tunThread?.isDaemon = true
         tunThread?.start()
-
-        return conn.fileDescriptor
-    }
-
-    private suspend fun sendFd(fd: FileDescriptor) {
-        var tries = 0
-        val path = File(Core.deviceStorage.noBackupFilesDir, "sock_path").absolutePath
-        while (true) try {
-            delay(50L shl tries)
-            LocalSocket().use { localSocket ->
-                localSocket.connect(LocalSocketAddress(path, LocalSocketAddress.Namespace.FILESYSTEM))
-                localSocket.setFileDescriptorsForSend(arrayOf(fd))
-                localSocket.outputStream.write(42)
-            }
-            return
-        } catch (e: IOException) {
-            if (tries > 5) throw e
-            tries += 1
-        }
     }
 
     override fun onDestroy() {
