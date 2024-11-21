@@ -86,8 +86,6 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
         val shareOverLan = findPreference<SwitchPreference>(Key.shareOverLan)!!
         val portProxy = findPreference<EditTextPreference>(Key.portProxy)!!
         portProxy.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
-        val portLocalDns = findPreference<EditTextPreference>(Key.portLocalDns)!!
-        portLocalDns.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
         val portTransproxy = findPreference<EditTextPreference>(Key.portTransproxy)!!
         portTransproxy.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
         val onServiceModeChange = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -97,7 +95,6 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
                 else -> throw IllegalArgumentException("newValue: $newValue")
             }
             hosts.isEnabled = enabledLocalDns
-            portLocalDns.isEnabled = enabledLocalDns
             portTransproxy.isEnabled = enabledTransproxy
             true
         }
@@ -110,7 +107,6 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
             // FIXME: *serviceMode* is something I wrote at will, please double-check it.
             if (stopped) onServiceModeChange.onPreferenceChange(serviceMode, DataStore.serviceMode) else {
                 hosts.isEnabled = false
-                portLocalDns.isEnabled = false
                 portTransproxy.isEnabled = false
             }
         }

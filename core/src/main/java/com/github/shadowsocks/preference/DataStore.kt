@@ -72,9 +72,6 @@ object DataStore : OnPreferenceDataStoreChangeListener {
         get() = getLocalPort(Key.portProxy, 1080)
         set(value) = publicStore.putString(Key.portProxy, value.toString())
     val proxyAddress get() = InetSocketAddress("127.0.0.1", portProxy)
-    var portLocalDns: Int
-        get() = getLocalPort(Key.portLocalDns, 5450)
-        set(value) = publicStore.putString(Key.portLocalDns, value.toString())
     var portTransproxy: Int
         get() = getLocalPort(Key.portTransproxy, 8200)
         set(value) = publicStore.putString(Key.portTransproxy, value.toString())
@@ -96,7 +93,6 @@ object DataStore : OnPreferenceDataStoreChangeListener {
         persistAcrossReboot
         if (publicStore.getBoolean(Key.tfo) == null) publicStore.putBoolean(Key.tfo, tcpFastOpen)
         if (publicStore.getString(Key.portProxy) == null) portProxy = portProxy
-        if (publicStore.getString(Key.portLocalDns) == null) portLocalDns = portLocalDns
         if (publicStore.getString(Key.portTransproxy) == null) portTransproxy = portTransproxy
     }
 

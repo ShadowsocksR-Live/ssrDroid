@@ -48,13 +48,15 @@ import java.io.File
 import java.io.FileDescriptor
 import java.io.IOException
 
-class SsrVpnService : VpnService(), LocalDnsService.Interface {
+class SsrVpnService : VpnService(), BaseService.Interface {
     companion object {
         private const val VPN_MTU = 1500
-        private const val PRIVATE_VLAN4_CLIENT = "172.19.0.1"
-        private const val PRIVATE_VLAN4_ROUTER = "172.19.0.2"
+        private const val PRIVATE_VLAN4_CLIENT = "172.19.0.2"
+        private const val PRIVATE_VLAN4_ROUTER = "172.19.0.1"
+        private const val PRIVATE_VLAN4_PREFIX_LENGTH = 30
         private const val PRIVATE_VLAN6_CLIENT = "fdfe:dcba:9876::1"
         private const val PRIVATE_VLAN6_ROUTER = "fdfe:dcba:9876::2"
+        private const val PRIVATE_VLAN6_PREFIX_LENGTH = 126
     }
 
     inner class NullConnectionException : NullPointerException(), BaseService.ExpectedException {
@@ -84,7 +86,7 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
 
     override fun onBind(intent: Intent) = when (intent.action) {
         SERVICE_INTERFACE -> super<VpnService>.onBind(intent)
-        else -> super<LocalDnsService.Interface>.onBind(intent)
+        else -> super<BaseService.Interface>.onBind(intent)
     }
 
     override fun onRevoke() = stopRunner()
@@ -105,7 +107,9 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
         if (DataStore.serviceMode == Key.modeVpn) {
             if (prepare(this) != null) {
                 startActivity(Intent(this, VpnRequestActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            } else return super<LocalDnsService.Interface>.onStartCommand(intent, flags, startId)
+            } else {
+                return super<BaseService.Interface>.onStartCommand(intent, flags, startId)
+            }
         }
         stopRunner()
         return Service.START_NOT_STICKY
@@ -126,10 +130,10 @@ class SsrVpnService : VpnService(), LocalDnsService.Interface {
             .setConfigureIntent(Core.configureIntent(this))
             .setSession(profile.formattedName)
             .setMtu(VPN_MTU)
-            .addAddress(PRIVATE_VLAN4_CLIENT, 30)
+            .addAddress(PRIVATE_VLAN4_CLIENT, PRIVATE_VLAN4_PREFIX_LENGTH)
             .addDnsServer(PRIVATE_VLAN4_ROUTER)
 
-        if (profile.ipv6) builder.addAddress(PRIVATE_VLAN6_CLIENT, 126)
+        if (profile.ipv6) builder.addAddress(PRIVATE_VLAN6_CLIENT, PRIVATE_VLAN6_PREFIX_LENGTH)
 
         if (profile.proxyApps) {
             val me = packageName

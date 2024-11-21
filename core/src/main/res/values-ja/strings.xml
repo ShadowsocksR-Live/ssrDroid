@@ -163,7 +163,6 @@
     <string name="service_mode_proxy">"プロキシのみ"</string>
     <string name="service_mode_transproxy">"トランスプロキシ"</string>
     <string name="port_proxy">"SOCKS5プロキシポート"</string>
-    <string name="port_local_dns">"ローカルDNSポート"</string>
     <string name="port_transproxy">"トランスプロキシポート"</string>
     <string name="service_proxy">"プロキシサービス"</string>
     <string name="service_transproxy">"トランスプロキシサービス"</string>

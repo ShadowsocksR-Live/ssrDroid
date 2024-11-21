@@ -12,7 +12,6 @@
     <string name="service_mode_transproxy">"透明代理"</string>
     <string name="share_over_lan">"通过局域网分享"</string>
     <string name="port_proxy">"SOCKS5 代理端口"</string>
-    <string name="port_local_dns">"本地 DNS 端口"</string>
     <string name="port_transproxy">"透明代理端口"</string>
 
     <string name="remote_dns">"远程 DNS"</string>

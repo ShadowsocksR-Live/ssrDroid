@@ -139,7 +139,6 @@
     <string name="service_mode_vpn">"وی‌پی‌ان"</string>
     <string name="service_mode_transproxy">"ترانس‌پروکسی"</string>
     <string name="port_proxy">"پورت پروکسی SOCKS5"</string>
-    <string name="port_local_dns">"پورت دی‌ان‌اس محلی"</string>
     <string name="port_transproxy">"پورت ترانس‌پروکسی"</string>
     <string name="service_proxy">"سرویس پروکسی"</string>
     <string name="service_transproxy">"سرویس ترانس‌پروکسی"</string>

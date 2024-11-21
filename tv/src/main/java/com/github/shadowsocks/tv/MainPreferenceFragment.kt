@@ -72,7 +72,6 @@ class MainPreferenceFragment : LeanbackPreferenceFragmentCompat(), ShadowsocksCo
     private lateinit var tfo: SwitchPreference
     private lateinit var shareOverLan: Preference
     private lateinit var portProxy: EditTextPreference
-    private lateinit var portLocalDns: EditTextPreference
     private lateinit var portTransproxy: EditTextPreference
     private val onServiceModeChange = Preference.OnPreferenceChangeListener { _, newValue ->
         val (enabledLocalDns, enabledTransproxy) = when (newValue as String?) {
@@ -81,7 +80,6 @@ class MainPreferenceFragment : LeanbackPreferenceFragmentCompat(), ShadowsocksCo
             else -> throw IllegalArgumentException("newValue: $newValue")
         }
         hosts.isEnabled = enabledLocalDns
-        portLocalDns.isEnabled = enabledLocalDns
         portTransproxy.isEnabled = enabledTransproxy
         true
     }
@@ -127,7 +125,6 @@ class MainPreferenceFragment : LeanbackPreferenceFragmentCompat(), ShadowsocksCo
         shareOverLan.isEnabled = stopped
         portProxy.isEnabled = stopped
         if (stopped) onServiceModeChange.onPreferenceChange(null, DataStore.serviceMode) else {
-            portLocalDns.isEnabled = false
             portTransproxy.isEnabled = false
         }
     }
@@ -181,8 +178,6 @@ class MainPreferenceFragment : LeanbackPreferenceFragmentCompat(), ShadowsocksCo
         shareOverLan = findPreference(Key.shareOverLan)!!
         portProxy = findPreference(Key.portProxy)!!
         portProxy.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
-        portLocalDns = findPreference(Key.portLocalDns)!!
-        portLocalDns.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
         portTransproxy = findPreference(Key.portTransproxy)!!
         portTransproxy.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
         serviceMode.onPreferenceChangeListener = onServiceModeChange

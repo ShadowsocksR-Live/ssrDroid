@@ -162,7 +162,6 @@
     <string name="service_mode_proxy">"仅代理"</string>
     <string name="service_mode_transproxy">"透明代理"</string>
     <string name="port_proxy">"SOCKS5 代理連接埠"</string>
-    <string name="port_local_dns">"本地 DNS 連接埠"</string>
     <string name="port_transproxy">"透明代理連接埠"</string>
     <string name="service_proxy">"代理服務"</string>
     <string name="service_transproxy">"透明代理服務"</string>

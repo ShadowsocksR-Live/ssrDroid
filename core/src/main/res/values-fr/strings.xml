@@ -151,7 +151,6 @@ Reçu : \t\t\t%4$s\t↓\t%2$s"</string>
     <string name="service_mode">"Mode Service"</string>
     <string name="service_mode_proxy">"Proxy seul"</string>
     <string name="port_proxy">"Port proxy SOCKS5"</string>
-    <string name="port_local_dns">"Port DNS local"</string>
     <string name="port_transproxy">"Port Transproxy"</string>
     <string name="service_proxy">"Service Proxy"</string>
     <string name="service_transproxy">"Service Transproxy"</string>

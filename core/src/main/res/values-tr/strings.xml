@@ -155,7 +155,6 @@
     <string name="service_mode">"Servis modu"</string>
     <string name="service_mode_proxy">"Sadece proxy"</string>
     <string name="port_proxy">"SOCKS5 proxy portu"</string>
-    <string name="port_local_dns">"Yerel DNS portu"</string>
     <string name="port_transproxy">"Transproxy portu"</string>
     <string name="service_proxy">"Proxy Servisi"</string>
     <string name="service_transproxy">"Transproxy Servisi"</string>

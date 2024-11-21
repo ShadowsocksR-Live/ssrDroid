@@ -156,7 +156,6 @@
     <string name="service_mode_proxy">"Только прокси"</string>
     <string name="service_mode_transproxy">"Прозрачный прокси"</string>
     <string name="port_proxy">"Порт SOCKS5 прокси"</string>
-    <string name="port_local_dns">"Локальный порт DNS"</string>
     <string name="port_transproxy">"Порт прозрачного прокси"</string>
     <string name="service_proxy">"Служба прокси"</string>
     <string name="service_transproxy">"Служба прозрачный прокси"</string>

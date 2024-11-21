@@ -40,7 +40,6 @@ object Key {
     const val modeVpn = "vpn"
     const val shareOverLan = "shareOverLan"
     const val portProxy = "portProxy"
-    const val portLocalDns = "portLocalDns"
     const val portTransproxy = "portTransproxy"
 
     const val route = "route"

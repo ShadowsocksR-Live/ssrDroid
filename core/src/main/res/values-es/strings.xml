@@ -145,7 +145,6 @@ Recibido: \t%4$s\t↓\t%2$s"</string>
     <string name="service_mode_proxy">"Sólo Proxy"</string>
     <string name="service_mode_vpn">"VPN"</string>
     <string name="port_proxy">"Puerto proxy SOCKS5"</string>
-    <string name="port_local_dns">"Puerto DNS local"</string>
     <string name="service_proxy">"Servicio Proxy"</string>
     <string name="service_transproxy">"Servicio Transproxy"</string>
     <string name="vpn_permission_denied">"Permiso denegado al crear servicio VPN"</string>
