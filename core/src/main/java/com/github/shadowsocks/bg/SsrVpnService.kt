@@ -92,6 +92,10 @@ class SsrVpnService : VpnService(), BaseService.Interface {
     override fun onRevoke() = stopRunner()
 
     override fun killProcesses(scope: CoroutineScope) {
+        dns2socksThread?.terminate()
+        dns2socksThread?.join()
+        dns2socksThread = null
+
         tunThread?.terminate()
         tunThread?.join()
         tunThread = null
@@ -186,6 +190,30 @@ class SsrVpnService : VpnService(), BaseService.Interface {
         tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose, dnsOverTcp)
         tunThread?.isDaemon = true
         tunThread?.start()
+
+        val listenAddr = "127.0.0.1:5353" // "${PRIVATE_VLAN4_ROUTER}:53" //
+        val dnsRemoteServer = profile.remoteDns
+        val socks5Server = "${DataStore.listenAddress}:${DataStore.portProxy}"
+        val username = null
+        val password = null
+        val forceTcp = true
+        val cacheRecords = false
+        val verbosity = if (verbose) 5 else 3
+        val timeout = 10
+
+        dns2socksThread = Dns2socksThread(
+            listenAddr,
+            dnsRemoteServer,
+            socks5Server,
+            username,
+            password,
+            forceTcp,
+            cacheRecords,
+            verbosity,
+            timeout
+        )
+        dns2socksThread?.isDaemon = true
+        dns2socksThread?.start()
     }
 
     override fun onDestroy() {
@@ -210,6 +238,38 @@ class SsrVpnService : VpnService(), BaseService.Interface {
 
         fun terminate() {
             Tun2proxy.stop()
+        }
+    }
+
+    private var dns2socksThread: Dns2socksThread? = null
+
+    internal class Dns2socksThread(
+        private val listenAddr: String?,
+        private val dnsRemoteServer: String?,
+        private val socks5Server: String?,
+        private val username: String?,
+        private val password: String?,
+        private val forceTcp: Boolean,
+        private val cacheRecords: Boolean,
+        private val verbosity: Int,
+        private val timeout: Int
+    ) : Thread() {
+        override fun run() {
+            Dns2socks.start(
+                listenAddr,
+                dnsRemoteServer,
+                socks5Server,
+                username,
+                password,
+                forceTcp,
+                cacheRecords,
+                verbosity,
+                timeout
+            )
+        }
+
+        fun terminate() {
+            Dns2socks.stop()
         }
     }
 }
