@@ -88,6 +88,9 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
         portProxy.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
         val portTransproxy = findPreference<EditTextPreference>(Key.portTransproxy)!!
         portTransproxy.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
+
+        val localDnsSvrAddr = findPreference<EditTextPreference>(Key.localDnsSvrAddr)!!
+
         val onServiceModeChange = Preference.OnPreferenceChangeListener { _, newValue ->
             val (enabledLocalDns, enabledTransproxy) = when (newValue as String?) {
                 Key.modeProxy -> Pair(false, false)
@@ -104,6 +107,7 @@ class GlobalSettingsPreferenceFragment : PreferenceFragmentCompat() {
             serviceMode.isEnabled = stopped
             shareOverLan.isEnabled = stopped
             portProxy.isEnabled = stopped
+            localDnsSvrAddr.isEnabled = stopped
             // FIXME: *serviceMode* is something I wrote at will, please double-check it.
             if (stopped) onServiceModeChange.onPreferenceChange(serviceMode, DataStore.serviceMode) else {
                 hosts.isEnabled = false

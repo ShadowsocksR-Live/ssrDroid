@@ -41,6 +41,7 @@ object Key {
     const val shareOverLan = "shareOverLan"
     const val portProxy = "portProxy"
     const val portTransproxy = "portTransproxy"
+    const val localDnsSvrAddr = "localDnsSvrAddr"
 
     const val route = "route"
 

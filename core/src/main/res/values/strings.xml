@@ -75,6 +75,7 @@
   <string name="udp_dns">Send DNS over UDP</string>
   <string name="udp_dns_summary">Requires UDP forwarding on server side</string>
   <string name="udp_fallback">UDP Fallback</string>
+  <string name="local_dns_svr_addr">Local DNS server address</string>
 
   <!-- notification category -->
   <string name="service_vpn">VPN Service</string>

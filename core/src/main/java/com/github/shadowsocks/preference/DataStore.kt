@@ -67,6 +67,9 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     val tcpFastOpen: Boolean get() = TcpFastOpen.sendEnabled && publicStore.getBoolean(Key.tfo, false)
     val aclUrl: String get() = publicStore.getString(Key.aclUrl) ?: ""
     val serviceMode get() = publicStore.getString(Key.serviceMode) ?: Key.modeVpn
+    var localDnsSvrAddr: String
+        get() = publicStore.getString(Key.localDnsSvrAddr) ?: "223.5.5.5"
+        set(value) = publicStore.putString(Key.localDnsSvrAddr, value)
     val listenAddress get() = if (publicStore.getBoolean(Key.shareOverLan, false)) "0.0.0.0" else "127.0.0.1"
     var portProxy: Int
         get() = getLocalPort(Key.portProxy, 1080)
@@ -93,6 +96,7 @@ object DataStore : OnPreferenceDataStoreChangeListener {
         persistAcrossReboot
         if (publicStore.getBoolean(Key.tfo) == null) publicStore.putBoolean(Key.tfo, tcpFastOpen)
         if (publicStore.getString(Key.portProxy) == null) portProxy = portProxy
+        if (publicStore.getString(Key.localDnsSvrAddr) == null) localDnsSvrAddr = localDnsSvrAddr
         if (publicStore.getString(Key.portTransproxy) == null) portTransproxy = portTransproxy
     }
 

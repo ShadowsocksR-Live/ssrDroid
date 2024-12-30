@@ -34,6 +34,11 @@
         app:key="serviceMode"
         app:title="@string/service_mode"
         app:useSimpleSummaryProvider="true" />
+    <EditTextPreference
+        app:icon="@drawable/ic_maps_directions_boat"
+        app:key="localDnsSvrAddr"
+        app:title="@string/local_dns_svr_addr"
+        app:useSimpleSummaryProvider="true" />
     <SwitchPreference
         app:icon="@drawable/ic_baseline_settings_remote_24"
         app:key="shareOverLan"
