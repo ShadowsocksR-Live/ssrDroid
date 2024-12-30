@@ -18,3 +18,7 @@
 	path = core/src/main/jni/fake-dlfcn
 	url = https://github.com/ssrlive/fake-dlfcn.git
 	branch = master
+[submodule "rust/dns2socks"]
+	path = rust/dns2socks
+	url = https://github.com/tun2proxy/dns2socks.git
+	branch = master

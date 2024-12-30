@@ -52,7 +52,6 @@ class SsrVpnService : VpnService(), BaseService.Interface {
     companion object {
         private const val VPN_MTU = 1500
         private const val PRIVATE_VLAN4_CLIENT = "172.19.0.2"
-        private const val PRIVATE_VLAN4_ROUTER = "172.19.0.1"
         private const val PRIVATE_VLAN4_PREFIX_LENGTH = 30
         private const val PRIVATE_VLAN6_CLIENT = "fdfe:dcba:9876::1"
         private const val PRIVATE_VLAN6_ROUTER = "fdfe:dcba:9876::2"
@@ -92,6 +91,10 @@ class SsrVpnService : VpnService(), BaseService.Interface {
     override fun onRevoke() = stopRunner()
 
     override fun killProcesses(scope: CoroutineScope) {
+        dns2socksThread?.terminate()
+        dns2socksThread?.join()
+        dns2socksThread = null
+
         tunThread?.terminate()
         tunThread?.join()
         tunThread = null
@@ -126,12 +129,13 @@ class SsrVpnService : VpnService(), BaseService.Interface {
 
     private suspend fun startVpn() {
         val profile = data.proxy!!.profile
+        val localDnsSvrAddr = DataStore.localDnsSvrAddr
         val builder = Builder()
             .setConfigureIntent(Core.configureIntent(this))
             .setSession(profile.formattedName)
             .setMtu(VPN_MTU)
             .addAddress(PRIVATE_VLAN4_CLIENT, PRIVATE_VLAN4_PREFIX_LENGTH)
-            .addDnsServer(PRIVATE_VLAN4_ROUTER)
+            .addDnsServer(localDnsSvrAddr)
 
         if (profile.ipv6) builder.addAddress(PRIVATE_VLAN6_CLIENT, PRIVATE_VLAN6_PREFIX_LENGTH)
 
@@ -161,7 +165,7 @@ class SsrVpnService : VpnService(), BaseService.Interface {
                     val subnet = Subnet.fromString(it)!!
                     builder.addRoute(subnet.address.hostAddress!!, subnet.prefixSize)
                 }
-                builder.addRoute(PRIVATE_VLAN4_ROUTER, 32)
+                builder.addRoute(localDnsSvrAddr, 32)
                 // https://issuetracker.google.com/issues/149636790
                 if (profile.ipv6) builder.addRoute("2000::", 3)
             }
@@ -186,6 +190,37 @@ class SsrVpnService : VpnService(), BaseService.Interface {
         tunThread = Tun2proxyThread(proxyUrl, tunFd, tunMtu, verbose, dnsOverTcp)
         tunThread?.isDaemon = true
         tunThread?.start()
+
+        // FIXME: here can NOT use "${localDnsSvrAddr}:53", I think Android NOT support it yet, and "127.0.0.1:5353" is useless.
+        // https://stackoverflow.com/questions/79217146/how-do-i-implement-an-android-vpn-app-with-local-dns-resolver
+        // https://github.com/shadowsocks/shadowsocks-android/discussions/2823
+        // https://github.com/shadowsocks/shadowsocks-android/issues/3122
+        //
+        // val listenAddr = "${localDnsSvrAddr}:53"
+        //
+        val listenAddr = "127.0.0.1:5353"
+        val dnsRemoteServer = profile.remoteDns
+        val socks5Server = "${DataStore.listenAddress}:${DataStore.portProxy}"
+        val username = null
+        val password = null
+        val forceTcp = true
+        val cacheRecords = false
+        val verbosity = if (verbose) 5 else 3
+        val timeout = 10
+
+        dns2socksThread = Dns2socksThread(
+            listenAddr,
+            dnsRemoteServer,
+            socks5Server,
+            username,
+            password,
+            forceTcp,
+            cacheRecords,
+            verbosity,
+            timeout
+        )
+        dns2socksThread?.isDaemon = true
+        dns2socksThread?.start()
     }
 
     override fun onDestroy() {
@@ -210,6 +245,38 @@ class SsrVpnService : VpnService(), BaseService.Interface {
 
         fun terminate() {
             Tun2proxy.stop()
+        }
+    }
+
+    private var dns2socksThread: Dns2socksThread? = null
+
+    internal class Dns2socksThread(
+        private val listenAddr: String?,
+        private val dnsRemoteServer: String?,
+        private val socks5Server: String?,
+        private val username: String?,
+        private val password: String?,
+        private val forceTcp: Boolean,
+        private val cacheRecords: Boolean,
+        private val verbosity: Int,
+        private val timeout: Int
+    ) : Thread() {
+        override fun run() {
+            Dns2socks.start(
+                listenAddr,
+                dnsRemoteServer,
+                socks5Server,
+                username,
+                password,
+                forceTcp,
+                cacheRecords,
+                verbosity,
+                timeout
+            )
+        }
+
+        fun terminate() {
+            Dns2socks.stop()
         }
     }
 }
