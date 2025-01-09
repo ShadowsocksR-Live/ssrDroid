@@ -34,7 +34,7 @@ jobs:
       run: git submodule update --init --recursive
 
     - name: Set up Rust
-      uses: dtolnay/rust-toolchain@stable
+      uses: dtolnay/rust-toolchain@1.83.0
 
     - name: Install Rust targets
       run: rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
@@ -67,3 +67,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           files: ${{ matrix.target_path }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.build_type }}
+        path: ${{ matrix.target_path }}
