@@ -1,0 +1,5 @@
+由 Shadowsocks Android 客户端修改而来.
+
+支持 OverTLS, 一個新代理，相当于是 SSRoT 去掉 SSR 和 SS, 唯独保留 oT 的 Rust 实现，快如闪电，稳如老狗。
+
+支持 SSRoT 协议。

@@ -1,0 +1,2 @@
+An Android client with OverTLS & SSRoT support, modified from Shadowsocks Android.
+OverTLS is a new proxy which is basically SSRoT without SSR and SS, keeping only the Rust implementation of oT. It's very fast and stable.

@@ -62,6 +62,7 @@ cargo {
     prebuiltToolchains = true
     apiLevel = 24
     targetIncludes = ['libovertls.so', 'libtun2proxy.so', 'libdns2socks.so']
+    extraCargoBuildArguments = ['--config', "build.rustflags = [ '--remap-path-prefix=${System.getenv('HOME')}/.cargo=.cargo', '--remap-path-prefix=${rootDir}=.', '-C', 'link-args=-Wl,--hash-style=gnu -Wl,--build-id=none' ]" ]
 }
 
 preBuild.dependsOn "cargoBuild"
