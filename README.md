@@ -8,6 +8,10 @@
 
 [常见问题](FAQ.md)
 
+[<img src="https://f-droid.org/badge/get-it-on-zh-hant.png"
+    alt="Get it on F-Droid"
+    height="80">](https://f-droid.org/packages/com.ssrlive.ssrdroid)]
+
 ### 编译
 
 #### 工具準備
